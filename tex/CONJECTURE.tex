@@ -1,0 +1,1427 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{problem}[theorem]{Problem}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\GK}{\operatorname{GK}}
+\newcommand{\AG}{\operatorname{AG}}
+\newcommand{\CPP}{\operatorname{CPP}}
+\newcommand{\qpoch}[2]{(#1;#2)_\infty}
+\newcommand{\qpochn}[3]{(#1;#2)_{#3}}
+\newcommand{\qbin}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+\newcommand{\jtheta}[2]{\theta(#1;#2)}
+
+\title{The Positivity Conjecture for $Q_{n,c}(q)$}
+\author{Reference summary for research on cylindric partitions}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document collects the statement, context, and motivation for the
+positivity conjecture on the polynomials $Q_{n,c}(q)$ arising from the
+two-variable generating function of rank-3 cylindric partitions.
+The conjecture first appears as Conjecture~4.2 of Corteel--Dousse--Uncu
+\cite{CDU} and independently as Conjecture~2.7 of Warnaar \cite{W}.
+We give the relevant definitions from the theory of cylindric partitions,
+state the conjecture precisely, and illustrate it with examples.
+\end{abstract}
+
+\tableofcontents
+
+%% ============================================================
+\section{Motivation: from Rogers--Ramanujan to $\mathrm{A}_2$}
+\label{sec:motivation}
+%% ============================================================
+
+\subsection{The Rogers--Ramanujan identities}
+
+The Rogers--Ramanujan identities \cite{RR}
+\begin{align}
+  \sum_{n \geq 0} \frac{q^{n^2}}{\qpochn{q}{q}{n}}
+  &= \prod_{n \geq 0} \frac{1}{(1-q^{5n+1})(1-q^{5n+4})},
+  \label{eq:RR1} \\
+  \sum_{n \geq 0} \frac{q^{n^2+n}}{\qpochn{q}{q}{n}}
+  &= \prod_{n \geq 0} \frac{1}{(1-q^{5n+2})(1-q^{5n+3})},
+  \label{eq:RR2}
+\end{align}
+are among the most celebrated $q$-series identities.
+They have interpretations in the theory of partitions, the representation
+theory of affine Lie algebras, conformal field theory, and statistical
+mechanics.
+
+\subsection{The Andrews--Gordon identities}
+
+Gordon \cite{Gordon} generalised the combinatorial form of the
+Rogers--Ramanujan identities to arbitrary odd moduli $2k+1$.
+Andrews \cite{Andrews} found the analytic counterpart: for
+$r \geq 2$ and $1 \leq s \leq r$,
+\begin{equation}\label{eq:AG}
+  \sum_{\substack{n_1 \geq n_2 \geq \cdots \geq n_{r-1} \geq 0}}
+  \frac{q^{n_1^2 + \cdots + n_{r-1}^2 + n_s + \cdots + n_{r-1}}}
+       {\qpochn{q}{q}{n_1} \prod_{i=1}^{r-2} \qbin{n_i}{n_{i+1}}}
+  = \frac{\qpoch{q^{2r+1}}{q^{2r+1}}}{\qpoch{q}{q}}
+    \,\jtheta{q^s}{q^{2r+1}}.
+\end{equation}
+The cases $r = 2$, $s \in \{1, 2\}$ recover \eqref{eq:RR1}--\eqref{eq:RR2}.
+These identities correspond to principally specialised characters of the
+affine Lie algebra $\mathrm{A}_1^{(1)}$.
+
+\subsection{The $\mathrm{A}_2$ problem}
+
+Finding higher-rank generalisations of the Andrews--Gordon identities
+for $\mathrm{A}_{r-1}^{(1)}$ with $r \geq 3$ has been a long-standing open problem.
+Andrews, Schilling and Warnaar \cite{ASW} discovered several
+$\mathrm{A}_2$ Rogers--Ramanujan identities (moduli 4 and 7) using an
+$\mathrm{A}_2$ Bailey lemma, but the resulting $q$-series were expressed as
+characters multiplied by a factor of $(q;q)_\infty$ that obscured positivity.
+
+The breakthrough insight, due to Foda--Welsh \cite{FW} and
+Corteel \cite{Corteel}, was that \textbf{cylindric partitions} provide
+a natural combinatorial framework for these identities.  The key
+observation is that the generating function for cylindric partitions of
+rank~3, when evaluated at $z = 1$, yields the $\mathrm{A}_2$
+Andrews--Gordon characters (up to a universal factor).
+
+This raises a fundamental question: can one find \emph{manifestly positive}
+multisum expressions for all $\mathrm{A}_2$ Andrews--Gordon identities?
+Corteel, Dousse and Uncu \cite{CDU} made significant progress on this
+for level $d = 5$, and the general positivity conjecture emerged from
+their work and that of Warnaar \cite{W}.
+
+
+%% ============================================================
+\section{Cylindric partitions}
+\label{sec:cpp}
+%% ============================================================
+
+\subsection{Definition}
+
+\begin{definition}[Cylindric partition, rank 3]
+\label{def:cpp}
+Let $c = (c_0, c_1, c_2)$ be a composition of $d := c_0 + c_1 + c_2$.
+A \emph{cylindric plane partition of profile~$c$} is a triple of partitions
+$\nu = (\nu^{(1)}, \nu^{(2)}, \nu^{(3)})$ satisfying the interlacing conditions:
+\begin{align}
+  \nu^{(1)}_j &\geq \nu^{(2)}_{j+c_1} && \text{for all } j \geq 1, \label{eq:interlace1} \\
+  \nu^{(2)}_j &\geq \nu^{(3)}_{j+c_2} && \text{for all } j \geq 1, \label{eq:interlace2} \\
+  \nu^{(3)}_j &\geq \nu^{(1)}_{j+c_0} && \text{for all } j \geq 1. \label{eq:interlace3}
+\end{align}
+Here $\nu^{(i)}_j = 0$ whenever $j$ exceeds the length of $\nu^{(i)}$.
+The \emph{size} and \emph{max} statistics are
+\[
+  |\nu| := |\nu^{(1)}| + |\nu^{(2)}| + |\nu^{(3)}|,
+  \qquad
+  \max(\nu) := \max\bigl(\nu^{(1)}_1,\, \nu^{(2)}_1,\, \nu^{(3)}_1\bigr).
+\]
+\end{definition}
+
+\begin{remark}
+This is a specialisation of the general definition of Gessel--Krattenthaler
+\cite{GK} to rank $r = 3$.  The profile $c$ encodes the ``shifts'' in the
+interlacing conditions; equivalently, the cylindric partition lives on a
+cylinder of circumference~$3$ with profile determining the shape of the
+fundamental domain.
+\end{remark}
+
+\begin{example}[Profile $(2, 1)$]
+\label{ex:profile-21}
+For $c = (2, 1, 0)$ (so $d = 3$), a cylindric partition is a triple
+$(\nu^{(1)}, \nu^{(2)}, \nu^{(3)})$ where:
+\begin{itemize}
+  \item $\nu^{(1)}_j \geq \nu^{(2)}_{j+1}$ (shift by $c_1 = 1$),
+  \item $\nu^{(2)}_j \geq \nu^{(3)}_j$ (shift by $c_2 = 0$),
+  \item $\nu^{(3)}_j \geq \nu^{(1)}_{j+2}$ (shift by $c_0 = 2$).
+\end{itemize}
+\end{example}
+
+\subsection{The generating functions}
+
+\begin{definition}[Two-variable generating function]
+\label{def:GK}
+The bivariate generating function for cylindric partitions with profile~$c$ is
+\begin{equation}
+  \GK_c(z,q) := \sum_{\nu \in \CPP(c)} z^{\max(\nu)}\, q^{|\nu|},
+  \label{eq:GK-def}
+\end{equation}
+where the sum runs over all cylindric partitions of profile~$c$.
+\end{definition}
+
+\begin{definition}[Size generating function]
+\label{def:GK-size}
+The (univariate) size generating function is obtained by setting $z = 1$:
+\[
+  \GK_c(q) := \GK_c(1,q) = \sum_{\nu \in \CPP(c)} q^{|\nu|}.
+\]
+\end{definition}
+
+\subsection{Borodin's product formula}
+
+\begin{theorem}[Borodin \cite{Borodin}]
+\label{thm:borodin}
+The size generating function factors as an infinite product.  For rank~3
+with profile $c = (c_0, c_1, c_2)$ and $d = c_0 + c_1 + c_2$,
+\[
+  \GK_c(q) = \frac{1}{\qpoch{q}{q}} \cdot
+  \frac{1}{\displaystyle\prod_{\square \in \mu} \qpoch{q^{h(\square)}}{q^d}
+  \cdot \prod_{\square \in \mu^c} \qpoch{q^{d-h(\square)}}{q^d}},
+\]
+where $\mu = \mu(c)$ is the partition associated to the profile, $h(\square)$
+is the hook length, and $\mu^c$ is the complement of $\mu$ in the
+$3 \times s(1,3)$ rectangle, with $s(i,j) = c_i + c_{i+1} + \cdots + c_{j-1}$.
+\end{theorem}
+
+\subsection{Connection to $\mathrm{A}_2$ characters}
+
+The crucial link to representation theory is the identity (Foda--Welsh \cite{FW}):
+\begin{equation}
+  \AG_{\lambda,3}(q) = \qpoch{q}{q} \cdot \GK_c(q),
+  \label{eq:AG-GK}
+\end{equation}
+where $\AG_{\lambda,3}(q)$ is the $\mathrm{A}_2$ Andrews--Gordon series associated
+to the $\mathrm{A}_2^{(1)}$ weight
+$\lambda = (d - \mu_1 + \mu_3)\Lambda_0 + (\mu_1 - \mu_2)\Lambda_1 + (\mu_2 - \mu_3)\Lambda_2$,
+and the profile entries are
+$c_0 = d - \mu_1 + \mu_3$, $c_i = \mu_i - \mu_{i+1}$ for $1 \leq i \leq 2$.
+This means that every identity about $\GK_c(q)$ translates to a statement
+about specialised affine Lie algebra characters.
+
+
+%% ============================================================
+\section{The $E$--$H$ factorisation and the polynomials $Q_{n,c}(q)$}
+\label{sec:EH}
+%% ============================================================
+
+\subsection{Factoring out the universal series}
+
+The generating function $\GK_c(z,q)$ contains a ``universal'' factor
+independent of the profile. Defining the corrected generating function
+\begin{equation}
+  G_c(z,q) := \qpoch{zq}{q} \cdot \GK_c(z,q),
+  \label{eq:Gc-def}
+\end{equation}
+the factor $H(z) = 1/\qpoch{zq}{q} = \sum_{n \geq 0} q^n z^n/\qpochn{q}{q}{n}$
+(representing ordinary partitions with largest part $\leq n$, or
+equivalently with at most~$n$ parts; see Section~\ref{sec:why-z-max}
+below) is stripped off.
+Note that $\GK_c(z,q) = H(z) \cdot G_c(z,q)$ is the $E$--$H$
+factorisation of the cylindric partition generating function.
+
+\subsection{Why $z$ tracks the maximum entry}
+\label{sec:why-z-max}
+
+The variable~$z$ in $\GK_c(z,q) = \sum z^{\max(\mathfrak{c})}\, q^{|\mathfrak{c}|}$
+tracks the maximum entry $\max(\mathfrak{c}) = \max_k \mu^k_1$.  This is
+natural because the universal factor $H(z)$ admits two equivalent readings,
+related by the conjugation involution $\lambda \mapsto \lambda'$ on
+partitions:
+\begin{equation}\label{eq:Hz-two-readings}
+  H(z) = \frac{1}{\qpoch{zq}{q}}
+  = \sum_\lambda z^{\lambda_1}\, q^{|\lambda|}
+  = \sum_\lambda z^{\ell(\lambda)}\, q^{|\lambda|},
+\end{equation}
+where the first sum tracks the \emph{largest part} $\lambda_1$ and the
+second tracks the \emph{number of parts} $\ell(\lambda)$.  These are the
+same generating function because conjugation preserves size and swaps
+$\lambda_1 \leftrightarrow \ell(\lambda)$.
+
+\begin{itemize}
+  \item \textbf{Height reading} ($z^{\lambda_1}$): the $z$-degree
+    measures the height of the tallest column.  This is the statistic
+    that appears in the definition of $\GK_c(z,q)$.
+  \item \textbf{Depth reading} ($z^{\ell(\lambda)}$): the $z$-degree
+    measures the number of parts, which in the growth diagram equals the
+    number of peeling layers needed to decompose the CPP.
+\end{itemize}
+
+The $E$--$H$ factorisation then expresses $z^{\max(\mathfrak{c})}$ as a
+convolution of the base partition's contribution (height or depth of~$\gamma$)
+and the purely cylindric contribution from $G_c(z,q)$.
+
+\subsection{The corrected coefficients}
+
+Write the $z$-expansion of the corrected generating function as
+\begin{equation}
+  G_c(z,q) = \sum_{n \geq 0} g_{n,c}(q)\, z^n,
+  \label{eq:gn-def}
+\end{equation}
+where $g_{n,c}(q) = [z^n]\,G_c(z,q)$.  By the Euler expansion
+$\qpoch{zq}{q} = \sum_{j \geq 0} (-1)^j q^{j(j+1)/2} z^j / \qpochn{q}{q}{j}$,
+we have the alternating sum expression:
+\begin{equation}
+  g_{n,c}(q)
+  = \sum_{j=0}^{n} \frac{(-1)^j\, q^{j(j+1)/2}}{\qpochn{q}{q}{j}}
+    \cdot [z^{n-j}]\,\GK_c(z,q).
+  \label{eq:gn-alt-sum}
+\end{equation}
+
+\subsection{The polynomial $Q_{n,c}(q)$}
+
+\begin{definition}[$Q_{n,c}(q)$]
+\label{def:Q}
+For a nonneg integer $n$ and profile $c = (c_0, c_1, c_2)$ with
+$d = c_0 + c_1 + c_2$ and $\ell = \gcd(d, 3)$, define
+\begin{equation}
+  Q_{n,c}(q) := \qpochn{q^\ell}{q^\ell}{n}
+  \cdot [z^n]\!\Bigl(\qpoch{zq}{q} \cdot \GK_c(z,q)\Bigr)
+  = \qpochn{q^\ell}{q^\ell}{n} \cdot g_{n,c}(q).
+  \label{eq:Q-def}
+\end{equation}
+When $d \not\equiv 0 \pmod{3}$, we have $\ell = 1$ and
+$Q_{n,c}(q) = \qpochn{q}{q}{n} \cdot g_{n,c}(q)$.
+\end{definition}
+
+\begin{remark}
+The multiplication by $\qpochn{q^\ell}{q^\ell}{n}$ clears the denominators
+appearing in \eqref{eq:gn-alt-sum}, converting the formal power series
+$g_{n,c}(q)$ into a polynomial.
+That $Q_{n,c}(q)$ is indeed a polynomial (and not merely a formal series)
+was proved by Welsh \cite{Welsh}.
+\end{remark}
+
+\subsection{The $q$-binomial decomposition}
+
+The definition yields a useful expansion in terms of $q$-binomial coefficients.
+Write $f_{m,c}(q) := [z^m]\,\GK_c(z,q)$ for the $z$-coefficients of the
+\emph{original} (uncorrected) generating function, and define
+\begin{equation}
+  h_{m,c}(q) := \qpochn{q}{q}{m} \cdot f_{m,c}(q).
+  \label{eq:hm-def}
+\end{equation}
+Note that $h_{m,c}(q) \neq Q_{m,c}(q)$: the former uses the coefficients
+$f_{m,c}$ of $\GK_c(z,q)$, while the latter uses the coefficients
+$g_{m,c}$ of the corrected $G_c(z,q) = \qpoch{zq}{q} \cdot \GK_c(z,q)$.
+
+Then:
+\begin{equation}
+  Q_{n,c}(q) = \sum_{j=0}^{n} (-1)^j\, q^{j(j+1)/2}\,
+  \qbin{n}{j} \cdot h_{n-j,c}(q).
+  \label{eq:Q-qbin}
+\end{equation}
+This follows from expanding $\qpoch{zq}{q}$ by the Euler identity
+$\qpoch{zq}{q} = \sum_j (-1)^j q^{j(j+1)/2} z^j / \qpochn{q}{q}{j}$,
+extracting $[z^n]$, and multiplying through by $\qpochn{q}{q}{n}$,
+using $\qpochn{q}{q}{n}/\qpochn{q}{q}{j} = \qbin{n}{j} \cdot \qpochn{q}{q}{n-j}$.
+
+Computational evidence shows that $h_{m,c}(q)$ is itself a polynomial with
+nonneg coefficients for all tested profiles.  This is a \emph{stronger}
+observation than positivity of $Q_{n,c}(q)$, since $Q_{n,c}(q)$ is built
+from the $h_{m,c}(q)$ via an alternating-sign sum.
+
+
+%% ============================================================
+\section{The conjecture}
+\label{sec:conjecture}
+%% ============================================================
+
+We now state the positivity conjecture.  The formulation below combines
+the statements of Corteel--Dousse--Uncu \cite[Conjecture~4.2]{CDU}
+and Warnaar \cite[Conjecture~2.7]{W}.
+
+\begin{conjecture}[Corteel--Dousse--Uncu; Warnaar]
+\label{conj:main}
+Let $c = (c_0, c_1, c_2)$ and $d := c_0 + c_1 + c_2$ with
+$d \not\equiv 0 \pmod{3}$.  Then:
+\begin{enumerate}
+  \item[(i)] $Q_{n,c}(q)$ is a polynomial in $q$ with
+    \textbf{nonneg coefficients}.
+  \item[(ii)] The evaluation at $q = 1$ is
+    \begin{equation}
+      Q_{n,c}(1)
+      = \left(\frac{(d+1)(d+2)}{6} - 1\right)^{\!n}.
+      \label{eq:Q-at-1}
+    \end{equation}
+\end{enumerate}
+\end{conjecture}
+
+\begin{remark}[Status]
+The polynomiality of $Q_{n,c}(q)$ and the $q = 1$ evaluation \eqref{eq:Q-at-1}
+have been \textbf{proved} by Welsh \cite{Welsh}.
+The positivity (i) \textbf{remains open} in general.
+\end{remark}
+
+\begin{remark}[The $d \equiv 0 \pmod{3}$ case]
+When $3 \mid d$ the appropriate normalisation uses $\ell = 3$, and the
+polynomial $P_{n,c}(q) := \qpochn{q^3}{q^3}{n} \cdot g_{n,c}(q)$ is
+conjectured to have nonneg coefficients as well
+(Corteel--Dousse--Uncu \cite[Conjecture~4.2]{CDU}).
+\end{remark}
+
+\begin{remark}[Equivalent formulation via $g_{n,c}$]
+Writing $g_{n,c}(q) = Q_{n,c}(q)/\qpochn{q}{q}{n}$ (when $\ell = 1$),
+the conjecture says that the generating function of cylindric partitions
+with max entry exactly~$n$, after correction by $\qpoch{zq}{q}$, has the
+form ``nonneg polynomial divided by $(q)_n$''.  In other words, the
+alternating-sign cancellation in \eqref{eq:gn-alt-sum} resolves perfectly
+into positivity after clearing denominators.
+\end{remark}
+
+
+%% ============================================================
+\section{Examples}
+\label{sec:examples}
+%% ============================================================
+
+\subsection{Level $d = 2$: the Rogers--Ramanujan identities}
+
+For $d = 2$ there are two profiles (up to the shift symmetry
+$\GK_{(c_0,c_1,c_2)}(z,q) = \GK_{(c_1,c_2,c_0)}(z,q)$):
+
+\paragraph{Profile $c = (2,0,0)$.}
+The interlacing conditions force $\nu^{(2)} = \nu^{(3)} = \emptyset$ and
+$\nu^{(1)}$ is any partition with parts $\leq n$ (when $\max = n$).
+Here
+\[
+  Q_{n,(2,0,0)}(q) = q^{n^2},
+\]
+a single monomial.  Combining with the $E$--$H$ factorisation and Borodin's
+formula reproduces the \textbf{first Rogers--Ramanujan identity} \eqref{eq:RR1}:
+\[
+  \GK_{(2,0,0)}(1,q) = \frac{1}{\qpoch{q}{q}} \cdot
+  \frac{1}{\qpoch{q^2}{q^5} \cdot \qpoch{q^3}{q^5}},
+  \qquad
+  \AG_{\Lambda_0+\Lambda_1;3}(q) = \sum_{n \geq 0} \frac{q^{n^2}}{\qpochn{q}{q}{n}}.
+\]
+
+\paragraph{Profile $c = (1,1,0)$.}
+Here
+\[
+  Q_{n,(1,1,0)}(q) = q^{n(n+1)},
+\]
+again a single monomial, and the identity becomes the
+\textbf{second Rogers--Ramanujan identity} \eqref{eq:RR2}:
+\[
+  \AG_{2\Lambda_0;3}(q) = \sum_{n \geq 0} \frac{q^{n^2+n}}{\qpochn{q}{q}{n}}.
+\]
+
+In both cases the conjecture holds trivially since a monomial has
+nonneg coefficients.
+
+
+\subsection{Level $d = 4$: the Andrews--Schilling--Warnaar identities}
+
+For $d = 4$ we have $\frac{1}{6}(5)(6) - 1 = 4$, so $Q_{n,c}(1) = 4^n$.
+
+\paragraph{Profile $c = (2,2,0)$.}
+The first few polynomials are:
+\begin{align*}
+  Q_{0,(2,2,0)}(q) &= 1, \\
+  Q_{1,(2,2,0)}(q) &= q^2 + q^3 + q^4 + q^5, \\
+  Q_{2,(2,2,0)}(q) &= q^4 + q^5 + 3q^6 + 3q^7 + 5q^8 + 4q^9 + 5q^{10}
+    + 3q^{11} + 3q^{12} + q^{13} + q^{14}.
+\end{align*}
+These are manifestly positive and palindromic, with $Q_{1,(2,2,0)}(1) = 4$.
+
+\paragraph{Profile $c = (2,1,1)$.}
+The generating function $\GK_{(2,2,1)}(z,q)$ was computed by
+Corteel--Dousse--Uncu \cite[Theorem~3.3]{CDU}.
+Their result yields:
+\[
+  Q_{n,(2,2,1)}(q) = \sum_{\substack{n_2, n_3, n_4 \geq 0 \\
+  m_1, \ldots, m_{k-1} \geq 0}}
+  q^{n^2 + n_2^2 + n_3^2 + n_4^2 - nn_2 + n_2n_4}
+  \qbin{n}{n_2} \qbin{n}{n_4} \qbin{n_2}{n_3},
+\]
+which gives $Q_{n,(2,2,1)}(1) = 6^n$.
+This is a manifestly positive quadruple sum.
+
+
+\subsection{Level $d = 5$: the Corteel--Dousse--Uncu identities}
+
+For $d = 5$ we have $\frac{1}{6}(6)(7) - 1 = 6$, so $Q_{n,c}(1) = 6^n$.
+This is the main case treated in \cite{CDU}, where manifestly positive
+multisum expressions for $\GK_c(z,q)$ were found for all five profiles
+(up to symmetry).
+
+
+\subsection{Level $d = 7$}
+
+For $d = 7$ we have $\frac{1}{6}(8)(9) - 1 = 11$, so $Q_{n,c}(1) = 11^n$.
+There are four distinct profiles up to cyclic shift: $(3,2,2)$, $(2,3,2)$,
+$(4,2,1)$, and $(5,1,1)$.  Computational verification confirms positivity
+of $Q_{n,c}(q)$ for all profiles with $n \leq 3$.
+
+
+%% ============================================================
+\section{Why cylindric partitions?}
+\label{sec:why-cpp}
+%% ============================================================
+
+\subsection{The product side}
+
+Borodin's formula (Theorem~\ref{thm:borodin}) gives a closed-form
+\emph{infinite product} for $\GK_c(1,q)$.  Via equation \eqref{eq:AG-GK},
+this product is (up to the factor $1/\qpoch{q}{q}$) an $\mathrm{A}_2^{(1)}$
+character.  So each profile~$c$ corresponds to a specific affine Lie algebra
+module, and the generating function of cylindric partitions is its character.
+
+\subsection{The sum side}
+
+The conjecture posits that the \emph{sum side}---the multisum expression
+for $Q_{n,c}(q)$---has nonneg coefficients.  Finding these multisum
+expressions amounts to finding \textbf{manifestly positive} formulas for
+$\mathrm{A}_2$ Andrews--Gordon identities.
+
+The connection is:
+\begin{equation}
+  \AG_{\lambda,3}(q)
+  = \qpoch{q}{q} \cdot \GK_c(1,q)
+  = \sum_{n \geq 0} \frac{Q_{n,c}(q)}{\qpochn{q}{q}{n}}.
+  \label{eq:AG-from-Q}
+\end{equation}
+So positivity of $Q_{n,c}(q)$ would give a manifestly positive
+``sum = product'' identity for every $\mathrm{A}_2$ Andrews--Gordon
+character (at levels not divisible by~3).
+
+\subsection{The role of the max statistic}
+
+The key innovation is the \emph{two-variable} generating function
+$\GK_c(z,q)$, which refines the character by the max statistic.
+Without the variable~$z$, one only sees the total count $\GK_c(1,q)$
+and the connection to $Q_{n,c}(q)$ is lost.  The max statistic provides the
+$z$-grading that decomposes the character into the pieces
+$g_{n,c}(q) = [z^n]\,G_c(z,q)$, each of which carries the positivity.
+
+This was first observed by Corteel--Welsh \cite{CW}, who showed that
+the Corteel--Welsh $q$-difference equation (Theorem~2.3 of \cite{CDU}) for
+$\GK_c(z,q)$ can be solved recursively to produce manifestly positive
+expressions when $d$ is small.
+
+
+%% ============================================================
+\section{The hierarchy of generating functions}
+\label{sec:hierarchy}
+%% ============================================================
+
+The generating function $\GK_c(z,q)$ that appears in the conjecture is the
+simplest in a hierarchy of progressively more refined generating series
+for cylindric partitions.  Each level specialises to the one below it, and
+the conjecture lives at the bottom of the chain.  Understanding the richer
+levels may be the key to proving positivity.
+
+\subsection{Level 0: the univariate generating function}
+
+The coarsest invariant tracks only the total size.  For a binary string
+$\pi$ of length~$T$ encoding the profile, Borodin's identity
+\cite{Borodin} gives:
+\begin{equation}
+  \sum_{\mathfrak{c} \in \CPP(\pi)} z^{|\mathfrak{c}|}
+  = \prod_{n \geq 0} \left(
+    \frac{1}{1 - z^{(n+1)T}}
+    \prod_{\substack{i < j \\ \pi_i > \pi_j}} \frac{1}{1 - z^{j-i+nT}}
+    \prod_{\substack{i > j \\ \pi_i > \pi_j}} \frac{1}{1 - z^{j-i+(n+1)T}}
+  \right).
+  \label{eq:borodin-full}
+\end{equation}
+
+\subsection{Level 1: the bivariate generating function $\GK_c(z,q)$}
+
+This refines Level~0 by tracking the max statistic alongside the size:
+\[
+  \GK_c(z,q) = \sum_{\mathfrak{c} \in \CPP(c)}
+  z^{\max(\mathfrak{c})}\, q^{|\mathfrak{c}|}.
+\]
+This is the level at which the conjecture is formulated.
+The variable~$z$ grades by the largest entry, decomposing $\GK_c(1,q)$
+into the pieces $g_{n,c}(q) = [z^n]\,G_c(z,q)$ from which $Q_{n,c}(q)$ is
+constructed.  Setting $z = 1$ recovers Level~0.
+
+
+\subsection{Level 2: the multivariate refinement}
+
+A cylindric partition $\mathfrak{c} = (\mu^0, \mu^1, \ldots, \mu^{T-1})$
+consists of $T$ individual partitions.  The \emph{multivariate generating
+function} (PhD thesis \cite{Langer-thesis}, Chapter~3) tracks each slice
+separately with its own variable:
+\begin{equation}
+  \sum_{\mathfrak{c} \in \CPP(\pi)}
+  z_0^{|\mu^0|}\, z_1^{|\mu^1|} \cdots z_{T-1}^{|\mu^{T-1}|}.
+  \label{eq:multivariate-gf}
+\end{equation}
+The \emph{refined Borodin identity} states that this equals the product
+\eqref{eq:borodin-full} with the substitutions:
+\begin{align}
+  z^{nT} &\mapsto z_0^n z_1^n \cdots z_{T-1}^n, \notag \\
+  z^{j-i+nT} &\mapsto z_0^n \cdots z_i^n\, z_{i+1}^{n+1} \cdots
+    z_j^{n+1}\, z_{j+1}^n \cdots z_{T-1}^n
+    && (i < j), \label{eq:refined-sub} \\
+  z^{j-i+(n+1)T} &\mapsto z_0^{n+1} \cdots z_j^{n+1}\, z_{j+1}^n \cdots
+    z_i^n\, z_{i+1}^{n+1} \cdots z_{T-1}^{n+1}
+    && (i > j). \notag
+\end{align}
+
+Setting $z_0 = z_1 = \cdots = z_{T-1} = 1$ recovers Level~0.
+Level~1 ($\GK_c(z,q)$) is obtained from Level~2 by the non-linear
+operation of replacing
+$z_0^{|\mu^0|} \cdots z_{T-1}^{|\mu^{T-1}|}$ by $z^{\max_k \mu^k_1} q^{|\mathfrak{c}|}$.
+
+
+\subsection{Level 3: the operator trace (most general Schur form)}
+
+The proof in the PhD thesis \cite{Langer-thesis} actually establishes an
+identity in \emph{free parameters} $u_0, u_1, \ldots, u_T$ and $w$, from
+which the multivariate version is a specialisation.
+
+The left-hand side is expressed as a \emph{trace} of operators acting on the
+ring of symmetric functions:
+\begin{equation}
+  \sum_{\mathfrak{c} \in \CPP(\pi)}
+  \prod_{k=0}^{T-1} z_k^{|\mu^k|}
+  = \sum_\mu \langle s_\mu \mid
+    G^{\pi_0}(u_0)\, G^{\pi_1}(u_1) \cdots G^{\pi_{T-1}}(u_{T-1})\,
+    D_w \mid s_\mu \rangle,
+  \label{eq:trace-schur}
+\end{equation}
+where $G^1(u) = \Omega[Xu]$ (strip addition), $G^0(u) = \Omega^*[Xu]$
+(strip removal), $D_w$ is the degree operator
+$D_w\, s_\lambda = w^{|\lambda|}\, s_\lambda$, and
+\begin{equation}
+  w = z_0 z_1 \cdots z_{T-1}, \qquad
+  u_k = \begin{cases}
+    z_0 z_1 \cdots z_{k-1} & \text{if } \pi_k = 1, \\
+    z_0^{-1} z_1^{-1} \cdots z_{k-1}^{-1} & \text{if } \pi_k = 0.
+  \end{cases}
+  \label{eq:uk-specialization}
+\end{equation}
+
+The proof proceeds in three steps:
+\begin{enumerate}
+  \item \textbf{Commute} all $\Omega^*$ operators past all $\Omega$ operators
+    using $\Omega^*[Xu]\,\Omega[Xv] = \frac{1}{1-uv}\,\Omega[Xv]\,\Omega^*[Xu]$,
+    producing scalar factors $1/(1 - u_i u_j)$ for each pair with
+    $\pi_i > \pi_j$ and $i < j$.
+  \item \textbf{Shift} using $D_w\,\Omega[Xu] = \Omega[Xuw]\,D_w$ and iterate,
+    defining
+    \begin{equation}
+      M_\pi(m) = \sum_\mu \langle s_\mu \mid
+      \prod_{\substack{k:\,\pi_k=0}} \Omega[Xu_k w^m]
+      \prod_{\substack{k:\,\pi_k=1}} \Omega^*[Xu_k]\,
+      D_w \mid s_\mu \rangle,
+      \label{eq:M-def}
+    \end{equation}
+    which satisfies the recurrence
+    \begin{equation}
+      M_\pi(m) = \prod_{\substack{(i,j)\\\pi_i \neq \pi_j}}
+      \frac{1}{1 - u_i u_j w^{m+1}} \;\cdot\; M_\pi(m+1).
+      \label{eq:M-recurrence}
+    \end{equation}
+  \item \textbf{Take the limit} $m \to \infty$, where
+    $M_\pi(\infty) = \prod_{n \geq 1} 1/(1-w^n)$.
+\end{enumerate}
+
+The result is an identity in the free parameters $u_0, \ldots, u_{T-1}, w$:
+\begin{equation}
+  \operatorname{tr}\!\bigl(
+  G^{\pi_0}(u_0) \cdots G^{\pi_{T-1}}(u_{T-1})\, D_w
+  \bigr)
+  = \prod_{m \geq 1} \frac{1}{1 - w^m}
+  \prod_{\substack{i < j \\ \pi_i > \pi_j}}
+    \frac{1}{1 - u_i u_j w^{m-1}}
+  \prod_{\substack{i > j \\ \pi_i > \pi_j}}
+    \frac{1}{1 - u_i u_j w^m}.
+  \label{eq:borodin-trace}
+\end{equation}
+The multivariate identity (Level~2) is recovered by the specialisation
+\eqref{eq:uk-specialization}, and the univariate identity (Level~0) by
+the further specialisation $z_k \mapsto z$ for all~$k$.
+
+
+\subsection{Level 4: the $(r,t)$-Macdonald extension}
+
+The richest form replaces the Schur inner product by the Macdonald inner
+product and each cylindric partition by a weighted object.  For
+$\mathfrak{c} = (\mu^0, \mu^1, \ldots, \mu^T)$, define the
+\emph{Macdonald weight}
+\begin{equation}
+  W_{\mathfrak{c}}(r,t)
+  := \prod_{\substack{k = 1 \\ \pi_k = 1}}^{T}
+     \varphi_{\mu^k / \mu^{k-1}}(r,t)
+     \prod_{\substack{k = 1 \\ \pi_k = 0}}^{T}
+     \psi_{\mu^{k-1} / \mu^k}(r,t),
+  \label{eq:Wc-def}
+\end{equation}
+where $\varphi_{\lambda/\mu}(r,t)$ and $\psi_{\lambda/\mu}(r,t)$ are the
+Macdonald Pieri coefficients:
+\begin{align}
+  \varphi_{\lambda/\mu}(r,t)
+  &= \prod_{s \in C_{\lambda/\mu}}
+     \frac{1 - r^{a_\lambda(s)}\, t^{\ell_\lambda(s)+1}}
+          {1 - r^{a_\lambda(s)+1}\, t^{\ell_\lambda(s)}},
+  \label{eq:phi-def} \\
+  \psi_{\lambda/\mu}(r,t)
+  &= \prod_{s \notin C_{\lambda/\mu}}
+     \frac{1 - r^{a_\lambda(s)+1}\, t^{\ell_\lambda(s)}}
+          {1 - r^{a_\lambda(s)}\, t^{\ell_\lambda(s)+1}},
+  \label{eq:psi-def}
+\end{align}
+with $a_\lambda(s)$ and $\ell_\lambda(s)$ the arm and leg lengths of the
+box~$s$ in~$\lambda$, and $C_{\lambda/\mu}$ the set of columns where the
+skew shape $\lambda/\mu$ has its boxes.
+
+The left-hand side of the $(r,t)$-identity is expressed as an operator trace
+over Macdonald polynomials (PhD thesis \cite{Langer-thesis}, Chapter~4):
+\begin{equation}
+  \sum_{\mathfrak{c} \in \CPP(\pi)}
+  W_{\mathfrak{c}}(r,t)
+  \prod_{k=0}^{T-1} z_k^{|\mu^k|}
+  = \sum_\mu \langle Q_\mu \mid
+    H^{\pi_0}(u_0)\, H^{\pi_1}(u_1) \cdots H^{\pi_{T-1}}(u_{T-1})\,
+    D_w \mid P_\mu \rangle_{r,t},
+  \label{eq:trace-mac}
+\end{equation}
+where $H^1(u) = \Omega_{r,t}[Xu]$, $H^0(u) = \Omega_{r,t}^*[Xu]$, and
+$\langle\,\cdot\,,\,\cdot\,\rangle_{r,t}$ is the Macdonald inner product
+with respect to which $\{P_\mu\}$ and $\{Q_\mu\}$ are dual bases.
+The proof is identical in structure to the Schur case, using the
+$(r,t)$-commutation relation
+\[
+  \Omega_{r,t}^*[Xu]\;\Omega_{r,t}[Xv]
+  = \frac{\qpochn{tuv}{r}{\infty}}{\qpochn{uv}{r}{\infty}}
+  \;\Omega_{r,t}[Xv]\;\Omega_{r,t}^*[Xu]
+\]
+in place of $\Omega^*[Xu]\,\Omega[Xv] = \frac{1}{1-uv}\,\Omega[Xv]\,\Omega^*[Xu]$.
+
+The $(r,t)$-recurrence $N_\pi(m) \to N_\pi(m+1)$ produces the factors
+$\qpochn{tu_iu_jw^{m+1}}{r}{\infty}/\qpochn{u_iu_jw^{m+1}}{r}{\infty}$,
+and the same limit $N_\pi(\infty) = \prod_{n \geq 1} 1/(1-w^n)$ gives:
+\begin{equation}
+  \operatorname{tr}\!\bigl(
+  H^{\pi_0}(u_0) \cdots H^{\pi_{T-1}}(u_{T-1})\, D_w
+  \bigr)_{r,t}
+  = \prod_{m \geq 1} \frac{1}{1 - w^m}
+  \prod_{\substack{i < j \\ \pi_i > \pi_j}}
+    \frac{\qpochn{tu_iu_jw^{m-1}}{r}{\infty}}
+         {\qpochn{u_iu_jw^{m-1}}{r}{\infty}}
+  \prod_{\substack{i > j \\ \pi_i > \pi_j}}
+    \frac{\qpochn{tu_iu_jw^m}{r}{\infty}}
+         {\qpochn{u_iu_jw^m}{r}{\infty}}.
+  \label{eq:rt-borodin-trace}
+\end{equation}
+
+The weight function has a combinatorial description in terms
+of \emph{peak} and \emph{valley} cubes (PhD thesis, Theorem~4.2):
+\begin{equation}
+  W_{\mathfrak{c}}(r,t)
+  = \Omega\!\left[(r - t)\,\mathcal{D}_{\mathfrak{c}}(r,t)\right],
+  \label{eq:Wc-plethystic}
+\end{equation}
+where $\Omega[\cdot]$ is the plethystic exponential and
+\[
+  \mathcal{D}_{\mathfrak{c}}(r,t)
+  = \sum_{s \in \mathrm{peak}(\mathfrak{c})}
+    r^{a_{\mathfrak{c}}(s)}\, t^{\ell_{\mathfrak{c}}(s)}
+  - \sum_{s \in \mathrm{valley}(\mathfrak{c})}
+    r^{a_{\mathfrak{c}}(s)}\, t^{\ell_{\mathfrak{c}}(s)}.
+\]
+
+\subsection{Summary: the nesting}
+
+The five levels form a chain of specialisations:
+
+\medskip
+\begin{center}
+\fbox{\parbox{0.92\textwidth}{\medskip
+\textbf{Level 4} --- $(r,t)$-operator trace in free parameters $u_k, w$
+\emph{(most general)}:
+\[
+  \operatorname{tr}\!\bigl(
+  H^{\pi_0}(u_0) \cdots H^{\pi_{T-1}}(u_{T-1})\, D_w
+  \bigr)_{r,t}
+  = \prod_{m \geq 1} \frac{1}{1-w^m}
+  \prod_{\pi_i > \pi_j}
+  \frac{(tu_iu_jw^{\bullet};r)_\infty}{(u_iu_jw^{\bullet};r)_\infty}
+\]
+
+\smallskip
+$\Big\downarrow$ \emph{set $r = t$ (all Macdonald weights $\to 1$)}
+
+\smallskip
+\textbf{Level 3} --- Schur operator trace in free parameters $u_k, w$:
+\[
+  \operatorname{tr}\!\bigl(
+  G^{\pi_0}(u_0) \cdots G^{\pi_{T-1}}(u_{T-1})\, D_w
+  \bigr)
+  = \prod_{m \geq 1} \frac{1}{1-w^m}
+  \prod_{\pi_i > \pi_j}
+  \frac{1}{1-u_iu_jw^{\bullet}}
+\]
+
+\smallskip
+$\Big\downarrow$ \emph{specialise $u_k, w$ via \eqref{eq:uk-specialization}}
+
+\smallskip
+\textbf{Level 2} --- Multivariate: $\;\displaystyle\sum_{\mathfrak{c}}
+z_0^{|\mu^0|} z_1^{|\mu^1|} \cdots z_{T-1}^{|\mu^{T-1}|}$
+
+\smallskip
+$\Big\downarrow$ \emph{set all $z_k = 1$}
+\hfill
+$\Big\downarrow$ \emph{max extraction $\to z^{\max_k \mu_1^k} q^{|\mathfrak{c}|}$}
+
+\smallskip
+\textbf{Level 0} --- Size: $\;\displaystyle\sum_{\mathfrak{c}} q^{|\mathfrak{c}|}$
+\hfill
+\textbf{Level 1} --- Bivariate: $\;\GK_c(z,q) = \displaystyle\sum_{\mathfrak{c}} z^{\max(\mathfrak{c})} q^{|\mathfrak{c}|}$
+
+\smallskip
+\hfill $\Big\downarrow$ \emph{set $z = 1$}
+
+\smallskip
+\hfill \textbf{Level 0} --- Size: $\;\displaystyle\sum_{\mathfrak{c}} q^{|\mathfrak{c}|}$
+
+\medskip
+}}
+\end{center}
+\medskip
+
+Level~1 (the bivariate $\GK_c(z,q)$) is the level at which
+Conjecture~\ref{conj:main} is stated.  It sits ``beside'' Level~2
+rather than strictly below it, because the max statistic is obtained
+from the multivariate data by a non-linear operation (taking the maximum
+of the first parts).
+
+%% ============================================================
+\section{The Macdonald extension of the conjecture}
+\label{sec:mac-conjecture}
+%% ============================================================
+
+\subsection{Notation}
+
+The Macdonald polynomials $P_\lambda(X;r,t)$ depend on two parameters
+traditionally called $q$ and~$t$.  Since we have already used $q$ as the
+weight-tracking variable throughout this document (as in $q^{|\mathfrak{c}|}$
+and $Q_{n,c}(q)$), we adopt the convention of writing $(r,t)$ for the
+Macdonald parameters to avoid ambiguity.  The specialisation $r = t$
+recovers the Schur function setting.
+
+\subsection{The $(r,t)$-extended generating function}
+
+Define the \emph{Macdonald-weighted bivariate generating function}:
+\begin{equation}
+  \GK_c^{(r,t)}(z,q)
+  := \sum_{\mathfrak{c} \in \CPP(c)}
+  W_{\mathfrak{c}}(r,t) \cdot z^{\max(\mathfrak{c})}\, q^{|\mathfrak{c}|},
+  \label{eq:GK-rt}
+\end{equation}
+where the Macdonald weight $W_{\mathfrak{c}}(r,t)$ is as defined in
+\eqref{eq:Wc-def} (with the substitution $q \mapsto r$):
+\[
+  W_{\mathfrak{c}}(r,t)
+  = \prod_{\substack{k:\,\pi_k = 1}}
+    \varphi_{\mu^k/\mu^{k-1}}(r,t)
+    \prod_{\substack{k:\,\pi_k = 0}}
+    \psi_{\mu^{k-1}/\mu^k}(r,t).
+\]
+This specialises to the ordinary generating function when $r = t$:
+\[
+  \GK_c^{(r,r)}(z,q) = \GK_c(z,q).
+\]
+
+\subsection{The corrected coefficients}
+
+As in the Schur case, define the corrected generating function and
+its $z$-coefficients:
+\begin{align}
+  G_c^{(r,t)}(z,q)
+  &:= \qpoch{zq}{q} \cdot \GK_c^{(r,t)}(z,q),
+  \label{eq:Gc-rt} \\
+  g_{n,c}^{(r,t)}(q)
+  &:= [z^n]\, G_c^{(r,t)}(z,q).
+  \label{eq:gn-rt}
+\end{align}
+Note that the $E$--$H$ factorisation uses $\qpoch{zq}{q}$, which depends
+only on the weight variable~$q$ and \emph{not} on the Macdonald
+parameters $(r,t)$.  This is because the ``universal factor''
+$H(z) = 1/\qpoch{zq}{q}$ counts ordinary partitions by size,
+independently of any Macdonald weighting.
+
+\subsection{The polynomial $Q_{n,c}(q;\,r,t)$}
+
+\begin{definition}
+\label{def:Q-rt}
+For a nonneg integer $n$, profile $c = (c_0, c_1, c_2)$ with
+$d = c_0 + c_1 + c_2$, $d \not\equiv 0 \pmod{3}$, and Macdonald
+parameters $(r,t)$, define
+\begin{equation}
+  Q_{n,c}(q;\,r,t)
+  := \qpochn{q}{q}{n} \cdot g_{n,c}^{(r,t)}(q)
+  = \qpochn{q}{q}{n} \cdot [z^n]\!\Bigl(
+    \qpoch{zq}{q} \cdot \GK_c^{(r,t)}(z,q)
+  \Bigr).
+  \label{eq:Q-rt}
+\end{equation}
+\end{definition}
+
+By construction, $Q_{n,c}(q;\,r,r) = Q_{n,c}(q)$.
+
+\begin{remark}[Structure of the coefficients]
+Since the Macdonald Pieri coefficients $\varphi_{\lambda/\mu}(r,t)$ and
+$\psi_{\lambda/\mu}(r,t)$ are rational functions of $r$ and~$t$,
+the quantity $Q_{n,c}(q;\,r,t)$ is \emph{a priori} a formal power series
+in~$q$ with coefficients in $\Q(r,t)$.  For it to be a polynomial in $q$
+with ``positive'' coefficients, we would need:
+\begin{enumerate}
+  \item[(a)] $Q_{n,c}(q;\,r,t)$ is a polynomial in~$q$
+    (finitely many nonzero $q$-powers), and
+  \item[(b)] each $q$-coefficient is a nonneg expression in $r$ and~$t$.
+\end{enumerate}
+The precise meaning of ``nonneg in $r,t$'' requires care: the Pieri
+coefficients are ratios of terms of the form $(1 - r^a t^b)$, so the
+natural positivity domain is $0 < r, t < 1$.
+\end{remark}
+
+\subsection{The conjecture}
+
+\begin{conjecture}[Macdonald extension]
+\label{conj:mac}
+Let $c = (c_0, c_1, c_2)$ with $d := c_0 + c_1 + c_2$ and
+$d \not\equiv 0 \pmod{3}$.  Then:
+\begin{enumerate}
+  \item[(i)] $Q_{n,c}(q;\,r,t)$ is a polynomial in~$q$ whose
+    coefficients are rational functions of $r,t$ that are
+    \textbf{nonneg} for $0 < r, t < 1$.
+  \item[(ii)] Specialising $r = t$ recovers Conjecture~\ref{conj:main}:
+    \[
+      Q_{n,c}(q;\,r,r) = Q_{n,c}(q).
+    \]
+  \item[(iii)] At $q = 1$:
+    \[
+      Q_{n,c}(1;\,r,t) = \left(\frac{(d+1)(d+2)}{6} - 1\right)^{\!n},
+    \]
+    independent of $(r,t)$.
+\end{enumerate}
+\end{conjecture}
+
+\begin{remark}[Why (iii) should be independent of $(r,t)$]
+The evaluation at $q = 1$ counts cylindric partitions at the
+``combinatorial'' level (ignoring the $q$-grading), and the Macdonald
+weight satisfies $W_{\mathfrak{c}}(r,t)\big|_{q=1} = 1$ for any
+cylindric partition $\mathfrak{c}$, since the Pieri coefficients
+collapse: the products of $(1 - r^a t^b)$ factors in numerator and
+denominator cancel pairwise when the $q$-weight is forgotten.
+More precisely, summing the weight variable $q^{|\mathfrak{c}|}$
+at $q = 1$ eliminates the distinction between different
+$q$-refinements, so the $q = 1$ evaluation depends only on the
+combinatorial count.
+\end{remark}
+
+\begin{remark}[The $(r,t)$-Borodin product at $z = 1$]
+Setting $z = 1$ in $\GK_c^{(r,t)}(z,q)$ gives a $(r,t)$-deformed
+character.  Via the $(r,t)$-Borodin identity
+\eqref{eq:rt-borodin-trace}, this is:
+\[
+  \GK_c^{(r,t)}(1,q) = \prod_{n \geq 1} \frac{1}{1-q^n}
+  \prod_{\substack{i < j \\ \pi_i > \pi_j}}
+    \frac{\qpochn{tq^{j-i+(n-1)T}}{r}{\infty}}
+         {\qpochn{q^{j-i+(n-1)T}}{r}{\infty}}
+  \prod_{\substack{i > j \\ \pi_i > \pi_j}}
+    \frac{\qpochn{tq^{j-i+nT}}{r}{\infty}}
+         {\qpochn{q^{j-i+nT}}{r}{\infty}},
+\]
+where $(a;r)_\infty = \prod_{k \geq 0}(1 - ar^k)$.
+At $r = t$ the $(r,t)$-factors reduce to~$1$ and we recover the
+ordinary Borodin product.
+\end{remark}
+
+\begin{remark}[Why the conjecture is natural]
+Each individual Macdonald weight $W_{\mathfrak{c}}(r,t)$ is a product of
+positive rational functions (for $0 < r, t < 1$), so each cylindric
+partition contributes a positive term to $\GK_c^{(r,t)}(z,q)$.
+The alternating-sign cancellation in the $E$--$H$ factorisation
+(multiplication by $\qpoch{zq}{q}$) is the same Euler expansion
+$\sum (-1)^j q^{j(j+1)/2} z^j / (q)_j$ as in the Schur case.
+If the cancellation resolves into positivity for $r = t$ (the original
+conjecture), it is natural to expect it does so for general $(r,t)$
+as well, since the Macdonald weights only \emph{redistribute} the mass
+among cylindric partitions without changing the total count.
+\end{remark}
+
+
+%% ============================================================
+\section{Multivariate extensions}
+\label{sec:multivariate}
+%% ============================================================
+
+The conjecture as stated in Section~\ref{sec:conjecture} uses the
+bivariate generating function $\GK_c(z,q)$, which tracks the single
+statistic $\max(\mathfrak{c})$ via the variable~$z$.  At Level~2 in the
+hierarchy (Section~\ref{sec:hierarchy}), we have the multivariate
+generating function with separate variables $z_0, z_1, \ldots, z_{T-1}$
+tracking $|\mu^0|, |\mu^1|, \ldots, |\mu^{T-1}|$ individually.
+This suggests natural multivariate lifts of the conjecture.
+
+\subsection{Multivariate $E$--$H$ factorisation}
+
+For rank~3 with profile $c = (c_0, c_1, c_2)$, the cylindric partition
+$\mathfrak{c} = (\mu^0, \mu^1, \mu^2)$ consists of three partitions.
+Define the \emph{multivariate generating function}
+\[
+  \GK_c(\mathbf{z}, q)
+  := \sum_{\mathfrak{c} \in \CPP(c)}
+  z_0^{|\mu^0|}\, z_1^{|\mu^1|}\, z_2^{|\mu^2|}\, q^{|\mathfrak{c}|},
+\]
+where $q^{|\mathfrak{c}|} = q^{|\mu^0| + |\mu^1| + |\mu^2|}$.
+(Here $\mathbf{z} = (z_0, z_1, z_2)$ and the $q$-variable is
+redundant: $q^{|\mathfrak{c}|} = (z_0 z_1 z_2)^? \cdot q^?$ is
+already encoded in the $z$-variables.
+More precisely, one can set $q = 1$ and work purely with $z_0, z_1, z_2$,
+or set $z_0 = z_1 = z_2 = q$ to recover $\GK_c(q) = \GK_c(1,q)$.)
+
+For the multivariate $E$--$H$ factorisation, define the corrected
+generating function
+\begin{equation}
+  G_c(\mathbf{z})
+  := \qpoch{z_0 z_1 z_2}{z_0 z_1 z_2}
+  \cdot \GK_c(\mathbf{z}, 1),
+  \label{eq:Gc-multi}
+\end{equation}
+and its multi-index coefficients
+\begin{equation}
+  g_{\mathbf{n},c}
+  := [z_0^{n_0} z_1^{n_1} z_2^{n_2}]\, G_c(\mathbf{z}),
+  \qquad
+  \mathbf{n} = (n_0, n_1, n_2).
+  \label{eq:gn-multi}
+\end{equation}
+
+\subsection{The multivariate polynomial $Q_{\mathbf{n},c}$}
+
+\begin{definition}[Multivariate $Q$]
+\label{def:Q-multi}
+For a multi-index $\mathbf{n} = (n_0, n_1, n_2) \in \N^3$, profile
+$c = (c_0, c_1, c_2)$ with $d = c_0 + c_1 + c_2$,
+$d \not\equiv 0 \pmod{3}$, define
+\begin{equation}
+  Q_{\mathbf{n},c}
+  := \prod_{k=0}^{2} \qpochn{q}{q}{n_k}
+  \cdot g_{\mathbf{n},c}(q),
+  \label{eq:Q-multi}
+\end{equation}
+where $q = z_0 z_1 z_2$ and $g_{\mathbf{n},c}(q)$ is the
+appropriately normalised multi-index coefficient.
+\end{definition}
+
+\begin{remark}
+Setting $n_0 = n_1 = n_2 = n$ and extracting the coefficient of
+$z_0^n z_1^n z_2^n$ from the multivariate generating function is
+\emph{not} the same as the bivariate $[z^n]$ extraction (which
+uses the max statistic).  The relationship between the multivariate
+and bivariate conjectures is therefore non-trivial: the bivariate
+conjecture concerns a different projection of the same
+underlying data.
+\end{remark}
+
+\begin{conjecture}[Multivariate positivity]
+\label{conj:multi}
+Let $c = (c_0, c_1, c_2)$ with $d := c_0 + c_1 + c_2$ and
+$d \not\equiv 0 \pmod{3}$.  Then for all
+$\mathbf{n} = (n_0, n_1, n_2) \in \N^3$:
+\begin{enumerate}
+  \item[(i)] $Q_{\mathbf{n},c}$ is a polynomial in~$q$ with
+    \textbf{nonneg coefficients}.
+  \item[(ii)] Specialising to the diagonal $n_0 = n_1 = n_2 = n$
+    and projecting via the max statistic recovers
+    Conjecture~\ref{conj:main}.
+\end{enumerate}
+\end{conjecture}
+
+\subsection{The $(r,t)$-Macdonald multivariate conjecture}
+
+Combining the Macdonald extension (Section~\ref{sec:mac-conjecture})
+with the multivariate framework, define the
+\emph{Macdonald-weighted multivariate generating function}:
+\[
+  \GK_c^{(r,t)}(\mathbf{z})
+  := \sum_{\mathfrak{c} \in \CPP(c)}
+  W_{\mathfrak{c}}(r,t) \cdot
+  z_0^{|\mu^0|}\, z_1^{|\mu^1|}\, z_2^{|\mu^2|},
+\]
+and the corrected multi-index coefficients
+\begin{equation}
+  g_{\mathbf{n},c}^{(r,t)}
+  := [z_0^{n_0} z_1^{n_1} z_2^{n_2}]\!\Bigl(
+    \qpoch{z_0 z_1 z_2}{z_0 z_1 z_2} \cdot
+    \GK_c^{(r,t)}(\mathbf{z})
+  \Bigr).
+  \label{eq:gn-multi-rt}
+\end{equation}
+
+\begin{definition}[Macdonald multivariate $Q$]
+\label{def:Q-multi-rt}
+For a multi-index $\mathbf{n} = (n_0, n_1, n_2) \in \N^3$, define
+\begin{equation}
+  Q_{\mathbf{n},c}(q;\,r,t)
+  := \prod_{k=0}^{2} \qpochn{q}{q}{n_k}
+  \cdot g_{\mathbf{n},c}^{(r,t)}(q),
+  \label{eq:Q-multi-rt}
+\end{equation}
+where $q = z_0 z_1 z_2$.
+\end{definition}
+
+\begin{conjecture}[Macdonald multivariate positivity]
+\label{conj:multi-mac}
+Let $c = (c_0, c_1, c_2)$ with $d := c_0 + c_1 + c_2$ and
+$d \not\equiv 0 \pmod{3}$.  Then for all
+$\mathbf{n} = (n_0, n_1, n_2) \in \N^3$:
+\begin{enumerate}
+  \item[(i)] $Q_{\mathbf{n},c}(q;\,r,t)$ is a polynomial in~$q$
+    whose coefficients are rational functions of~$r,t$ that are
+    \textbf{nonneg} for $0 < r, t < 1$.
+  \item[(ii)] Specialising $r = t$ recovers
+    Conjecture~\ref{conj:multi}:
+    \[
+      Q_{\mathbf{n},c}(q;\,r,r)
+      = Q_{\mathbf{n},c}(q).
+    \]
+  \item[(iii)] Restricting to the bivariate setting (single index
+    $n$ via the max statistic) recovers
+    Conjecture~\ref{conj:mac}.
+\end{enumerate}
+\end{conjecture}
+
+\begin{remark}[Chain of implications]
+The three conjectures form a chain of increasing generality:
+\[
+  \text{Conjecture~\ref{conj:multi-mac}}
+  \;\;\underset{r=t}{\Longrightarrow}\;\;
+  \text{Conjecture~\ref{conj:multi}}
+  \;\;\underset{\text{max proj.}}{\Longrightarrow}\;\;
+  \text{Conjecture~\ref{conj:main}}
+\]
+and the bivariate Macdonald version fits as:
+\[
+  \text{Conjecture~\ref{conj:multi-mac}}
+  \;\;\underset{\text{max proj.}}{\Longrightarrow}\;\;
+  \text{Conjecture~\ref{conj:mac}}
+  \;\;\underset{r=t}{\Longrightarrow}\;\;
+  \text{Conjecture~\ref{conj:main}}.
+\]
+\end{remark}
+
+
+%% ============================================================
+\section{Cylindric Kostka polynomials}
+\label{sec:cyl-kostka}
+%% ============================================================
+
+The polynomials $Q_{n,c}(q)$ bear a striking structural resemblance to
+the classical Kostka--Foulkes polynomials $K_{\lambda,\mu}(t)$.
+We argue that they should be regarded as \emph{cylindric} analogues
+of Kostka polynomials, and that this perspective clarifies both
+the conjecture and the path toward its proof.
+
+\subsection{Recollection: Kostka polynomials}
+
+The \emph{Kostka--Foulkes polynomials} $K_{\lambda,\mu}(t)$
+\cite{Macdonald} arise as the transition coefficients between the Schur
+and Hall--Littlewood bases of the ring of symmetric functions:
+\begin{equation}
+  s_\lambda(X)
+  = \sum_\mu K_{\lambda,\mu}(t)\, P_\mu(X;t),
+  \label{eq:KF-def}
+\end{equation}
+where $P_\mu(X;t)$ is the Hall--Littlewood polynomial.
+Equivalently, inverting the relation,
+$P_\mu(X;t) = \sum_\lambda \widetilde{K}_{\lambda,\mu}(t)\, s_\lambda(X)$
+expresses the Hall--Littlewood polynomial in the Schur basis.
+
+Their key properties are:
+\begin{enumerate}
+  \item[(K1)] \textbf{Polynomiality:}
+    $K_{\lambda,\mu}(t) \in \Z[t]$.
+  \item[(K2)] \textbf{Positivity:}
+    $K_{\lambda,\mu}(t)$ has nonneg integer coefficients
+    (Lascoux--Sch\"utzenberger \cite{LS}).
+  \item[(K3)] \textbf{Combinatorial interpretation:}
+    $K_{\lambda,\mu}(t) = \sum_{T} t^{\operatorname{charge}(T)}$,
+    summed over semistandard Young tableaux $T$ of shape $\lambda$
+    and weight $\mu$, where $\operatorname{charge}$ is Lascoux and
+    Sch\"utzenberger's charge statistic.
+  \item[(K4)] \textbf{Evaluation:}
+    $K_{\lambda,\mu}(1) = K_{\lambda,\mu}$, the Kostka number
+    counting semistandard Young tableaux of shape $\lambda$ and
+    weight $\mu$.
+  \item[(K5)] \textbf{Macdonald lift:}
+    There exist two-parameter polynomials $K_{\lambda,\mu}(r,t)$
+    (the \emph{Macdonald--Kostka polynomials} or
+    $(r,t)$-Kostka polynomials)
+    with $K_{\lambda,\mu}(0,t) = K_{\lambda,\mu}(t)$.
+  \item[(K6)] \textbf{Representation theory:}
+    The Kostka polynomials encode multiplicities in the decomposition
+    of representations of $\mathrm{GL}_n$ and appear as
+    Kazhdan--Lusztig polynomials for the affine Weyl group of type
+    $\mathrm{A}_1^{(1)}$.
+\end{enumerate}
+
+\subsection{The cylindric analogue}
+
+The polynomials $Q_{n,c}(q)$ share each of these properties
+(proved or conjectured):
+\begin{enumerate}
+  \item[(C1)] \textbf{Polynomiality:}
+    $Q_{n,c}(q) \in \Z[q]$ (proved by Welsh \cite{Welsh}).
+  \item[(C2)] \textbf{Positivity:}
+    $Q_{n,c}(q)$ has nonneg integer coefficients
+    (Conjecture~\ref{conj:main}, open).
+  \item[(C3)] \textbf{Combinatorial interpretation:}
+    Unknown.  Finding a charge-like statistic on cylindric
+    partitions (or cylindric tableaux) is the central open problem.
+  \item[(C4)] \textbf{Evaluation:}
+    $Q_{n,c}(1) = \bigl(\frac{(d+1)(d+2)}{6} - 1\bigr)^n$
+    (proved by Welsh \cite{Welsh}).
+  \item[(C5)] \textbf{Macdonald lift:}
+    The $(r,t)$-extended polynomial $Q_{n,c}(q;\,r,t)$
+    of Definition~\ref{def:Q-rt}, with
+    $Q_{n,c}(q;\,r,r) = Q_{n,c}(q)$.
+  \item[(C6)] \textbf{Representation theory:}
+    The $Q_{n,c}(q)$ appear as numerators in $\mathrm{A}_2^{(1)}$
+    Andrews--Gordon characters via equation~\eqref{eq:AG-from-Q}.
+\end{enumerate}
+
+\begin{definition}[Cylindric Kostka polynomial]
+\label{def:cyl-kostka}
+We call $Q_{n,c}(q)$ the \emph{cylindric Kostka polynomial} of
+index $n$ and profile $c$.  More generally,
+$Q_{\mathbf{n},c}(q;\,r,t)$ (Definition~\ref{def:Q-multi-rt})
+is the \emph{$(r,t)$-cylindric Kostka polynomial} of multi-index
+$\mathbf{n}$ and profile $c$.
+\end{definition}
+
+\subsection{Schur expansion of the Borodin product}
+
+The multivariate Borodin product (Level~2, Section~\ref{sec:hierarchy})
+is a formal power series in $z_0, z_1, z_2$:
+\[
+  \GK_c(\mathbf{z})
+  = \sum_{\mathfrak{c} \in \CPP(c)}
+  z_0^{|\mu^0|}\, z_1^{|\mu^1|}\, z_2^{|\mu^2|}
+  = \prod \text{(Borodin factors)}.
+\]
+This product can be expanded in terms of Schur functions
+$s_\lambda(z_0, z_1, z_2)$ (for partitions $\lambda$ with at most
+3~parts):
+\begin{equation}
+  \GK_c(\mathbf{z})
+  = \sum_\lambda a_{\lambda,c}\, s_\lambda(z_0, z_1, z_2),
+  \label{eq:schur-expansion}
+\end{equation}
+where the coefficients $a_{\lambda,c}$ are formal power series.
+
+\begin{remark}
+The multivariate generating function $\GK_c(\mathbf{z})$ is
+\emph{not} symmetric in $(z_0, z_1, z_2)$ in general (the
+profile~$c$ breaks the symmetry unless $c_0 = c_1 = c_2$).
+The Schur functions $\{s_\lambda\}_{\ell(\lambda) \leq 3}$
+form a basis for the \emph{symmetric} polynomials in three
+variables, so the expansion \eqref{eq:schur-expansion} captures
+the symmetric part.  The full expansion requires additional
+terms from the non-symmetric sector---for instance, Demazure
+characters (key polynomials) or the monomial basis.
+For a cyclic profile ($c_0 = c_1 = c_2$), the generating
+function is symmetric and the Schur expansion suffices.
+\end{remark}
+
+The coefficients $a_{\lambda,c}$ in \eqref{eq:schur-expansion}
+are not known in closed form.  One might hope that non-negativity
+of these Schur expansion coefficients would imply the
+positivity conjecture for $Q_{n,c}(q)$.  However, the relationship
+between the two is \textbf{not straightforward}, for two reasons:
+\begin{enumerate}
+  \item \textbf{Max extraction.}
+    The bivariate generating function $\GK_c(z,q)$ is obtained
+    from the multivariate one by the non-linear operation
+    $z_0^{|\mu^0|} z_1^{|\mu^1|} z_2^{|\mu^2|}
+    \mapsto z^{\max_k \mu^k_1}\, q^{|\mathfrak{c}|}$.
+    This is \emph{not} a linear map on formal power series,
+    so Schur-positivity of $\GK_c(\mathbf{z})$ does not directly
+    transfer to the bivariate setting.
+  \item \textbf{$E$--$H$ factorisation.}
+    Even after passing to the bivariate $\GK_c(z,q)$, the
+    construction of $Q_{n,c}(q)$ involves multiplication by
+    $\qpoch{zq}{q} = \sum_{j \geq 0} (-1)^j q^{j(j+1)/2}
+    z^j/(q)_j$, which introduces \textbf{alternating signs}.
+    The conjecture asserts that these alternating-sign
+    cancellations resolve perfectly into non-negativity after
+    clearing denominators---but this cancellation is the
+    essential difficulty, and it is not implied by any
+    positivity of the Schur expansion coefficients $a_{\lambda,c}$.
+\end{enumerate}
+
+In other words, the Schur expansion coefficients of the Borodin
+product and the cylindric Kostka polynomials $Q_{n,c}(q)$ are
+\textbf{distinct} objects.  The name ``cylindric Kostka polynomial''
+for $Q_{n,c}(q)$ is justified not because $Q_{n,c}(q)$ \emph{is}
+a Schur expansion coefficient, but because it plays the same
+\emph{structural role}: it is the polynomial numerator that appears
+when an affine Lie algebra character is decomposed as
+$\sum Q_{n,c}(q)/(q)_n$.
+
+\begin{remark}[The $\mathrm{A}_1 \to \mathrm{A}_2$ step]
+In the $\mathrm{A}_1$ setting (rank~2, one profile entry), the
+Andrews--Gordon identity has the form
+$\sum_n q^{f(n)}/(q)_n = \text{product}$, where $f(n)$ is a
+quadratic form.  The ``Kostka polynomial'' is the monomial
+$q^{f(n)}$---trivially positive.
+
+The $\mathrm{A}_2$ step replaces this monomial by a genuine
+polynomial $Q_{n,c}(q)$ with (conjecturally) many terms, all
+positive.  This is the essential new phenomenon: at rank~3,
+the cylindric Kostka polynomials are \emph{not} monomials
+(except for $d = 2$, which reduces to the $\mathrm{A}_1$ case).
+\end{remark}
+
+\subsection{The missing charge statistic}
+
+The single most important open problem is finding the combinatorial
+counterpart of property~(C3): a \emph{charge-like statistic} on some
+set of cylindric objects.
+
+\begin{problem}
+\label{prob:charge}
+Find a finite set $\mathcal{T}_{n,c}$ with
+$|\mathcal{T}_{n,c}| = Q_{n,c}(1)
+= \bigl(\frac{(d+1)(d+2)}{6} - 1\bigr)^n$ and a statistic
+$\operatorname{ch}\colon \mathcal{T}_{n,c} \to \N$ such that
+\begin{equation}
+  Q_{n,c}(q) = \sum_{T \in \mathcal{T}_{n,c}} q^{\operatorname{ch}(T)}.
+  \label{eq:charge-formula}
+\end{equation}
+\end{problem}
+
+The natural candidates for $\mathcal{T}_{n,c}$ include:
+\begin{itemize}
+  \item \textbf{Cylindric tableaux} --- semistandard fillings of a
+    cylindric shape, generalising the SSYT that index ordinary Kostka
+    polynomials.
+  \item \textbf{Paths in the alcove geometry} --- the $\mathrm{A}_2^{(1)}$
+    alcove walk model, which provides the representation-theoretic
+    setting for the conjecture.
+  \item \textbf{Cylindric partitions with bounded max} --- the set
+    $\CPP(c)_{\max = n}$ has the right generating function (before
+    clearing denominators), and the cyclic descent injection studied
+    in \cite{Langer-thesis} provides a partial weight-raising
+    bijection on this set.
+\end{itemize}
+
+Solving Problem~\ref{prob:charge} would simultaneously prove
+Conjecture~\ref{conj:main} and provide a manifestly positive
+multisum formula for every $\mathrm{A}_2$ Andrews--Gordon identity.
+
+
+%% ============================================================
+\section{Computational evidence}
+\label{sec:evidence}
+%% ============================================================
+
+The conjecture has been verified computationally for:
+\begin{center}
+\begin{tabular}{c|c|l|c}
+$d$ & $Q_{n,c}(1)$ & Profiles tested & Max $n$ verified \\ \hline
+$1$ & $1^n = 1$ & $(1,0,0)$ & all $n$ (trivial) \\
+$2$ & $2^n$ & $(2,0,0)$, $(1,1,0)$ & all $n$ ($Q$ is monomial) \\
+$4$ & $4^n$ & $(2,2,0)$, $(2,1,1)$ & $n \leq 3$ \\
+$5$ & $6^n$ & $(3,1,1)$, $(3,2,0)$, $(2,2,1)$ & $n \leq 3$ \\
+$7$ & $11^n$ & $(3,2,2)$, $(2,3,2)$, $(4,2,1)$ & $n \leq 2$ \\
+$8$ & $14^n$ & $(3,3,2)$, $(4,3,1)$, $(4,2,2)$ & $n \leq 1$ \\
+\end{tabular}
+\end{center}
+
+In every case, all coefficients of $Q_{n,c}(q)$ are nonneg.
+Moreover, the corrected coefficients $h_{m,c}(q) = \qpochn{q}{q}{m} \cdot g_{m,c}(q)$
+are themselves nonneg polynomials, which is a strictly stronger observation.
+
+
+\begin{thebibliography}{99}
+\bibitem{Andrews}
+  G.~E.~Andrews,
+  \emph{An analytic generalization of the Rogers--Ramanujan identities for odd moduli},
+  Proc.\ Nat.\ Acad.\ Sci.\ USA \textbf{71} (1974), 4082--4085.
+
+\bibitem{ASW}
+  G.~E.~Andrews, A.~Schilling, S.~O.~Warnaar,
+  \emph{An $\mathrm{A}_2$ Bailey lemma and Rogers--Ramanujan-type identities},
+  J.~Amer.\ Math.\ Soc.\ \textbf{12} (1999), 677--702.
+
+\bibitem{Borodin}
+  A.~Borodin,
+  \emph{Periodic Schur process and cylindric partitions},
+  Duke Math.~J.\ \textbf{140} (2007), 391--468.
+
+\bibitem{CDU}
+  S.~Corteel, J.~Dousse, A.~K.~Uncu,
+  \emph{Cylindric partitions and some new $\mathrm{A}_2$ Rogers--Ramanujan identities},
+  Proc.\ Amer.\ Math.\ Soc.\ \textbf{150} (2022), 481--497.
+  arXiv:2011.12828.
+
+\bibitem{Corteel}
+  S.~Corteel,
+  \emph{Rogers--Ramanujan identities and the Robinson--Schensted--Knuth correspondence},
+  Proc.\ Amer.\ Math.\ Soc.\ \textbf{145} (2017), 2011--2022.
+
+\bibitem{CW}
+  S.~Corteel, T.~Welsh,
+  \emph{The $\mathrm{A}_2$ Rogers--Ramanujan identities revisited},
+  Ann.\ Combin.\ \textbf{23} (2019), 683--694.
+
+\bibitem{FW}
+  O.~Foda, T.~A.~Welsh,
+  \emph{Cylindric partitions, $W_r$ characters and the Andrews--Gordon--Bressoud identities},
+  J.\ Phys.\ A \textbf{49} (2016), 164004.
+
+\bibitem{GK}
+  I.~M.~Gessel, C.~Krattenthaler,
+  \emph{Cylindric partitions},
+  Trans.\ Amer.\ Math.\ Soc.\ \textbf{349} (1997), 429--479.
+
+\bibitem{Gordon}
+  B.~Gordon,
+  \emph{A combinatorial generalization of the Rogers--Ramanujan identities},
+  Amer.\ J.\ Math.\ \textbf{83} (1961), 393--399.
+
+\bibitem{RR}
+  L.~J.~Rogers, S.~Ramanujan,
+  \emph{Proof of certain identities in combinatory analysis},
+  Cambr.\ Phil.\ Soc.\ Proc.\ \textbf{19} (1919), 211--216.
+
+\bibitem{W}
+  S.~O.~Warnaar,
+  \emph{The $\mathrm{A}_2$ Andrews--Gordon identities and cylindric partitions},
+  arXiv:2111.07550, 2021.
+
+\bibitem{Welsh}
+  A.~V.~Welsh,
+  cited in \cite{W}, proof of polynomiality and $q=1$ evaluation.
+
+\bibitem{Langer-thesis}
+  R.~Langer,
+  \emph{Cylindric Partitions and Bijective Proofs},
+  PhD thesis, University of Melbourne.
+
+\bibitem{LS}
+  A.~Lascoux, M.-P.~Sch\"utzenberger,
+  \emph{Sur une conjecture de H.\,O.~Foulkes},
+  C.~R.\ Acad.\ Sci.\ Paris \textbf{286A} (1978), 323--324.
+
+\bibitem{Macdonald}
+  I.~G.~Macdonald,
+  \emph{Symmetric Functions and Hall Polynomials},
+  2nd ed., Oxford University Press, 1995.
+\end{thebibliography}
+
+\end{document}

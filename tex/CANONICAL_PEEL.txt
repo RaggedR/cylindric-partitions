@@ -1,0 +1,221 @@
+CANONICAL PEEL VIA LOCAL RULES AND NILP DUALITY
+================================================
+
+Date: 2026-02-10
+Context: Warnaar Conjecture 2.7, rank-3 cylindric partitions
+
+
+1. THE SETUP
+============
+
+The ground set G_{n,c} encodes ALL families of lattice paths on the
+cylinder -- both non-intersecting and intersecting:
+
+  (S, d)  where  S <= {1,...,n},  d in H_{n-|S|, c}
+
+  - S = empty:    non-intersecting family (= genuine CPP), sign +1
+  - S non-empty:  intersecting family, sign (-1)^|S|
+
+Q_{n,c}(q) = sum_{(S,d)} (-1)^|S| q^{sigma(S) + wt(d)}
+
+Positivity means: all intersecting families cancel via a sign-reversing
+involution, leaving only non-intersecting contributions.
+
+
+2. LOCAL RULE AT EACH FACE
+==========================
+
+At each face of the growth diagram, the local rule computes:
+
+  Input:  (alpha, beta, m, nu)  where nu <_h alpha, nu <_h beta
+  Output: lambda, and the sets A, B, C, D
+
+  A = {columns where alpha' > nu'}   (alpha exceeds nu)
+  B = {columns where beta'  > nu'}   (beta exceeds nu)
+  A cap B = columns where BOTH edges exceed nu (conflict zone)
+
+  Cascade C resolves the conflict:
+    Burge:  cascade UP    (epsilon(i) = smallest j > i not in A u B u C)
+    RSK:    cascade DOWN  (delta(i)   = largest  j < i not in A u B u C)
+
+
+3. THE DUALITY: LOCAL RULE <-> NILP CROSSINGS
+==============================================
+
+  Local rule data          |  NILP interpretation
+  -------------------------|------------------------------------------
+  A cap B = empty          |  Paths don't conflict -- naturally non-intersecting
+  A cap B non-empty        |  Paths WOULD cross without cascade resolution
+  Cascade C (Burge: up)    |  Resolve conflict by pushing crossing upward
+  Cascade C (RSK: down)    |  Resolve conflict by pushing crossing downward
+  Face label m             |  Number of free columns (cubes) beyond conflict
+  |A cap B|                |  Number of competing path positions
+
+The local rule IS the crossing resolution mechanism. At faces where
+A cap B = empty, the paths naturally don't interfere. At faces where
+A cap B is non-empty, the cascade actively PREVENTS a crossing.
+
+
+4. THE CANONICAL PEEL CRITERION
+===============================
+
+The peelable faces are those where A cap B is non-empty along the
+outermost diagonal. At those faces, the cascade is actively preventing
+a crossing. To "peel" means to UNDO the cascade -- stop resolving the
+conflict and let the paths cross.
+
+Algorithm for the involution iota on (S, d):
+
+  Step 1: Compute the PEEL CANDIDATE.
+    Build the growth diagram for d using Burge.
+    Along the outermost diagonal, scan for faces with A cap B non-empty.
+    The first such face (with valid weight) is the peel candidate level ell.
+
+  Step 2: Compute the GLUE CANDIDATE.
+    If S is non-empty: glue candidate = min(S) (the first crossing level).
+    If S is empty: no glue candidate.
+
+  Step 3: Franklin comparison.
+    - ell < min(S):   PEEL at ell  (introduce a crossing)
+                       (S, d) -> (S u {ell}, d')  where d' has height one less
+    - min(S) < ell:   GLUE at min(S)  (resolve the crossing)
+                       (S, d) -> (S \ {min(S)}, d')  where d' has height one more
+    - ell = min(S):   FIXED POINT  (contributes to Q_{n,c}(q))
+    - No peel candidate and S = empty:  FIXED POINT
+
+  The involution is its own inverse because:
+    - After gluing at s, the resulting ALCD has A cap B non-empty at level s
+      (the conflict we just resolved can be unresolved), so ell = s.
+    - Since s = min(S) < min(S \ {s}), the Franklin comparison gives:
+      peel at ell = s, recovering the original (S, d).
+
+
+5. THE WEIGHT CONDITION
+=======================
+
+For weight preservation:  sigma(S') + wt(d') = sigma(S) + wt(d)
+
+Peel at level s:
+  - sigma(S) increases by s  (adding s to S)
+  - wt(d) decreases by (weight of removed diagonal)
+  - Preservation requires: weight of removed diagonal = s
+
+Glue at level s:
+  - sigma(S) decreases by s  (removing s from S)
+  - wt(d) increases by (weight of added diagonal)
+  - Preservation requires: weight of added diagonal = s
+
+The weight of a diagonal = sum of face labels along that diagonal
+                         = horizontal strip size at that level.
+
+So the weight condition is:
+
+  HORIZONTAL STRIP SIZE AT LEVEL s = s
+
+The local rule computes this strip size via the face labels, making
+the weight constraint directly checkable.
+
+Not every level satisfies this. The canonical peel targets the first
+level where:
+  (a) A cap B is non-empty (conflict exists), AND
+  (b) the strip size equals the level number (weight matches).
+
+
+6. LGV COMPARISON
+=================
+
+  Classical LGV              |  Q-NILP with local rules
+  ---------------------------|------------------------------------------
+  Crossing indexed by        |  Crossing indexed by
+    sigma in S_r             |    S <= {1,...,n}
+  (which paths cross)        |  (where paths cross)
+  Involution: swap tails     |  Involution: peel/glue at
+    at first intersection    |    first conflict face
+  Swap is automatic          |  Cascade direction (Burge/RSK)
+    (unique on DAG)          |    determines the swap
+  No weight constraint       |  Weight condition: strip size = level
+  Fixed points: NILP         |  Fixed points: non-intersecting
+    (identity permutation)   |    Q-families with no valid peel
+
+Key structural difference: on a DAG, "swap tails" is unique and
+automatic. On the cylinder, the swap requires choosing a cascade
+direction, and the weight condition constrains which levels are valid.
+
+The local rule resolves both issues:
+  - It identifies the conflict (A cap B) and the cascade direction
+  - It computes the strip sizes for the weight check
+
+
+7. WHAT'S COMPUTABLE NOW
+========================
+
+For a given profile c and level n, we can:
+
+  1. Enumerate all ground-set elements (S, d) in G_{n,c}
+  2. For each d, build the growth diagram (Burge)
+  3. At each face of the outermost diagonal, compute A, B, A cap B
+  4. Identify peel candidates: faces with A cap B non-empty
+  5. Check the weight condition at each candidate
+  6. Apply the Franklin comparison with min(S)
+  7. Verify: does the involution pair up all intersecting families?
+  8. Check: do the fixed points generate Q_{n,c}(q)?
+
+This is a concrete computational test of the canonical peel criterion.
+
+
+8. WHAT REMAINS OPEN
+====================
+
+(a) The weight condition (strip size = level number) may not always
+    have a solution. When it doesn't, the element must be a fixed
+    point or paired by a different mechanism.
+
+(b) The "first face with A cap B non-empty" might not be the right
+    choice. Other orderings (last face, smallest |A cap B|, smallest
+    cascade displacement) could work better.
+
+(c) For rank 3, there are at most 2 adjacent path pairs (paths 1-2
+    and paths 2-3), so at each level there are at most 2 peel
+    candidates. The criterion must also choose WHICH pair to cross.
+
+(d) Involutivity needs verification: after peeling at level ell,
+    does the resulting element have glue candidate = ell (so the
+    Franklin comparison sends it back)?
+
+(e) The interaction between the weight condition and the Franklin
+    comparison needs careful analysis. It's possible that the
+    "right" criterion involves a combined weight-and-position
+    comparison, not just position.
+
+
+9. CONNECTION TO PREVIOUS WORK
+==============================
+
+- LOCAL_RULE.tex, Section 7: the locality principle (peel/glue
+  at single faces bypasses propagation)
+- LOCAL_RULE.tex, Conjecture 8.1: the canonical peel exists
+- Q_LOCAL.tex: two equivalent local rules on ground-set pairs
+  (Burge and RSK give different lambda but same face label m)
+- Q_SCHUTZENBERGER.tex: the Q-Schutzenberger sigma = v^R o (v^B)^{-1}
+  is sign-PRESERVING (parity obstruction), so does NOT directly
+  give the involution
+- Q_NILP.tex: the enlarged path space and crossing framework
+- test_ground_set.py: existing code enumerates G_{n,c} elements
+- compare_rules.py: existing code computes A, B, C, D at each face
+
+
+10. NEXT STEP
+=============
+
+Write a Python script (test_canonical_peel.py) that:
+  1. Enumerates G_{n,c} for small cases (d=4, c=(2,2,0), n=1)
+  2. For each (empty, d), builds the growth diagram and computes
+     A cap B at each face of the outermost diagonal
+  3. Identifies peel candidates and checks weight condition
+  4. Applies the Franklin comparison
+  5. Checks whether the resulting pairing is:
+     (a) well-defined (every non-fixed element has a partner)
+     (b) involutive (applying twice gives identity)
+     (c) sign-reversing (partners have opposite sign)
+     (d) weight-preserving (partners have same total weight)
+  6. Verifies the fixed-point generating function equals Q_{n,c}(q)

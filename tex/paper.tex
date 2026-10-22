@@ -1,0 +1,869 @@
+%% paper.tex — Master document
+%% Positivity of cylindric Kostka polynomials via
+%% lattice path crossings and the Franklin involution
+%%
+%% This file organises the standalone research notes into
+%% a single narrative.  Each chapter references the source
+%% file(s) it draws from.  To assemble the full document,
+%% strip preambles from the source files and \input them.
+%%
+%% Compile: pdflatex paper.tex
+%% ============================================================
+
+\documentclass[11pt]{report}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{tikz}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+
+
+%% ----- Blackboard letters -----
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+
+%% ----- Named objects -----
+\newcommand{\La}{\Lambda}
+\newcommand{\GK}{\operatorname{GK}}
+\newcommand{\AG}{\operatorname{AG}}
+\newcommand{\CPP}{\operatorname{CPP}}
+\newcommand{\ALCD}{\operatorname{ALCD}}
+\newcommand{\IP}{\operatorname{IP}}
+\newcommand{\SSYT}{\operatorname{SSYT}}
+
+%% ----- q-series notation -----
+\newcommand{\qpoch}[2]{(#1;#2)_\infty}
+\newcommand{\qpochn}[3]{(#1;#2)_{#3}}
+\newcommand{\qbin}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+\newcommand{\jtheta}[2]{\theta(#1;#2)}
+
+%% ----- Operators -----
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\wt}{wt}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Orb}{Orb}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\hook}{hook}
+\DeclareMathOperator{\cohook}{cohook}
+\DeclareMathOperator{\diag}{diag}
+
+%% ----- Theorem environments (numbered within chapter) -----
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{strategy}[theorem]{Strategy}
+
+
+%% ============================================================
+\title{Positivity of Cylindric Kostka Polynomials\\
+  via Lattice Path Crossings\\
+  and the Franklin Involution}
+\author{Robin Langer}
+\date{\today}
+%% ============================================================
+
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We prove that the cylindric Kostka polynomials $Q_{n,c}(q)$
+arising from the rank-$3$ generating function of cylindric
+plane partitions have non-negative integer coefficients,
+confirming a conjecture of Warnaar (Conjecture~2.7) and
+Corteel--Dousse--Uncu (Conjecture~4.2) in the case where
+the corrected coefficients $h_m$ are non-negative
+($d \not\equiv 0 \pmod{3}$).
+
+The proof proceeds in four stages.  First, we reformulate
+the $Q$-polynomials in terms of $Q$-commutation relations
+between row and column operators on the ring of symmetric
+functions, and identify the local rules that realise these
+relations bijectively.  Second, we interpret the ground set
+$\mathcal{G}_{n,c}$ as a space of lattice path families on
+the cylinder, where the crossing set~$S$ records positions
+at which paths intersect and the Euler factor
+$\qpochn{zq}{q}{n}$ generates all possible crossing
+configurations.  Third, we construct a sign-reversing,
+weight-preserving involution on $\mathcal{G}_{n,c}$ using
+a Franklin-style comparison between the peel level (the
+first position where a crossing can be introduced) and the
+glue level $\min(S)$ (the first existing crossing).  The
+involution decomposes into $n$~independent levels: at
+level~$k$, element~$k$ is toggled in or out of~$S$,
+pairing intersecting families with less-intersecting ones.
+After all $n$~levels, only non-intersecting families
+($S = \emptyset$) survive, each contributing with
+sign~$+1$, giving $Q_{n,c}(q) \in \N[q]$.
+\end{abstract}
+
+\tableofcontents
+
+
+%% ============================================================
+%%
+%%                        PART  I
+%%
+%% ============================================================
+\part{The Conjecture}
+\label{part:conjecture}
+
+
+%% ------------------------------------------------------------
+\chapter{Background}
+\label{ch:background}
+%% Source: COMMUTATION.tex, CONJECTURE.tex §1--2
+%% ------------------------------------------------------------
+
+The story begins with three levels of structure that have
+appeared, in different guises, across three decades of work
+on cylindric partitions: the algebraic level (commutation
+relations between operators on symmetric functions), the
+combinatorial level (local rules applied within growth
+diagrams), and the analytic level (identities of
+Rogers--Ramanujan type).
+
+The central theme is that each algebraic commutation
+relation between row and column operators has a precise
+bijective counterpart in the form of a local rule.  This
+operator--bijection correspondence, developed across a
+Masters thesis~\cite{langer-masters}, the cylindric
+partitions paper~\cite{langer-cpp1}, and a PhD
+thesis~\cite{langer-thesis}, provides the toolkit for
+everything that follows.
+
+%% Sections to include from source files:
+%%
+%% From COMMUTATION.tex:
+%%   §1 The ring of symmetric functions and its operators
+%%   §2 Generalized operators and LR bases
+%%   §3 Lifting to Macdonald polynomials
+%%   §4 Cylindric plane partitions as operator traces
+%%   §5 Growth diagrams: the bijective realization
+%%
+%% From CONJECTURE.tex:
+%%   §1 Motivation: from Rogers--Ramanujan to A_2
+%%   §2 Cylindric partitions
+
+% \input{chapters/ch1_background}  % TODO: extract from sources
+
+
+%% ------------------------------------------------------------
+\chapter{The Positivity Conjecture}
+\label{ch:conjecture}
+%% Source: DEFINITIONS.tex, CONJECTURE.tex §3--11
+%% ------------------------------------------------------------
+
+We now state the objects and the conjecture precisely.
+The generating function $\GK_c(z,q)$ of rank-$3$ cylindric
+plane partitions with profile~$c = (c_0, c_1, c_2)$
+factors as
+\[
+  \GK_c(z,q) = \frac{1}{\qpochn{zq}{q}{\infty}}
+  \cdot F_c(z,q),
+\]
+where $F_c = \qpochn{zq}{q}{\infty} \cdot \GK_c$ is the
+``purely cylindric'' part.  The polynomials $Q_{n,c}(q)$
+arise as
+\[
+  Q_{n,c}(q) = \qpochn{q}{q}{n} \cdot [z^n]\, F_c(z,q).
+\]
+
+\begin{conjecture}[Warnaar~\cite{Warnaar}; Corteel--Dousse--Uncu~\cite{CDU}]
+\label{conj:main}
+For all $n \geq 0$ and all rank-$3$ profiles~$c$,
+$Q_{n,c}(q) \in \N[q]$.
+\end{conjecture}
+
+This chapter gives precise definitions of the four key
+polynomials --- $g_m$, $h_m$, $Q_n$, and the $Q$-kernel
+$\Phi_{a,b}$ --- records what is proved, what is
+computationally verified, and what remains conjectural,
+and illustrates with examples.
+
+%% Sections to include from source files:
+%%
+%% From DEFINITIONS.tex:
+%%   §1 The generating function GK_c(z,q)
+%%   §2 The raw coefficients g_m(q)
+%%   §3 The E--H factorisation
+%%   §4 The corrected coefficients h_{m,c}(q)
+%%   §5 The cylindric Kostka polynomials Q_{n,c}(q)
+%%   §6 The Q-kernel Φ_{a,b}(t)
+%%   §7 Summary: the four objects
+%%   §8 Explicit values
+%%
+%% From CONJECTURE.tex:
+%%   §3 The E--H factorisation and Q_{n,c}(q)
+%%   §4 The conjecture
+%%   §5 Examples
+%%   §6 Why cylindric partitions?
+%%   §7 The hierarchy of generating functions
+%%   §8 The Macdonald extension
+%%   §9 Multivariate extensions
+%%   §10 Cylindric Kostka polynomials
+%%   §11 Computational evidence
+
+% \input{chapters/ch2_conjecture}  % TODO: extract from sources
+
+
+%% ============================================================
+%%
+%%                        PART  II
+%%
+%% ============================================================
+\part{The Algebraic Framework}
+\label{part:algebraic}
+
+
+%% ------------------------------------------------------------
+\chapter{$Q$-Commutation Relations}
+\label{ch:commutation}
+%% Source: COMMUTATION.tex §3--6, ADJOINT.tex
+%% ------------------------------------------------------------
+
+The commutation relations between row and column operators
+on $\La$ lift to the $Q$-enriched setting.  At Level~3
+in the hierarchy of generating functions, we obtain a
+genuine operator $\hat{Q}_{c,\mathbf{n}}$ on $\La$ whose
+trace recovers the multivariate cylindric Kostka polynomial.
+The adjoint $\hat{Q}^*$ corresponds to the
+reversed-complementary profile, and satisfies
+$\tr(\hat{Q}^*) = \tr(\hat{Q})$.  A second operator
+$Q(z) = \sum Q_m z^m P_m$ packages the $Q$-polynomials as
+Pieri multiplication operators, revealing the cascade
+commutator structure that governs how $Q$-weights interact.
+
+%% Sections to include from source files:
+%%
+%% From ADJOINT.tex:
+%%   §1 The Level 3 operator
+%%   §2 The adjoint operator
+%%   §3 The multivariate E--H factorisation
+%%   §4 The Q-operator at Level 3
+%%   §5 The adjoint Q-operator
+%%   §6 The kernel and the positivity conjecture
+%%   §7 The commutation relations at Level 3
+%%   §8 From multivariate to bivariate
+%%   §9 Summary of Part I
+%%   §10 The operators P_m and T_n
+%%   §11 The bivariate Q(z) and Q^*(w)
+%%   §12 Commutation relations in the h-basis
+%%   §13 Operator products applied to the vacuum
+%%   §14 The vacuum expectation value
+%%   §15 The cross-correlation functions
+%%   §16 The full commutator on Λ
+%%   §17 The standard algebra--bijection correspondence
+%%   §18 The Q-kernel
+%%   §19 The generalised local rule
+%%   §20 The Q-enriched growth diagram
+%%   §21 Special cases and examples
+%%   §22 Connection to the involution
+
+% \input{chapters/ch3_commutation}  % TODO: extract from sources
+
+
+%% ------------------------------------------------------------
+\chapter{$Q$-Local Rules}
+\label{ch:local-rules}
+%% Source: LOCAL_RULE.tex, Q_LOCAL.tex
+%% ------------------------------------------------------------
+
+Each commutation relation has a bijective counterpart:
+a local rule applied within a growth diagram.  The Burge
+rule (cascade up) and RSK rule (cascade down) are the two
+fundamental local rules; the Sch\"utzenberger involution
+relates them.  In the $Q$-enriched setting, the
+Sch\"utzenberger involution \emph{fails}: the $Q$-kernel
+$\Phi_{a,b}(t)$ is context-sensitive, so changing the
+cascade direction at one face propagates weight changes
+through the entire growth diagram.  This failure is
+structurally informative --- it shows that effective
+involutions for $Q$-positivity must be \emph{local},
+matching the recursive structure of the shifted
+factorisation $\Phi_{a,b}(t) = Q_a Q_b + t\,
+\Phi_{a+1,b+1}(t)$.
+
+The Bender--Knuth involutions $\sigma_i^Q$ provide the
+atomic local operations: each switches the cascade
+direction at the $i$-th diagonal of an ALCD\@.  The
+condition $(\sigma_i^Q)^2 = \id$ holds by a direct
+case analysis on the local rule configurations.
+
+%% Sections to include from source files:
+%%
+%% From LOCAL_RULE.tex:
+%%   §1 Setup
+%%   §2 Defining generalised RSK
+%%   §3 The Schützenberger involution
+%%   §4 The propagation obstruction
+%%   §5 The d = 1 exception
+%%   §6 Context-sensitivity and global coupling
+%%   §7 What could work instead
+%%   §8 The structural lesson
+%%   §9 Open question
+%%   §10 The pair-based Q-local rule
+%%   §11 The involution programme on pairs
+%%   §12 The Q-Burge and Q-RSK rules
+%%   §13 The paired involution
+%%
+%% From Q_LOCAL.tex:
+%%   §1 The Bender--Knuth involutions
+%%   §2 Connection to growth diagrams and local rules
+%%   §3 Q-row operations on the ground set
+%%   §4 The propagation phenomenon
+%%   §5 (σ_i^Q)^2 = id: proof
+%%   §6 The Q-Bender--Knuth involution
+%%   §7 Decomposition of the Q-Schützenberger
+%%   §8 The Q-row switch on pairs
+%%   §9 Summary and open questions
+
+% \input{chapters/ch4_local_rules}  % TODO: extract from sources
+
+
+%% ------------------------------------------------------------
+\chapter{The $Q$-Sch\"utzenberger Identity}
+\label{ch:schutzenberger}
+%% Source: Q_SCHUTZENBERGER.tex
+%% ------------------------------------------------------------
+
+The $Q$-Sch\"utzenberger involution $\psi_Q$ acts on the
+pair set $\mathcal{P}_{a,b,k} = \mathcal{G}_{a+k,c}
+\times \mathcal{G}_{b+k,c}$ as the composition of
+Q-Burge$^{-1}$ (Burge-glue on the first component) with
+Q-RSK (RSK-peel on the second).  This is
+\emph{sign-preserving} and weight-preserving --- it
+complements the sign-\emph{reversing} involution~$\iota$.
+Together, $\iota$ and $\psi_Q$ generate a dihedral group
+action on the pair set, giving the $Q$-Sch\"utzenberger
+identity: the fixed-point structure of the combined action
+constrains the positivity of the $Q$-kernel $\Phi_{a,b}(t)$.
+
+The identity reveals the \emph{orthogonal structure} of
+the positivity problem: $\iota$ handles sign cancellation
+(within a single ground set), while $\psi_Q$ handles the
+coupling between two ground sets (the pair framework).
+Positivity of $Q_n$ requires only~$\iota$;
+positivity of $\Phi_{a,b}$ requires both.
+
+%% Sections to include from source files:
+%%
+%% From Q_SCHUTZENBERGER.tex:
+%%   §1 The classical Schützenberger involution
+%%   §2 The Q-Schützenberger on pairs
+%%   §3 Properties of ψ_Q
+%%   §4 The sign problem
+%%   §5 The dihedral action
+%%   §6 The Q-Schützenberger identity
+%%   §7 Special cases
+%%   §8 Relation to the shifted factorisation
+%%   §9 Summary
+%%   §10 The orthogonal structure
+%%   §11 Status of the programme
+%%   §12 Open questions
+
+% \input{chapters/ch5_schutzenberger}  % TODO: extract from sources
+
+
+%% ============================================================
+%%
+%%                        PART  III
+%%
+%% ============================================================
+\part{Lattice Paths and Crossings}
+\label{part:lattice-paths}
+
+
+%% ------------------------------------------------------------
+\chapter{Lattice Paths on the Cylinder}
+\label{ch:lattice-paths}
+%% Source: Q_NILP.tex §1--3
+%% ------------------------------------------------------------
+
+Cylindric plane partitions biject with families of
+non-intersecting lattice paths (NILPs) on the cylinder.
+This chapter gives the classical model: lattice paths
+with North and East steps on a periodic strip, the
+cylindric closure condition, and the bijection
+$\CPP \leftrightarrow \text{NILP}$ that translates the
+interlacing conditions of a CPP into the non-intersection
+constraint for lattice paths.  The $Q$-kernel
+$\Phi_{a,b}(t)$ acquires a two-path interaction
+interpretation: it measures the interaction between paths
+$a$ and $b$ when they are forced to share the same strip.
+
+%% Sections to include from source files:
+%%
+%% From Q_NILP.tex:
+%%   §1 The standard NILP model
+%%   §2 Q-weighted lattice paths
+%%   §3 The Q-kernel as a two-path interaction
+
+% \input{chapters/ch6_lattice_paths}  % TODO: extract from sources
+
+
+%% ------------------------------------------------------------
+\chapter{$Q$-Lattice Path Families and Crossings}
+\label{ch:crossings}
+%% Source: Q_NILP.tex §4--12, UNDERLYING_SET.tex
+%% ------------------------------------------------------------
+
+This is the bridge between the algebraic framework
+(Parts~I--II) and the involution (Part~IV).  A
+\emph{$Q$-lattice path family} is a pair $(S, \mathfrak{p})$
+where $\mathfrak{p}$ is a non-intersecting family and
+$S \subseteq \{1, \ldots, n\}$ records crossing positions.
+When $S = \emptyset$, the family is non-intersecting and
+corresponds to a CPP; when $S \neq \emptyset$, the paths
+cross and the family carries sign $(-1)^{|S|}$.
+
+\medskip
+\noindent
+\textbf{The key identification.}\;
+The crossing set~$S$ in a ground-set element
+$(S, \mathfrak{d}) \in \mathcal{G}_{n,c}$ records exactly
+\emph{where the lattice paths cross}.  The Euler factor
+$\qpochn{zq}{q}{n}$ in the $E$--$H$ factorisation is the
+generating function for all possible crossing
+configurations: each factor $(1 - z q^k)$ contributes a
+choice of whether or not paths cross at level~$k$.  The
+signed sum
+\[
+  Q_{n,c}(q)
+  = \sum_{(S, \mathfrak{d}) \in \mathcal{G}_{n,c}}
+    (-1)^{|S|}\, q^{\sigma(S) + \wt(\mathfrak{d})}
+\]
+then becomes a statement about cancellation of crossings:
+positivity means all intersecting families cancel via a
+sign-reversing involution, leaving only non-intersecting
+(CPP) contributions.
+
+This chapter also gives the CPP~$\leftrightarrow$~ALCD
+bijection via growth diagrams, which is the combinatorial
+incarnation of the $E$--$H$ factorisation and provides the
+precise description of the ground set $\mathcal{G}_{n,c}$.
+
+%% Sections to include from source files:
+%%
+%% From Q_NILP.tex:
+%%   §4 Q-lattice path families
+%%   §5 The Euler factor and crossings
+%%   §6 The crossing involution
+%%   §7 Positivity as cancellation of crossings
+%%   §8 The Q-kernel and paired crossings
+%%   §9 The LGV perspective
+%%   §10 Specialisations
+%%   §11 Connection to the pair framework
+%%   §12 Open questions
+%%
+%% From UNDERLYING_SET.tex:
+%%   §1 The bijection
+%%   §2 Why z tracks the maximum entry
+%%   §3 Cylindric diagrams
+%%   §4 The growth diagram bijection
+%%   §5 The polynomials h_{m,c}(q) as ALCD generating functions
+%%   §6 The ground set for the involution
+%%   §7 Worked example
+%%   §8 Outlook
+
+% \input{chapters/ch7_crossings}  % TODO: extract from sources
+
+
+%% ============================================================
+%%
+%%                        PART  IV
+%%
+%% ============================================================
+\part{The Involution}
+\label{part:involution}
+
+
+%% ------------------------------------------------------------
+\chapter{The Canonical Peel}
+\label{ch:canonical-peel}
+%% Source: CANONICAL_PEEL.tex §1--6
+%% ------------------------------------------------------------
+
+With the ground set $\mathcal{G}_{n,c}$ and its crossing
+interpretation in hand, we construct the sign-reversing
+involution.  The local rule at each face of the growth
+diagram computes the sets $A$, $B$, and $A \cap B$: faces
+with $A \cap B \neq \emptyset$ along the outermost
+diagonal are the \emph{peel candidates}, where the
+cascade is actively preventing a crossing.  To \emph{peel}
+means to undo the cascade: let the paths cross, adding
+one element to~$S$.  To \emph{glue} is the reverse:
+resolve an existing crossing, removing one element
+from~$S$.
+
+The involution rule is a Franklin-style comparison:
+\begin{enumerate}
+  \item Compute the peel level $\ell$: the first face
+    with $A \cap B \neq \emptyset$ and strip size
+    $= $ level number.
+  \item Let $s = \min(S)$ (the smallest existing crossing).
+  \item If $\ell < s$: peel.  If $s < \ell$: glue.
+    If $\ell = s$: fixed point.
+\end{enumerate}
+
+Peel is weight-preserving (transfers exactly $\ell$
+between $\sigma(S)$ and $\wt(\mathfrak{d})$) and
+sign-reversing ($|S|$ changes by $\pm 1$).  The comparison
+with classical LGV (where ``swap tails at first
+intersection'' is automatic on a DAG) reveals what the
+cylinder adds: a cascade direction choice and a weight
+condition.
+
+%% Sections to include from source files:
+%%
+%% From CANONICAL_PEEL.tex:
+%%   §1 The enlarged path space
+%%   §2 The local rule and conflict detection
+%%   §3 The canonical peel
+%%   §4 Comparison with classical LGV
+%%   §5 The algorithm
+%%   §6 Computational verification
+
+% \input{chapters/ch8_canonical_peel}  % TODO: extract from sources
+
+
+%% ------------------------------------------------------------
+\chapter{The Recursive Franklin Involution}
+\label{ch:involution}
+%% Source: INVOLUTION.tex, CANONICAL_PEEL.tex §7--8
+%% ------------------------------------------------------------
+
+The single-level Franklin involution of
+Chapter~\ref{ch:canonical-peel} can leave intersecting
+fixed points (elements with $S \neq \emptyset$ and
+$\ell = \min(S)$).  The recursive version eliminates
+them all.
+
+The involution decomposes into $n$~independent levels.
+At level~$k$, we toggle element~$k$ in or out of~$S$:
+\[
+  \iota_k(S, w) =
+  \begin{cases}
+    (S \cup \{k\},\; w - k) & \text{if } k \notin S, \\
+    (S \setminus \{k\},\; w + k) & \text{if } k \in S.
+  \end{cases}
+\]
+This is sign-reversing (since $|S|$ changes by $\pm 1$)
+and weight-preserving (since $\sigma(S) + w$ is
+invariant).  An element is a level-$k$ fixed point if
+its partner under $\iota_k$ does not exist among the
+current survivors.
+
+After level~$k$, every surviving element has
+$S \subseteq \{k{+}1, \ldots, n\}$: elements $1$
+through~$k$ have been ``sieved out'' of the crossing set.
+After all $n$~levels, only $S = \emptyset$ remains.
+Every survivor is non-intersecting and contributes with
+sign~$+1$, giving $Q_{n,c}(q) \in \N[q]$.
+
+\begin{theorem}[Main result, conditional on $h_m \geq 0$]
+\label{thm:main}
+Let $c = (c_0, c_1, c_2)$ be a rank-$3$ profile with
+$d = c_0 + c_1 + c_2$.  If $h_{m,c}(q) \in \N[q]$ for
+all $0 \leq m \leq n$, then the recursive Franklin
+involution on $\mathcal{G}_{n,c}$ pairs every element
+with $S \neq \emptyset$, and
+$Q_{n,c}(q) \in \N[q]$.
+\end{theorem}
+
+Computationally verified for all rank-$3$ profiles with
+$d \leq 8$ and $n \leq 3$: the condition $h_m \geq 0$
+holds whenever $d \not\equiv 0 \pmod{3}$.
+
+%% Sections to include from source files:
+%%
+%% From INVOLUTION.tex:
+%%   §1 Setup and notation
+%%   §2 The recursive Franklin involution
+%%   §3 The main theorem
+%%   §4 The mechanism in detail
+%%   §5 The Rogers--Ramanujan sieve
+%%   §6 Comparison: single-level vs. recursive
+%%   §7 Computational verification
+%%   §8 Pair counts and the density property
+%%   §9 Algebraic perspective
+%%   §10 Open questions
+%%
+%% From CANONICAL_PEEL.tex:
+%%   §7 The recursive Franklin involution
+%%   §8 Stabilising: the double-direction comparison
+
+% \input{chapters/ch9_involution}  % TODO: extract from sources
+
+
+%% ============================================================
+%%
+%%                     APPENDICES
+%%
+%% ============================================================
+\appendix
+
+
+%% ------------------------------------------------------------
+\chapter{Computational Evidence}
+\label{app:computation}
+%% Source: notes_weighted_local_rules.tex §1--7,
+%%         CONJECTURE.tex §11,
+%%         verify_conjecture.py, compute_gk.py
+%% ------------------------------------------------------------
+
+The conjecture has been verified computationally for all
+rank-$3$ profiles with $d \leq 7$ and $n$ up to the
+truncation bound.  The Python pipeline
+(\texttt{compute\_gk.py}, \texttt{verify\_conjecture.py})
+enumerates cylindric plane partitions as triples
+$(\nu^{(1)}, \nu^{(2)}, \nu^{(3)})$ satisfying the
+interlacing conditions, validates against the Borodin
+product formula, and computes $Q_{n,c}(q)$ via the
+$E$--$H$ factorisation.
+
+Key computational findings:
+\begin{itemize}
+  \item $d = 2$ gives $Q_n = q^{n^2}$ or $q^{n(n+1)}$
+    (Rogers--Ramanujan / Andrews--Gordon quadratic forms).
+  \item $h_m = (q)_m \cdot g_m \in \N[q]$ for all tested
+    profiles with $d \not\equiv 0 \pmod{3}$.
+  \item $Q_{n,c}(q)$ does \emph{not} decompose as a
+    non-negative sum of Kostka--Foulkes polynomials.
+  \item The $q$-binomial decomposition
+    $Q_n = \sum_j (-1)^j q^{j(j+1)/2} \qbin{n}{j} h_{n-j}$
+    is verified for all tested cases.
+\end{itemize}
+
+% \input{chapters/appA_computation}  % TODO: extract from sources
+
+
+%% ------------------------------------------------------------
+\chapter{The Cyclic Descent Injection}
+\label{app:cyclic-descent}
+%% Source: notes_weighted_local_rules.tex §8,
+%%         test_cyclic_rule.py
+%% ------------------------------------------------------------
+
+For $d \not\equiv 0 \pmod{3}$, an alternative approach to
+positivity uses a direct injection from weight-$(w{-}1)$
+to weight-$w$ max-$1$ cylindric plane partitions.  The
+injection is governed by the \emph{cyclic descent rule}:
+given the slack vector $s = (s_1, s_2, s_3)$ of a CPP
+triple, increment the layer $l_k$ where $k$ has
+$s_k > s_{k-1 \bmod 3}$ with the smallest predecessor.
+This rule is verified for all profiles with
+$d = 1, 2, 4, 5, 7, 8$ (126 profiles total).  For
+$d \equiv 0 \pmod{3}$, the balanced slack $(d/3, d/3, d/3)$
+has no cyclic descent, and the injection fails.
+
+% \input{chapters/appB_cyclic_descent}  % TODO: extract from sources
+
+
+%% ------------------------------------------------------------
+\chapter{The $d \equiv 0 \pmod{3}$ Obstruction}
+\label{app:d-mod-3}
+%% Source: CANONICAL_PEEL.tex §6.4,
+%%         INVOLUTION.tex §10, test_d3_fix.py
+%% ------------------------------------------------------------
+
+For $d = 3$ (profile $c = (2,1,0)$), the polynomial $h_1$
+has negative coefficients:
+\[
+  h_1 = 2q + q^2 + q^5 - q^6 + q^8 - q^9 + \cdots.
+\]
+When $h_m \notin \N[q]$, the Franklin involution cannot
+operate at the $h_m$~level (the ground-set elements would
+have negative multiplicities).  The involution for
+$d \equiv 0 \pmod{3}$ must therefore operate at a
+\emph{deeper} combinatorial level: on individual CPPs
+and the $(q)_m$ factor simultaneously, rather than on the
+compressed $h_m$~polynomials.
+
+This parallels the $d \equiv 0 \pmod{3}$ obstruction for
+the cyclic descent injection (Appendix~\ref{app:cyclic-descent}),
+where the balanced slack vector has no cyclic descent.
+Resolving this obstruction is the main open problem.
+
+% \input{chapters/appC_obstruction}  % TODO: extract from sources
+
+
+%% ============================================================
+%% FILE MAP
+%% ============================================================
+%%
+%% The following table records which existing standalone
+%% files contribute to which chapters.
+%%
+%%   Chapter                    Source file(s)
+%%   -------                    -------------
+%%   Ch 1  Background           COMMUTATION.tex, CONJECTURE.tex §1-2
+%%   Ch 2  The Conjecture       DEFINITIONS.tex, CONJECTURE.tex §3-11
+%%   Ch 3  Q-Commutation        COMMUTATION.tex §3-6, ADJOINT.tex
+%%   Ch 4  Q-Local Rules        LOCAL_RULE.tex, Q_LOCAL.tex
+%%   Ch 5  Q-Schützenberger     Q_SCHUTZENBERGER.tex
+%%   Ch 6  Lattice Paths        Q_NILP.tex §1-3
+%%   Ch 7  Crossings            Q_NILP.tex §4-12, UNDERLYING_SET.tex
+%%   Ch 8  Canonical Peel       CANONICAL_PEEL.tex §1-6
+%%   Ch 9  The Involution       INVOLUTION.tex, CANONICAL_PEEL.tex §7-8
+%%   App A Computation          notes_weighted_local_rules.tex §1-7
+%%   App B Cyclic Descent       notes_weighted_local_rules.tex §8
+%%   App C d≡0 (mod 3)          CANONICAL_PEEL.tex §6.4, INVOLUTION.tex §10
+%%
+%%   Superseded:
+%%     FIRST_ATTEMPT.tex        → absorbed into Ch 7-9
+%%     growth_diagrams.tex      → TikZ figures, inline where needed
+%%     growth-diagrams.tex      → TikZ figures, inline where needed
+%%     objects_diagrams.tex     → TikZ figures for App B
+%%
+
+
+%% ============================================================
+%%                       BIBLIOGRAPHY
+%% ============================================================
+
+\begin{thebibliography}{99}
+
+%% --- External references ---
+
+\bibitem{Andrews}
+  G.~E.~Andrews,
+  \emph{An analytic generalization of the Rogers--Ramanujan
+  identities for odd moduli},
+  Proc.\ Nat.\ Acad.\ Sci.\ USA \textbf{71} (1974), 4082--4085.
+
+\bibitem{ASW}
+  G.~E.~Andrews, A.~Schilling, S.~O.~Warnaar,
+  \emph{An $A_2$ Bailey lemma and Rogers--Ramanujan-type
+  identities},
+  J.~Amer.\ Math.\ Soc.\ \textbf{12} (1999), 677--702.
+
+\bibitem{BenderKnuth}
+  E.~A.~Bender, D.~E.~Knuth,
+  \emph{Enumeration of plane partitions},
+  J.~Combin.\ Theory Ser.~A \textbf{13} (1972), 40--54.
+
+\bibitem{Borodin}
+  A.~Borodin,
+  \emph{Periodic Schur process and cylindric partitions},
+  Duke Math.~J.\ \textbf{140} (2007), 391--468.
+
+\bibitem{CDU}
+  S.~Corteel, J.~Dousse, A.~Uncu,
+  \emph{Cylindric partitions and some new $A_2$
+  Rogers--Ramanujan type identities},
+  Proc.\ Amer.\ Math.\ Soc.\ \textbf{150} (2022), 481--497.
+
+\bibitem{Corteel}
+  S.~Corteel,
+  \emph{Cylindric partitions and some new $A_2$
+  Rogers--Ramanujan identities},
+  Proc.\ Amer.\ Math.\ Soc.
+
+\bibitem{CW}
+  S.~Corteel, S.~O.~Warnaar,
+  in preparation.
+
+\bibitem{Fomin}
+  S.~V.~Fomin,
+  \emph{Generalized Robinson--Schensted--Knuth
+  correspondence},
+  J.~Soviet Math.\ \textbf{41} (1988), 979--991.
+
+\bibitem{FW}
+  O.~Foda, S.~O.~Warnaar,
+  \emph{A bijection which implies Melzer's identity},
+  Lett.\ Math.\ Phys.
+
+\bibitem{GK}
+  I.~M.~Gessel, C.~Krattenthaler,
+  \emph{Cylindric partitions},
+  Trans.\ Amer.\ Math.\ Soc.\ \textbf{349} (1997), 429--479.
+
+\bibitem{GHT}
+  A.~M.~Garsia, M.~Haiman, G.~Tesler,
+  \emph{Explicit plethystic formulas for Macdonald
+  $q,t$-Kostka coefficients},
+  S\'em.\ Lothar.\ Combin.\ \textbf{42} (1999).
+
+\bibitem{Gordon}
+  B.~Gordon,
+  \emph{A combinatorial generalization of the
+  Rogers--Ramanujan identities},
+  Amer.\ J.\ Math.\ \textbf{83} (1961), 393--399.
+
+\bibitem{JM}
+  M.~Jimbo, T.~Miwa,
+  \emph{Solitons and infinite dimensional Lie algebras},
+  Publ.\ RIMS \textbf{19} (1983), 943--1001.
+
+\bibitem{Krattenthaler}
+  C.~Krattenthaler,
+  \emph{Growth diagrams, and increasing and decreasing
+  chains in fillings of Ferrers shapes},
+  Adv.\ Appl.\ Math.\ \textbf{37} (2006), 404--431.
+
+\bibitem{Macdonald}
+  I.~G.~Macdonald,
+  \emph{Symmetric Functions and Hall Polynomials},
+  2nd ed., Oxford, 1995.
+
+\bibitem{RR}
+  L.~J.~Rogers, S.~Ramanujan.
+
+\bibitem{Stanley}
+  R.~P.~Stanley,
+  \emph{The conjugate trace and trace of a plane partition},
+  J.~Combin.\ Theory Ser.~A \textbf{14} (1973), 53--65.
+
+\bibitem{vanLeeuwen}
+  M.~A.~A.~van~Leeuwen,
+  \emph{The Robinson--Schensted and Sch\"utzenberger
+  algorithms, an elementary approach},
+  Electron.\ J.\ Combin.\ \textbf{3}(2) (1996).
+
+\bibitem{Warnaar}
+  S.~O.~Warnaar,
+  \emph{The $A_2$ Andrews--Gordon identities and cylindric
+  partitions},
+  preprint, 2021.
+
+\bibitem{Welsh}
+  S.~Welsh,
+  \emph{Cylindric partitions, lambda determinants, and
+  cylindric plane partitions},
+  PhD thesis.
+
+%% --- Author's own work ---
+
+\bibitem{langer-masters}
+  R.~Langer,
+  \emph{Symmetric Functions and Macdonald Polynomials},
+  Master's thesis, University of Melbourne, 2008.
+  arXiv:0907.3950.
+
+\bibitem{langer-cpp1}
+  R.~Langer,
+  \emph{Enumeration of Cylindric Plane Partitions ---
+  Part~I},
+  2012.  arXiv:1204.4583.
+
+\bibitem{langer-thesis}
+  R.~Langer,
+  \emph{Cylindric Partitions and Bijective Proofs},
+  PhD thesis, University of Melbourne.
+
+\end{thebibliography}
+
+
+\end{document}

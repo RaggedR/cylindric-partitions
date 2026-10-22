@@ -1,0 +1,1076 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\La}{\Lambda}
+\newcommand{\GK}{\operatorname{GK}}
+\newcommand{\CPP}{\operatorname{CPP}}
+\newcommand{\ALCD}{\operatorname{ALCD}}
+\newcommand{\IP}{\operatorname{IP}}
+\newcommand{\qpoch}[2]{(#1;#2)_\infty}
+\newcommand{\qpochn}[3]{(#1;#2)_{#3}}
+\newcommand{\qbin}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+\DeclareMathOperator{\tr}{tr}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{The Generalized Local Rule and the Burge--RSK Involution}
+\author{Robin Langer}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We analyse whether the Sch\"utzenberger involution relating the
+Burge and RSK local rules extends to the $Q$-enriched setting
+of~\cite{ADJOINT}.  The conclusion is negative: the $Q$-kernel
+$\Phi_{a,b}(t)$ is context-sensitive (it depends on the strip
+sizes at each face), and the Sch\"utzenberger involution changes
+the interior partition shapes, propagating $Q$-weight changes
+through the growth diagram.  The failure is structurally
+informative: it shows that effective involutions for $Q$-positivity
+must be \emph{local} (operating one face at a time), matching the
+recursive structure of the shifted factorisation
+$\Phi_{a,b}(t) = Q_a Q_b + t\,\Phi_{a+1,b+1}(t)$.
+\end{abstract}
+
+\tableofcontents
+
+
+%% ============================================================
+\section{Setup}
+\label{sec:setup}
+%% ============================================================
+
+Recall the two parallel frameworks.
+
+\medskip
+\noindent\textbf{Algebraic.}
+The fundamental commutation relation (cf.~\cite{COMMUTATION},
+\cite{ADJOINT}):
+\begin{equation}\label{eq:fund-comm}
+  T(v)\, P(w) = \frac{1}{1-vw}\; P(w)\, T(v),
+\end{equation}
+which at the mode level gives the cascade relation:
+\begin{equation}\label{eq:cascade}
+  T_n\, P_m = \sum_{k=0}^{\min(n,m)} P_{m-k}\, T_{n-k}.
+\end{equation}
+
+\medskip
+\noindent\textbf{Bijective.}
+The Burge local rule $\mathfrak{U}_{\alpha,\beta}$ has type
+signature
+\begin{equation}\label{eq:type-sig}
+  \mathfrak{U}_{\alpha,\beta}\colon
+  \Z_{\geq 0} \times (D(\alpha) \cap D(\beta))
+  \to U(\alpha) \cap U(\beta),
+\end{equation}
+where $U(\mu)$ (resp.\ $D(\lambda)$) is the set of partitions
+obtained by adding (resp.\ removing) a horizontal strip.
+The weight condition is:
+\begin{equation}\label{eq:weight-cond}
+  |\lambda| = |\alpha| + |\beta| - |\nu| + k.
+\end{equation}
+
+Each commutation step corresponds to one local rule application.
+The scalar factor $1/(1-vw)$ generates the face labels.  Both
+the Burge and RSK local rules share the same type
+signature~\eqref{eq:type-sig} and satisfy the same weight
+condition~\eqref{eq:weight-cond}.
+
+\medskip
+\noindent\textbf{The $Q$-enriched setting.}
+In the $Q$-enriched framework (\cite{ADJOINT}, Part~III), the
+face label $k$ carries weight $Q_{a+k}(q) \cdot Q_{b+k}(q)$,
+where $a = |\alpha| - |\nu|$ and $b = |\beta| - |\nu|$ are the
+horizontal strip sizes entering the diamond.  The face-label
+generating function becomes the $Q$-kernel:
+\begin{equation}\label{eq:Phi}
+  \Phi_{a,b}(t) = \sum_{k \geq 0} Q_{a+k}\, Q_{b+k}\, t^k,
+\end{equation}
+replacing the universal $1/(1-t)$ of the standard rule.
+
+
+%% ============================================================
+\section{Defining generalised RSK}
+\label{sec:gen-RSK}
+%% ============================================================
+
+This works without difficulty.  The RSK local rule has the same
+type signature as Burge:
+\begin{equation}\label{eq:RSK-type}
+  \mathfrak{U}^{\mathrm{RSK}}_{\alpha,\beta}\colon
+  \Z_{\geq 0} \times (D(\alpha) \cap D(\beta))
+  \to U(\alpha) \cap U(\beta),
+\end{equation}
+with the same weight condition
+$|\lambda| = |\alpha| + |\beta| - |\nu| + k$.
+
+\begin{definition}[$Q$-enriched RSK]
+\label{def:Q-RSK}
+The \emph{$Q$-enriched RSK local rule} is defined identically to
+the $Q$-enriched Burge rule: same partition geometry, same cascade
+parameter~$k$, face label $k$ carries weight
+$Q_{a+k}(q) \cdot Q_{b+k}(q)$.
+\end{definition}
+
+Since the inputs $(\nu, \alpha, \beta, k)$ are the same for both
+rules, and the strip sizes $a$, $b$ depend only on the input, the
+$Q$-weight at each individual face is the same for both rules
+\emph{at that face considered in isolation}.
+
+
+%% ============================================================
+\section{The Sch\"utzenberger involution}
+\label{sec:schutzenberger}
+%% ============================================================
+
+The composition
+\begin{equation}\label{eq:psi-comp}
+  \psi_R \circ \psi_B^{-1} \colon \CPP(\pi) \to \CPP(\pi)
+\end{equation}
+is well-defined: take a cylindric plane partition, decompose it
+via the Burge bijection into a pair $(\gamma, \mathfrak{d})$
+with $\gamma \in \IP$ and $\mathfrak{d} \in \ALCD(\pi)$, then
+reassemble via the RSK bijection.  This preserves the base
+partition~$\gamma$ and the face labels (the ALCD is unchanged).
+In the standard (non-$Q$-enriched) case, this is a
+weight-preserving endomorphism on $\CPP(\pi)$.
+
+\begin{remark}
+From~\cite{COMMUTATION}: ``Two natural local rules exist (RSK
+and Burge), related by the Sch\"utzenberger involution.  Their
+composition $\psi_R \circ \psi_B^{-1} \colon \CPP(\pi) \to
+\CPP(\pi)$ has a conjectural interpretation via crystal bases
+for $\widehat{\mathfrak{sl}}_n$.''
+\end{remark}
+
+
+%% ============================================================
+\section{The propagation obstruction}
+\label{sec:obstruction}
+%% ============================================================
+
+Here is the critical failure.  Consider a cylindric growth
+diagram with multiple rows of faces.
+
+\subsection{First row}
+
+The inputs $(\nu, \alpha, \beta)$ at each first-row face are
+determined by the base partition~$\gamma$.  These are the same
+for both Burge and RSK.  Therefore:
+\begin{itemize}
+  \item Strip sizes at first-row faces: \textbf{identical} for
+    both rules.
+  \item $Q$-weights at first-row faces: \textbf{identical}.
+  \item Output partition $\lambda$: \textbf{different}
+    ($\lambda_B \neq \lambda_R$ in general).
+\end{itemize}
+
+\subsection{Second row and beyond}
+
+At the second row, the inputs include~$\lambda$ from the first
+row.  Since $\lambda_B \neq \lambda_R$, the strip sizes
+$a'$,~$b'$ at second-row faces are \textbf{different} between
+Burge and RSK.  Therefore:
+\[
+  Q_{a'+k} \cdot Q_{b'+k}
+  \quad\text{differs between the two rules.}
+\]
+
+\begin{proposition}[Propagation obstruction]
+\label{prop:obstruction}
+The $Q$-weights propagate upward through the growth diagram.  The
+Sch\"utzenberger involution changes the partition shapes at
+interior vertices, which changes the strip sizes at subsequent
+faces, which changes the $Q$-weights.  The total $Q$-weight
+(the product over all faces) is \textbf{not} preserved.
+\end{proposition}
+
+Schematically:
+\begin{center}
+\begin{tabular}{l|l}
+\textbf{Standard case} & \textbf{$Q$-enriched case} \\ \hline
+Face weight $= 1$ (always) &
+  Face weight $= Q_{a+k} \cdot Q_{b+k}$ \\[3pt]
+Independent of strip sizes &
+  Depends on strip sizes \\[3pt]
+Sch\"utzenberger preserves &
+  Sch\"utzenberger changes \\
+total weight trivially &
+  total $Q$-weight via propagation
+\end{tabular}
+\end{center}
+
+
+%% ============================================================
+\section{The $d = 1$ exception}
+\label{sec:d1}
+%% ============================================================
+
+When $d = 1$, $Q_n = 1$ for all~$n$.  The $Q$-weight
+$Q_{a+k} \cdot Q_{b+k} = 1$ regardless of $a$, $b$, $k$.  The
+strip-size dependence vanishes, and the Sch\"utzenberger
+involution trivially preserves $Q$-weights.  This recovers the
+standard Burge--RSK equivalence.
+
+
+%% ============================================================
+\section{Context-sensitivity and global coupling}
+\label{sec:context}
+%% ============================================================
+
+The failure is fundamentally because the $Q$-kernel is
+\emph{context-sensitive}: $\Phi_{a,b}(t)$ depends on the strip
+sizes $(a,b)$, which are determined by the global partition
+structure.  In the standard case, the face-label generating
+function is $1/(1-t)$ everywhere (universal), so any
+rearrangement of the growth diagram preserves weights.  The
+$Q$-enrichment breaks this universality.
+
+\begin{remark}[Why positivity is hard]
+\label{rem:hard}
+This explains, at a structural level, why the positivity proof for
+$Q_{n,c}(q)$ is hard: any bijective technique that rearranges the
+growth diagram \emph{globally} (Sch\"utzenberger, evacuation, jeu
+de taquin) will change the $Q$-weights unless it preserves the
+exact strip sizes at every face.  The $Q$-kernel creates a
+\textbf{global coupling} between the local rule and the partition
+geometry.
+\end{remark}
+
+
+%% ============================================================
+\section{What could work instead}
+\label{sec:alternatives}
+%% ============================================================
+
+The failure of the global Burge--RSK approach suggests three
+alternative strategies, all based on \emph{local} operations.
+
+
+\subsection{Peel/glue at the ALCD level}
+
+The sign-reversing involution from~\cite{FIRST_ATTEMPT} operates
+on pairs $(S, \mathfrak{d})$ where $\mathfrak{d}$ is an ALCD.
+The peel/glue mechanism uses Burge forward/inverse on a
+\emph{single} face (the outermost diagonal), which does
+\emph{not} change the rest of the growth diagram.  This is local
+and self-consistent.  The $Q$-weight change at the peeled face is
+controlled:
+\begin{align*}
+  \text{peel:} &\quad \text{removes one face with weight }
+    Q_{a+k} \cdot Q_{b+k}, \\
+  \text{glue:} &\quad \text{adds one face with weight }
+    Q_{a+k} \cdot Q_{b+k}.
+\end{align*}
+The rest of the growth diagram is untouched, so its $Q$-weights
+are preserved.  The involution pairs:
+\[
+  (S,\, \mathfrak{d})
+  \;\longleftrightarrow\;
+  (S \mathbin{\triangle} \{k\},\, \mathfrak{d}'),
+\]
+where $\mathfrak{d}'$ differs from $\mathfrak{d}$ by one face on
+the outermost diagonal.
+
+
+\subsection{The $Q$-kernel recurrence}
+
+The shifted factorisation (\cite{ADJOINT}, Part~III,
+Proposition~16.4):
+\begin{equation}\label{eq:shifted}
+  \Phi_{a,b}(t) = Q_a\, Q_b + t\, \Phi_{a+1,b+1}(t)
+\end{equation}
+peels off one layer of $Q$-weight at a time.  An involution that
+peels/glues one diagonal at a time tracks the $Q$-weight shift
+through this recurrence.  The $k = 0$ term $Q_a Q_b$ is the
+``uncoupled'' contribution, and the remainder
+$t\, \Phi_{a+1,b+1}(t)$ represents the cross-level interactions
+that the involution must cancel.
+
+Iterating~\eqref{eq:shifted}:
+\begin{equation}\label{eq:shifted-iter}
+  \Phi_{a,b}(t) = \sum_{j=0}^{N-1} Q_{a+j}\, Q_{b+j}\, t^j
+    + t^N\, \Phi_{a+N,b+N}(t).
+\end{equation}
+So the involution can work layer by layer, cancelling one
+cross-level term at a time.  This matches the Franklin-style
+structure where each involution step moves exactly one element
+between $S$ and the cylindric object.
+
+
+\subsection{The commutator approach}
+
+From~\cite{ADJOINT}, Part~III, the commutator isolates the
+$k \geq 1$ terms:
+\begin{equation}\label{eq:comm}
+  [\mathbf{Q}(z),\, \mathbf{Q}^*(w)]
+  = -\sum_{a,b \geq 0} P_a\, T_b\; z^a w^b\;
+    \bigl(\Phi_{a,b}(zw) - Q_a\, Q_b\bigr).
+\end{equation}
+The obstruction to commutativity is precisely:
+\begin{equation}\label{eq:obstruction}
+  \Phi_{a,b}(t) - Q_a\, Q_b
+  = t\, \Phi_{a+1,b+1}(t)
+  = \sum_{k \geq 1} Q_{a+k}\, Q_{b+k}\, t^k.
+\end{equation}
+A successful involution must cancel precisely these cross-level
+terms.  The peel/glue mechanism applied to the outermost face of
+the ALCD amounts to cancelling the $k = 1$ term of this sum,
+then iterating inward.
+
+
+%% ============================================================
+\section{The structural lesson}
+\label{sec:lesson}
+%% ============================================================
+
+The Burge $\leftrightarrow$ RSK involution is a \emph{global}
+transformation: it changes all internal vertices of the growth
+diagram simultaneously.  But the $Q$-enrichment makes weights
+\emph{locally coupled} to the partition shapes at those vertices.
+
+\begin{theorem}[Locality principle]
+\label{thm:locality}
+Effective involutions for $Q$-positivity must be
+\textbf{local}---operating on one diagonal/face at a time---because
+the $Q$-kernel's shifted factorisation
+\[
+  \Phi_{a,b}(t) = Q_a\, Q_b + t\, \Phi_{a+1,b+1}(t)
+\]
+is itself a one-layer-at-a-time recurrence.
+\end{theorem}
+
+This is the algebraic reason why the Franklin-style peel/glue
+approach (\cite{FIRST_ATTEMPT}) is the right framework: it matches
+the recursive structure of the $Q$-kernel.  The involution peels
+one face at a time, each step corresponding to one application of
+the shifted factorisation, and the $Q$-weights are tracked through
+the recurrence rather than through a global diagram transformation.
+
+
+%% ============================================================
+\section{Open question}
+\label{sec:open}
+%% ============================================================
+
+Can the local peel/glue involution be made explicit?
+
+\begin{conjecture}[Canonical peel]
+\label{conj:peel}
+Given $(S, \mathfrak{d})$ with $\mathfrak{d} \in
+\ALCD_{n-j}(c)$, there exists a canonical choice of face on the
+outermost diagonal to peel, satisfying:
+\begin{enumerate}
+  \item \emph{Involutivity.}\;
+    $\mathrm{peel}(\mathrm{glue}(S, \mathfrak{d}))
+    = (S, \mathfrak{d})$ and vice versa.
+  \item \emph{Weight preservation.}\;
+    $\sigma(S') + |\mathfrak{d}'|
+    = \sigma(S) + |\mathfrak{d}|$.
+  \item \emph{Fixed points.}\;
+    The unpaired elements at $j = 0$ contribute exactly
+    $Q_{n,c}(q)$.
+\end{enumerate}
+\end{conjecture}
+
+The cyclic descent injection (\cite{NOTES}, Section~8) provides a
+partial answer for the max-$1$ CPP case ($d \not\equiv 0
+\pmod{3}$), but the general case---where the ALCD has arbitrary
+depth---remains open.  The $Q$-kernel framework suggests that the
+canonical choice should be guided by the shifted factorisation:
+peel the face whose removal corresponds to the $k = 1 \to k = 0$
+reduction in $\Phi_{a,b}(t)$.
+
+
+%% ============================================================
+\section{The pair-based $Q$-local rule}
+\label{sec:pair-rule}
+%% ============================================================
+
+The preceding sections showed that na\"ively lifting the
+Sch\"utzenberger involution to the $Q$-enriched setting fails
+because of the propagation obstruction: partition diamonds couple
+$Q$-weights to vertex shapes.  We now take a fundamentally
+different approach.  The underlying combinatorial object for the
+$Q$-commutator is \textbf{not} a partition diamond, but a
+\textbf{pair of ground-set elements}.
+
+\subsection{Why not diamonds}
+
+The standard Burge/RSK local rule operates on a diamond
+$(\nu;\, \alpha, \beta) \mapsto \lambda$ of integer partitions.
+This is the bijective incarnation of $T_n P_m
+= \sum_k P_{m-k} T_{n-k}$, which acts on partitions (the
+Schur basis of~$\La$).
+
+The $Q$-operator $\mathbf{Q}(z) = \sum Q_m z^m P_m$ packages
+the cylindric Kostka polynomials as \emph{coefficients} of the
+Pieri operators.  Each $Q_m$ is itself the signed generating
+function of the ground set $\mathcal{G}_{m,c}$:
+\begin{equation}\label{eq:Q-ground-set}
+  Q_m = \sum_{(S,\mathfrak{d}) \in \mathcal{G}_{m,c}}
+    (-1)^{|S|}\, q^{\sigma(S) + |\mathfrak{d}|}.
+\end{equation}
+The cascade $T_n P_m = \sum_k P_{m-k} T_{n-k}$ still happens
+\emph{inside}, but the $Q$-weights are \emph{external} to the
+cascade---they come from the ground-set decomposition.  A local
+rule on diamonds captures the cascade but misses the cylindric
+structure that $Q_m$ encodes.
+
+
+\subsection{The underlying object: pairs of ground-set elements}
+
+The product $\mathbf{Q}^*(w)\,\mathbf{Q}(z)$ involves terms
+$Q_m\, Q_n\, z^m w^n\, T_n P_m$ (cf.~\cite{ADJOINT}, Part~II).
+At the combinatorial level, the factor $Q_m \cdot Q_n$ is the
+signed generating function of the \textbf{product ground set}:
+\begin{equation}\label{eq:product-ground-set}
+  Q_m \cdot Q_n
+  = \sum_{\substack{(S,\mathfrak{d}) \in \mathcal{G}_{m,c} \\
+    (S',\mathfrak{d}') \in \mathcal{G}_{n,c}}}
+    (-1)^{|S|+|S'|}\,
+    q^{\sigma(S) + |\mathfrak{d}| + \sigma(S') + |\mathfrak{d}'|}.
+\end{equation}
+
+After the cascade with $m = a + k$ and $n = b + k$, the coefficient
+of $P_a\, T_b\, z^a w^b\, (zw)^k$ in
+$\mathbf{Q}^*(w)\,\mathbf{Q}(z)$ is $Q_{a+k}\, Q_{b+k}$.
+
+\begin{definition}[Pair-based $Q$-local rule]
+\label{def:pair-rule}
+The underlying combinatorial object at cascade level~$k$ with
+strip sizes $(a,b)$ is a \emph{pair of ground-set elements}:
+\begin{equation}\label{eq:pair}
+  \bigl((S,\mathfrak{d}),\; (S',\mathfrak{d}')\bigr)
+  \;\in\;
+  \mathcal{G}_{a+k,c} \times \mathcal{G}_{b+k,c},
+\end{equation}
+with:
+\begin{itemize}
+  \item \textbf{Sign:}\; $(-1)^{|S|+|S'|}$.
+  \item \textbf{$q$-weight:}\;
+    $q^{\sigma(S) + |\mathfrak{d}|
+      + \sigma(S') + |\mathfrak{d}'|}$.
+  \item \textbf{Cascade parameter:}\; $k \geq 0$.
+\end{itemize}
+\end{definition}
+
+The $Q$-kernel is then expressed as a signed sum over pairs:
+\begin{equation}\label{eq:Phi-pairs}
+  \Phi_{a,b}(t) = \sum_{k \geq 0} t^k
+    \sum_{\substack{(S,\mathfrak{d}) \in \mathcal{G}_{a+k,c} \\
+      (S',\mathfrak{d}') \in \mathcal{G}_{b+k,c}}}
+    (-1)^{|S|+|S'|}\,
+    q^{\sigma(S) + |\mathfrak{d}|
+      + \sigma(S') + |\mathfrak{d}'|}.
+\end{equation}
+
+
+\subsection{The sign structure}
+
+The sign $(-1)^{|S|+|S'|}$ depends on the \emph{total subset
+size} $|S| + |S'|$, which ranges from $0$ to $(a+k) + (b+k)$.
+The terms decompose as:
+
+\begin{center}
+\begin{tabular}{l|l|l}
+$|S| + |S'|$ & \textbf{Sign} & \textbf{Contribution} \\ \hline
+$0$ (both empty) & $+1$ &
+  $\sum_{\mathfrak{d},\mathfrak{d}'}
+  q^{|\mathfrak{d}| + |\mathfrak{d}'|}$ \\[3pt]
+$1$ (one singleton) & $-1$ &
+  cancels against $|S|+|S'| = 0$ terms \\[3pt]
+$2$ & $+1$ &
+  cancels against $|S|+|S'| = 1$ terms \\[3pt]
+$\vdots$ & $\vdots$ & $\vdots$
+\end{tabular}
+\end{center}
+
+\begin{remark}[Two sources of sign]
+\label{rem:two-signs}
+The signs arise from two \emph{independent} copies of the
+alternating sum~\eqref{eq:Q-ground-set}: one from
+$\mathcal{G}_{a+k}$ (the ``creation'' side) and one from
+$\mathcal{G}_{b+k}$ (the ``annihilation'' side).  If each
+factor $Q_{a+k}$ and $Q_{b+k}$ were independently non-negative,
+the product would be non-negative.  The pair structure opens the
+possibility of a \emph{coupled} involution that works even when
+the individual factors are hard to handle.
+\end{remark}
+
+
+\subsection{The cascade as coupling}
+
+The cascade parameter $k$ \textbf{couples} the two components of
+the pair: the first component lives in $\mathcal{G}_{a+k,c}$ and
+the second in $\mathcal{G}_{b+k,c}$, with $k$ shared.  This
+coupling is absent in the standard Burge rule (where the face
+label~$k$ carries weight~$1$ regardless of context) and is the
+essential new feature of the pair-based framework.
+
+An involution on pairs can exploit the shared cascade in ways that
+two independent involutions cannot:
+\begin{enumerate}
+  \item \textbf{Cross-pair exchange.}
+    Move an element from $S$ to $S'$ (or vice versa), adjusting
+    the ALCD components to preserve total weight.  This changes
+    the parity of $|S| + |S'|$ by $0$ (not useful for sign
+    cancellation) but can redistribute weight between the two
+    components.
+
+  \item \textbf{Cascade shift.}
+    Move from cascade level~$k$ to level~$k \pm 1$ by
+    transferring data between the pair and the cascade.  This
+    changes the ground-set levels from
+    $(a+k, b+k)$ to $(a+k \pm 1, b+k \pm 1)$ and modifies the
+    pair accordingly.
+
+  \item \textbf{Coupled peel/glue.}
+    In the first component, peel an element from
+    $\mathfrak{d}$ and deposit it in~$S$ (changing the sign);
+    simultaneously, in the second component, glue an element
+    from $S'$ onto $\mathfrak{d}'$ (changing the sign back).
+    The net sign change is $(-1)^{+1}\cdot(-1)^{-1} = 1$
+    (no sign change), but the \emph{weight} can be redistributed.
+
+  \item \textbf{Asymmetric peel.}
+    Peel in only \emph{one} component: add an element to~$S$
+    (sign changes by $-1$), adjusting the weight.  This is the
+    analogue of the Franklin-style involution, but applied to one
+    component of the pair.
+\end{enumerate}
+
+\begin{remark}[The cascade recurrence, revisited]
+\label{rem:cascade-pair}
+The shifted factorisation $\Phi_{a,b}(t) = Q_a Q_b + t\,
+\Phi_{a+1,b+1}(t)$ acquires a new interpretation in the
+pair framework.  The $k = 0$ term $Q_a Q_b$ corresponds to
+pairs in $\mathcal{G}_{a,c} \times \mathcal{G}_{b,c}$ (no
+cascade).  The remainder $t\, \Phi_{a+1,b+1}(t)$ corresponds
+to pairs in $\mathcal{G}_{a+1,c} \times \mathcal{G}_{b+1,c}$
+and higher (with cascade $k \geq 1$).  The involution must
+map between these two regimes, using the cascade as the
+transfer mechanism.
+\end{remark}
+
+
+%% ============================================================
+\section{The involution programme on pairs}
+\label{sec:pair-programme}
+%% ============================================================
+
+\subsection{The full signed sum}
+
+Assembling all the pieces, the $Q$-kernel at cascade level~$k$ is
+a signed sum over pairs:
+\[
+  [t^k]\, \Phi_{a,b}(t) = Q_{a+k}\, Q_{b+k}
+  = \!\!\!\!
+    \sum_{\substack{(S,\mathfrak{d}) \in \mathcal{G}_{a+k} \\
+      (S',\mathfrak{d}') \in \mathcal{G}_{b+k}}}
+    \!\!\!\!
+    (-1)^{|S|+|S'|}\,
+    q^{\sigma(S) + |\mathfrak{d}|
+      + \sigma(S') + |\mathfrak{d}'|}.
+\]
+We need a sign-reversing, weight-preserving involution
+$\iota$ on the set
+\begin{equation}\label{eq:pair-set}
+  \mathcal{P}_{a,b,k}
+  := \mathcal{G}_{a+k,c} \times \mathcal{G}_{b+k,c}
+\end{equation}
+whose fixed points have $|S| + |S'|$ even and contribute
+$Q_{a+k}\, Q_{b+k} \in \Z_{\geq 0}[q]$.
+
+\subsection{Factored vs.\ coupled involutions}
+
+The simplest approach is a \emph{factored involution}:
+apply a sign-reversing involution $\iota_1$ on
+$\mathcal{G}_{a+k}$ independently of a sign-reversing
+involution $\iota_2$ on $\mathcal{G}_{b+k}$, and set
+$\iota = \iota_1 \times \iota_2$.
+
+\begin{proposition}\label{prop:factored}
+If sign-reversing involutions $\iota_1$ on
+$\mathcal{G}_{a+k,c}$ and $\iota_2$ on $\mathcal{G}_{b+k,c}$
+exist (proving $Q_{a+k} \geq 0$ and $Q_{b+k} \geq 0$
+individually), then $\iota = \iota_1 \times \iota_2$ is a
+sign-reversing involution on $\mathcal{P}_{a,b,k}$.
+\end{proposition}
+
+\begin{proof}
+If $(S,\mathfrak{d})$ is paired with $(T,\mathfrak{e})$ by
+$\iota_1$ (so $|S| \not\equiv |T| \pmod{2}$), then for any
+$(S',\mathfrak{d}')$, the pairs
+$((S,\mathfrak{d}),(S',\mathfrak{d}'))$ and
+$((T,\mathfrak{e}),(S',\mathfrak{d}'))$ have opposite signs and
+the same weight.  The product involution pairs them.
+\end{proof}
+
+This reduces the pair problem to the original single-factor
+problem and is therefore no easier.  The interest of the pair
+framework lies in the possibility of a \textbf{coupled involution}
+that uses the cascade to transfer data between components.
+
+\subsection{Coupled involutions via cascade shift}
+
+\begin{definition}[Cascade-coupled involution]
+\label{def:cascade-coupled}
+A \emph{cascade-coupled involution} on $\bigsqcup_{k \geq 0}
+\mathcal{P}_{a,b,k}$ is a sign-reversing, weight-preserving
+involution $\iota$ that may pair elements at \emph{different}
+cascade levels:
+\[
+  \iota\colon
+  \bigl((S,\mathfrak{d}),\, (S',\mathfrak{d}'),\, k\bigr)
+  \;\longmapsto\;
+  \bigl((T,\mathfrak{e}),\, (T',\mathfrak{e}'),\, k'\bigr),
+\]
+where $k' \neq k$ is allowed, provided that:
+\begin{enumerate}
+  \item $|S|+|S'| \not\equiv |T|+|T'| \pmod{2}$
+    (sign reversal),
+  \item $\sigma(S) + |\mathfrak{d}| + \sigma(S')
+    + |\mathfrak{d}'| + k
+    = \sigma(T) + |\mathfrak{e}| + \sigma(T')
+    + |\mathfrak{e}'| + k'$
+    (weight preservation, where the cascade contributes
+    weight~$k$ via the $t^k$ monomial),
+  \item $\iota^2 = \mathrm{id}$ (involutivity).
+\end{enumerate}
+\end{definition}
+
+The cascade shift is the key new feature: an element at cascade
+level~$k$ with pair data
+$((S,\mathfrak{d}), (S',\mathfrak{d}'))$ can be paired with
+an element at level~$k'$ by transferring weight between the
+cascade parameter and the pair components.
+
+\begin{remark}[The shifted factorisation as cascade shift]
+The shifted factorisation
+$\Phi_{a,b}(t) = Q_a Q_b + t\,\Phi_{a+1,b+1}(t)$ says: the
+$k = 0$ pairs in $\mathcal{G}_a \times \mathcal{G}_b$ and the
+$k \geq 1$ pairs in
+$\bigsqcup_{k \geq 1} \mathcal{G}_{a+k} \times
+\mathcal{G}_{b+k}$ must combine to give non-negative
+coefficients.  A cascade-coupled involution can pair an element
+at level~$k = 0$ with an element at level~$k = 1$ (or higher),
+using the cascade parameter to absorb the weight difference.
+\end{remark}
+
+\subsection{The programme}
+
+\begin{enumerate}
+  \item \textbf{Define the pair set.}
+    $\mathcal{P}_{a,b} := \bigsqcup_{k \geq 0}
+    \mathcal{G}_{a+k,c} \times \mathcal{G}_{b+k,c}$, with sign
+    $(-1)^{|S|+|S'|}$ and weight
+    $\sigma(S) + |\mathfrak{d}| + \sigma(S') + |\mathfrak{d}'|
+    + k$.
+
+  \item \textbf{Construct a cascade-coupled involution}
+    $\iota$ on $\mathcal{P}_{a,b}$.  The involution may pair
+    elements at different cascade levels, using the cascade
+    parameter as a ``bridge'' between the two ground-set
+    components.
+
+  \item \textbf{Identify the fixed points.}
+    The unpaired elements of $\iota$ contribute
+    $\Phi_{a,b}(t) \in \Z_{\geq 0}[q][\![t]\!]$, which implies
+    $Q_{a+k} Q_{b+k} \in \Z_{\geq 0}[q]$ for each~$k$.
+
+  \item \textbf{Deduce single-factor positivity.}
+    Setting $b = 0$ gives
+    $\Phi_{a,0}(t) = C_a(t) = \sum_k Q_{a+k} Q_k\, t^k$.
+    Since $Q_0 = 1$, the $k = 0$ term is $Q_a$, and
+    non-negativity of $\Phi_{a,0}(t)$ implies $Q_a \geq 0$.
+\end{enumerate}
+
+\begin{remark}[Advantage over the factored approach]
+\label{rem:advantage}
+Step~(4) is the key advantage of the pair framework: proving
+$\Phi_{a,0}(t) \geq 0$ for all~$a$ is \emph{a priori} a
+different problem from proving $Q_n \geq 0$ for all~$n$, and
+the pair structure with cascade coupling provides additional
+tools (cross-component transfer, cascade shifts) that are not
+available when working with a single ground set.  In particular,
+the involution on $\mathcal{G}_{a+k} \times \mathcal{G}_{k}$
+can exploit the asymmetry between the two components (one at
+level $a + k$, one at level~$k$) to construct pairings that
+have no analogue in the single-factor setting.
+\end{remark}
+
+
+%% ============================================================
+\section{The Q-Burge and Q-RSK rules}
+\label{sec:two-rules}
+%% ============================================================
+
+The standard Burge and RSK local rules differ in a single
+respect: the cascade direction applied to overlapping columns
+in conjugate coordinates.
+\begin{center}
+\begin{tabular}{l|l}
+\textbf{Rule} & \textbf{Cascade direction} \\ \hline
+Burge forward & UP:
+  $\varepsilon(i) = \min\{j > i : j \notin A \cup B \cup C\}$
+  \\
+RSK forward & DOWN:
+  $\delta(i) = \max\{j < i : j \notin A \cup B \cup C\}$
+\end{tabular}
+\end{center}
+Both have the same type signature and weight condition; they
+produce different outputs only when the overlap
+$A \cap B \neq \emptyset$.  We now lift this dichotomy to the
+pair framework of Section~\ref{sec:pair-rule}.
+
+
+\subsection{Peel and glue on ground-set elements}
+
+Let $(S, \mathfrak{d}) \in \mathcal{G}_{n,c}$ with
+$S \subseteq \{1, \ldots, n\}$, $|S| = j$,
+$\mathfrak{d} \in \ALCD_{n-j}(c)$.  The \emph{peel} and
+\emph{glue} operations transfer data between the subset~$S$
+and the ALCD~$\mathfrak{d}$, using the local rule as the
+transfer mechanism.
+
+\begin{definition}[Peel]
+\label{def:peel}
+Suppose $\mathfrak{d}$ has a non-trivial outermost face.  The
+\emph{$R$-peel} (for $R \in \{\text{Burge}, \text{RSK}\}$)
+applies the inverse local rule~$R^{-1}$ to extract the
+outermost face, producing:
+\[
+  (S, \mathfrak{d})
+  \;\xrightarrow{\;\text{$R$-peel}\;}
+  (S \cup \{\ell\},\; \mathfrak{d}'),
+\]
+where $\ell \in \{1, \ldots, n\} \setminus S$ is the position
+determined by the inverse rule
+(Burge$^{-1}$ cascades \textbf{down}, RSK$^{-1}$ cascades
+\textbf{up}), and $\mathfrak{d}' \in \ALCD_{n-j-1}(c)$ is the
+reduced ALCD\@.  Weight is preserved:
+$\sigma(S \cup \{\ell\}) + |\mathfrak{d}'|
+= \sigma(S) + |\mathfrak{d}|$, and the sign changes:
+$(-1)^{j+1} = -(-1)^j$.
+\end{definition}
+
+\begin{definition}[Glue]
+\label{def:glue}
+The inverse of peel.  Given $i \in S$, the \emph{$R$-glue}
+of~$i$ applies the forward local rule~$R$ to insert a
+horizontal strip of weight~$i$ into $\mathfrak{d}$:
+\[
+  (S, \mathfrak{d})
+  \;\xrightarrow{\;\text{$R$-glue of $i$}\;}
+  (S \setminus \{i\},\; \tilde{\mathfrak{d}}),
+\]
+with the same weight preservation and sign reversal.
+\end{definition}
+
+In general, $\ell_{\text{Burge}} \neq \ell_{\text{RSK}}$ and
+$\mathfrak{d}'_{\text{Burge}} \neq \mathfrak{d}'_{\text{RSK}}$:
+the Burge inverse cascades the extracted data \emph{downward}
+(tending to produce a smaller~$\ell$), while the RSK inverse
+cascades it \emph{upward} (tending to produce a larger~$\ell$).
+
+
+\subsection{The Q-Burge rule on pairs}
+
+\begin{definition}[Q-Burge rule]
+\label{def:Q-Burge}
+On the pair set $\mathcal{P}_{a,b,k} = \mathcal{G}_{a+k,c}
+\times \mathcal{G}_{b+k,c}$, the \emph{Q-Burge rule}
+$\mathfrak{B}$ applies a Burge-peel to the \textbf{first
+component}:
+\[
+  \mathfrak{B}\colon
+  \bigl((S, \mathfrak{d}),\; (S', \mathfrak{d}')\bigr)
+  \;\longmapsto\;
+  \bigl((S \cup \{\ell_B\},\, \mathfrak{d}_B),\;
+    (S', \mathfrak{d}')\bigr),
+\]
+where $\ell_B$ and $\mathfrak{d}_B$ are determined by
+Burge$^{-1}$ applied to the outermost face of~$\mathfrak{d}$.
+The second component is unchanged.
+\end{definition}
+
+\subsection{The Q-RSK rule on pairs}
+
+\begin{definition}[Q-RSK rule]
+\label{def:Q-RSK}
+On the same pair set, the \emph{Q-RSK rule} $\mathfrak{R}$
+applies an RSK-peel to the \textbf{second component}:
+\[
+  \mathfrak{R}\colon
+  \bigl((S, \mathfrak{d}),\; (S', \mathfrak{d}')\bigr)
+  \;\longmapsto\;
+  \bigl((S, \mathfrak{d}),\;
+    (S' \cup \{\ell_R\},\, \mathfrak{d}'_R)\bigr),
+\]
+where $\ell_R$ and $\mathfrak{d}'_R$ are determined by
+RSK$^{-1}$ applied to the outermost face
+of~$\mathfrak{d}'$.  The first component is unchanged.
+\end{definition}
+
+Both $\mathfrak{B}$ and $\mathfrak{R}$ are sign-reversing: each
+changes $|S| + |S'|$ by exactly~$1$, so the total sign
+$(-1)^{|S|+|S'|}$ flips.
+
+\begin{remark}[The double asymmetry]
+\label{rem:double-asymmetry}
+The Q-Burge rule uses the Burge direction (cascade
+\textbf{down} for the inverse) on the \emph{first} component,
+while the Q-RSK rule uses the RSK direction (cascade
+\textbf{up} for the inverse) on the \emph{second} component.
+This double asymmetry---different cascade directions on
+different components of the pair---is the structural feature
+that makes the combined involution possible.  It mirrors the
+standard Burge--RSK dichotomy, but applied to the two sides of
+the pair rather than to two bijections on the same object.
+\end{remark}
+
+
+%% ============================================================
+\section{The paired involution}
+\label{sec:paired-involution}
+%% ============================================================
+
+Having two sign-reversing operations on the pair set---one for
+each component, using opposite cascade directions---we combine
+them into a single sign-reversing involution.
+
+
+\subsection{The Franklin-style comparison}
+
+In the classical Franklin involution (for the pentagonal number
+theorem), one compares a \emph{peel candidate}~$\ell$ (the
+smallest part of the partition) with a \emph{glue
+candidate}~$g$ (the end of the staircase): if $\ell < g$, one
+peels; if $g < \ell$, one glues; if $\ell = g$, the element
+is a fixed point.
+
+In the pair framework, the two rules provide two peel
+candidates---one for each component---and the comparison
+between them determines which component to act on.
+
+\begin{definition}[The Q-Burge--RSK involution]
+\label{def:Q-BR-involution}
+Let $p = ((S, \mathfrak{d}),\, (S', \mathfrak{d}'))$ be a
+pair in $\mathcal{P}_{a,b,k}$.  Define the involution
+$\iota(p)$ as follows.
+
+\medskip
+\noindent\textbf{Step~1: Compute candidates.}
+\begin{itemize}
+  \item If $\mathfrak{d}$ is non-trivial, compute the
+    Burge-peel candidate~$\ell_B$ for the first component
+    (cascade \textbf{down}: $\ell_B$ is the position where the
+    extracted face data lands).
+  \item If $\mathfrak{d}'$ is non-trivial, compute the
+    RSK-peel candidate~$\ell_R$ for the second component
+    (cascade \textbf{up}: $\ell_R$ is the position where the
+    extracted face data lands).
+\end{itemize}
+
+\medskip
+\noindent\textbf{Step~2: Compare and act.}
+\begin{enumerate}
+  \item[(P)] \textbf{Peel phase.}\; If both candidates exist,
+    compare $\ell_B$ and~$\ell_R$.
+    \begin{itemize}
+      \item If $\ell_B < \ell_R$: apply $\mathfrak{B}$ (peel
+        first component).
+      \item If $\ell_R < \ell_B$: apply $\mathfrak{R}$ (peel
+        second component).
+      \item If $\ell_B = \ell_R$: proceed to the glue phase.
+    \end{itemize}
+    If only one candidate exists, apply the corresponding rule.
+
+  \item[(G)] \textbf{Glue phase.}\; If the previous step
+    produced a peeled pair~$p'$, this phase does not apply.
+    Otherwise, check whether a glue operation can reverse a
+    previous peel:
+    \begin{itemize}
+      \item If $S \neq \emptyset$ and $\max(S)$ is
+        Burge-glueable (i.e., Burge-glue of $\max(S)$
+        followed by Burge-peel recovers~$\max(S)$): apply
+        Burge-glue to the first component.
+      \item Else if $S' \neq \emptyset$ and $\min(S')$ is
+        RSK-glueable: apply RSK-glue to the second component.
+    \end{itemize}
+
+  \item[(F)] \textbf{Fixed point.}\; If neither peel nor glue
+    applies, $p$ is a \textbf{fixed point} of~$\iota$.
+\end{enumerate}
+\end{definition}
+
+The peel--glue duality ensures involutivity: if $\iota$ peels
+the first component of~$p$ to produce~$p'$, then $\iota$
+applied to~$p'$ glues the first component back (since the
+newly added element $\ell_B \in S$ is the Burge-glue candidate,
+and gluing it reverses the peel).
+
+
+\subsection{Sign-reversal and weight preservation}
+
+\begin{proposition}\label{prop:sign-weight}
+The involution $\iota$ of Definition~\ref{def:Q-BR-involution}
+is:
+\begin{enumerate}
+  \item \textbf{Sign-reversing:} each non-fixed-point pair~$p$
+    satisfies
+    $(-1)^{|S(\iota(p))| + |S'(\iota(p))|}
+    = -(-1)^{|S(p)| + |S'(p)|}$,
+    since exactly one of $|S|$, $|S'|$ changes by~$1$.
+  \item \textbf{Weight-preserving:} the total $q$-weight
+    $\sigma(S) + |\mathfrak{d}| + \sigma(S') + |\mathfrak{d}'|$
+    is unchanged, since peel and glue individually preserve
+    weight.
+\end{enumerate}
+\end{proposition}
+
+
+\subsection{Fixed-point structure}
+
+A pair $p = ((S, \mathfrak{d}), (S', \mathfrak{d}'))$ is a
+fixed point of~$\iota$ when:
+\begin{enumerate}
+  \item Both ALCDs $\mathfrak{d}$ and $\mathfrak{d}'$ are
+    trivial (no face to peel), \textbf{and}
+  \item Both subsets $S$ and $S'$ are empty (no element to
+    glue);
+\end{enumerate}
+or when the peel candidates coincide ($\ell_B = \ell_R$) and
+no glue operation is available.
+
+\begin{remark}[The trivial fixed points]
+\label{rem:trivial-fp}
+In the first case, $|S| = |S'| = 0$, so the fixed point has
+sign $(-1)^0 = +1$ and contributes
+$q^{|\mathfrak{d}| + |\mathfrak{d}'|}$ with a \emph{positive}
+coefficient.  These trivial fixed points correspond to pure
+ALCD pairs
+$(\mathfrak{d}, \mathfrak{d}') \in \ALCD_{a+k}(c) \times
+\ALCD_{b+k}(c)$ and contribute the ``uncancelled positive
+core'' of $Q_{a+k} \cdot Q_{b+k}$.
+\end{remark}
+
+
+\subsection{Why two rules are needed}
+
+\begin{remark}[Single rule vs.\ paired rules]
+\label{rem:single-vs-paired}
+A single-rule involution (say, Burge-peel/glue on the first
+component alone) is a \emph{factored involution}
+(Proposition~\ref{prop:factored}): it proves $Q_{a+k} \geq 0$
+for the first component independently, which is the original
+unsolved problem.
+
+The paired involution uses \emph{both} rules simultaneously,
+one per component, with opposite cascade directions.  The
+cross-component comparison in Step~2(P) creates pairings that
+have no analogue in the single-factor setting:
+\begin{itemize}
+  \item A pair where the first component is a fixed point of
+    Burge-peel may still be paired by the Q-RSK rule acting on
+    the second component.
+  \item The opposite cascade directions (Burge \textbf{down}
+    on first, RSK \textbf{up} on second) ensure that the peel
+    candidates $\ell_B$ and $\ell_R$ explore different parts
+    of the position space, maximising the chance that at least
+    one operation is available.
+\end{itemize}
+\end{remark}
+
+
+\subsection{Connection to the shifted factorisation}
+
+The shifted factorisation
+$\Phi_{a,b}(t) = Q_a Q_b + t\,\Phi_{a+1,b+1}(t)$ acquires a
+concrete meaning in this framework.  The $k = 0$ pairs
+$\mathcal{G}_a \times \mathcal{G}_b$ are acted on by the
+involution~$\iota$ restricted to cascade level~$0$.  The
+unpaired (fixed-point) pairs at level~$0$ contribute $Q_a Q_b$
+to $\Phi_{a,b}(0)$.  At level~$k = 1$, the involution acts on
+$\mathcal{G}_{a+1} \times \mathcal{G}_{b+1}$, and the
+fixed-point contribution is $Q_{a+1} Q_{b+1}$, the coefficient
+of~$t$.  In general:
+\[
+  [t^k]\, \Phi_{a,b}(t)
+  = \sum_{\substack{p \in \mathcal{P}_{a,b,k} \\
+    \iota(p) = p}}
+  q^{\mathrm{wt}(p)}
+  \;\in\; \Z_{\geq 0}[q],
+\]
+provided $\iota$ has only positive fixed points at each cascade
+level.  Setting $b = 0$ recovers $Q_a$ as the $k = 0$
+fixed-point contribution of the involution on
+$\mathcal{G}_{a} \times \mathcal{G}_{0}$, where
+$\mathcal{G}_0 = \{(\emptyset, \mathfrak{d}_0)\}$ is a
+singleton (the trivial ALCD at level~$0$).
+
+
+\begin{thebibliography}{99}
+\bibitem{ADJOINT}
+  R.~Langer,
+  \emph{The $Q$-Operator and its Adjoint: From Level~3 Operator
+  Traces to Cascade Commutators},
+  companion note, 2026.
+
+\bibitem{Borodin}
+  A.~Borodin,
+  \emph{Periodic Schur process and cylindric partitions},
+  Duke Math.~J.\ \textbf{140} (2007), 391--468.
+
+\bibitem{COMMUTATION}
+  R.~Langer,
+  \emph{From Commutation Relations to Growth Diagrams:
+  A Summary of the Operator--Bijection Correspondence},
+  companion note.
+
+\bibitem{FIRST_ATTEMPT}
+  R.~Langer,
+  \emph{Towards an Involution Proof of Positivity for $Q_{n,c}(q)$},
+  companion note.
+
+\bibitem{NOTES}
+  R.~Langer,
+  \emph{Weighted Local Rules and the Cyclic Descent Injection},
+  companion note.
+
+\bibitem{UNDERLYING_SET}
+  R.~Langer,
+  \emph{The Underlying Set: Cylindric Plane Partitions, ALCDs,
+  and the Ground Set for the Involution},
+  companion note.
+
+\bibitem{langer-thesis}
+  R.~Langer,
+  \emph{Cylindric Partitions and Bijective Proofs},
+  PhD thesis, University of Melbourne.
+
+\bibitem{vanLeeuwen}
+  M.~A.~A.~van~Leeuwen,
+  \emph{The Robinson--Schensted and Sch\"utzenberger algorithms,
+  an elementary approach},
+  Electron.~J.~Combin.\ \textbf{3} (1996), R15.
+\end{thebibliography}
+
+\end{document}

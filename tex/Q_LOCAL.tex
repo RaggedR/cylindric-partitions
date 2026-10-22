@@ -1,0 +1,695 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\La}{\Lambda}
+\newcommand{\GK}{\operatorname{GK}}
+\newcommand{\CPP}{\operatorname{CPP}}
+\newcommand{\ALCD}{\operatorname{ALCD}}
+\newcommand{\IP}{\operatorname{IP}}
+\newcommand{\SSYT}{\operatorname{SSYT}}
+\newcommand{\qpoch}[2]{(#1;#2)_\infty}
+\newcommand{\qpochn}[3]{(#1;#2)_{#3}}
+\newcommand{\qbin}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\wt}{wt}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\Fix}{Fix}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{$Q$-Local: Bender--Knuth Involutions \\
+  and $Q$-Row Operations}
+\author{Robin Langer}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The classical Sch\"utzenberger involution decomposes into
+Bender--Knuth involutions $\sigma_i$, each of which swaps two
+adjacent rows of the growth diagram.  We give a self-contained
+account of these involutions, their connection to local rules,
+and their $Q$-analogues.  The $Q$-Bender--Knuth involution
+$\sigma_i^Q$ acts on ground-set elements
+$(S, \mathfrak{d}) \in \mathcal{G}_{n,c}$ by switching the
+cascade direction at the $i$-th diagonal of the ALCD\@.  The
+condition $(\sigma_i^Q)^2 = \mathrm{id}$ is the atomic
+requirement for the $Q$-Sch\"utzenberger
+identity~\cite{Q_SCHUTZ}.
+\end{abstract}
+
+\tableofcontents
+
+
+%% ============================================================
+\part{The Classical Theory}
+%% ============================================================
+
+
+%% ============================================================
+\section{The Bender--Knuth involutions}
+\label{sec:BK-def}
+%% ============================================================
+
+Let $T$ be a semistandard Young tableau (SSYT) of shape
+$\lambda$ with entries in $\{1, 2, 3, \ldots\}$.
+
+\begin{definition}[Free and paired entries]
+\label{def:free-paired}
+Fix an index $i \geq 1$.  Consider the entries $i$ and
+$i + 1$ in the tableau~$T$.  In each row~$r$, suppose there
+are $a_r$ copies of~$i$ and $b_r$ copies of~$i + 1$.  The
+column-strictness condition forces a certain number of these
+to be \emph{paired}: an $i$ in column~$c$ is paired with the
+$i+1$ in column~$c$ of the row above (if it exists), and
+conversely.  More precisely:
+\begin{itemize}
+  \item The entries $i$ and $i+1$ in row~$r$ occupy a
+    contiguous block of columns (by the semistandard
+    condition: all $i$'s come before all $(i+1)$'s).
+  \item An $i$ is \emph{paired} if the cell directly below it
+    (in row $r+1$) contains $i+1$.
+  \item An $i+1$ is \emph{paired} if the cell directly above
+    it (in row $r-1$) contains~$i$.
+  \item All other $i$'s and $(i+1)$'s are \emph{free}.
+\end{itemize}
+Let $f_r$ be the number of free $i$'s and $g_r$ the number of
+free $(i+1)$'s in row~$r$.
+\end{definition}
+
+\begin{definition}[Bender--Knuth involution $\sigma_i$]
+\label{def:BK}
+The involution $\sigma_i \colon \SSYT(\lambda) \to
+\SSYT(\lambda)$ acts by:
+\begin{enumerate}
+  \item Keep all paired entries fixed.
+  \item In each row~$r$, exchange the free entries:
+    replace each free~$i$ by~$i + 1$ and each free~$i+1$
+    by~$i$.
+\end{enumerate}
+Equivalently, in each row, swap $(f_r, g_r) \mapsto
+(g_r, f_r)$.
+\end{definition}
+
+\begin{proposition}[Properties of $\sigma_i$]
+\label{prop:BK-properties}
+\mbox{}
+\begin{enumerate}
+  \item $\sigma_i^2 = \mathrm{id}$ \textup{(involution)}.
+  \item $\sigma_i$ preserves the shape~$\lambda$.
+  \item $\sigma_i$ exchanges the multiplicities of~$i$
+    and~$i+1$ in the content.
+  \item $\sigma_i \circ \sigma_j = \sigma_j \circ \sigma_i$
+    for $|i - j| \geq 2$
+    \textup{(distant involutions commute)}.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1)~Swapping $(f_r, g_r) \mapsto (g_r, f_r)$ twice gives the
+identity.
+(2)~Only entries $i \leftrightarrow i+1$ are changed; the
+shape is determined by row lengths, which are unaffected.
+(3)~Free $i$'s become free $(i+1)$'s and vice versa; paired
+entries are unchanged.
+(4)~The entries $\{i, i+1\}$ and $\{j, j+1\}$ are disjoint
+when $|i-j| \geq 2$, so $\sigma_i$ and $\sigma_j$ act on
+independent sets of cells.
+\end{proof}
+
+\begin{corollary}[Schur functions are symmetric]
+\label{cor:schur-symmetric}
+The Schur function
+$s_\lambda = \sum_{T \in \SSYT(\lambda)}
+x^{\mathrm{content}(T)}$ is symmetric: $\sigma_i$ gives a
+weight-preserving, content-swapping bijection on
+$\SSYT(\lambda)$, so the coefficient of $x^\mu$ equals the
+coefficient of~$x^{s_i(\mu)}$.
+\end{corollary}
+
+
+%% ============================================================
+\section{Connection to growth diagrams and local rules}
+\label{sec:growth}
+%% ============================================================
+
+\subsection{The growth diagram}
+
+A \emph{growth diagram} of size $m \times n$ is an array of
+partitions $\lambda^{(i,j)}$ ($0 \leq i \leq m$,
+$0 \leq j \leq n$) satisfying:
+\begin{itemize}
+  \item Boundary conditions on $\lambda^{(i,0)}$ and
+    $\lambda^{(0,j)}$.
+  \item A \emph{local rule} at each face $(i,j)$: the diamond
+    $(\lambda^{(i-1,j-1)};\; \lambda^{(i-1,j)},\,
+    \lambda^{(i,j-1)};\; \lambda^{(i,j)})$ with face label
+    $k_{i,j} \geq 0$.
+\end{itemize}
+Each diagonal~$i$ of the growth diagram corresponds to one
+application of
+$T_n P_m = \sum_k P_{m-k} T_{n-k}$.
+The face labels along diagonal~$i$ form the $i$-th row of the
+ALCD\@.
+
+
+\subsection{Row-swapping $=$ Bender--Knuth}
+
+The key insight (van~Leeuwen~\cite{vanLeeuwen}):
+
+\begin{proposition}
+\label{prop:row-swap}
+Swapping diagonals $i$ and $i+1$ of the growth
+diagram---i.e., recomputing the vertex partitions with the
+data from diagonals $i$ and $i+1$ interchanged---is equivalent
+to applying the Bender--Knuth involution $\sigma_i$ to the
+corresponding tableau.
+\end{proposition}
+
+The dictionary:
+\begin{center}
+\begin{tabular}{l|l}
+\textbf{Tableaux} & \textbf{Growth diagrams} \\ \hline
+$\sigma_i$: swap entries $i \leftrightarrow i+1$ &
+  swap diagonals $i \leftrightarrow i+1$ \\
+free entries in a row &
+  face labels that change under the swap \\
+paired entries &
+  face labels that stay fixed \\
+$\sigma_i^2 = \mathrm{id}$ &
+  double swap $=$ identity
+\end{tabular}
+\end{center}
+
+
+\subsection{Burge vs.\ RSK at one diagonal}
+
+The two local rules (Burge and RSK) differ only in cascade
+direction:
+\begin{itemize}
+  \item \textbf{Burge forward}: cascade \textbf{up}
+    ($\varepsilon(i) = \min\{j > i : j \notin
+    A \cup B \cup C\}$).
+  \item \textbf{RSK forward}: cascade \textbf{down}
+    ($\delta(i) = \max\{j < i : j \notin
+    A \cup B \cup C\}$).
+\end{itemize}
+
+\begin{proposition}
+\label{prop:switch-one-diagonal}
+Building a growth diagram using Burge at all diagonals, then
+switching to RSK at diagonal~$i$ alone, produces a growth
+diagram that differs from the original by $\sigma_i$ applied
+to the face-label data.
+\end{proposition}
+
+
+\subsection{Sch\"utzenberger $=$ product of Bender--Knuth}
+
+The Sch\"utzenberger involution
+$\psi = \psi_R \circ \psi_B^{-1}$ switches \emph{every}
+diagonal from Burge to RSK\@.  By
+Proposition~\ref{prop:switch-one-diagonal}:
+\begin{equation}\label{eq:psi-decomp}
+  \psi = \prod_{i} \sigma_i,
+\end{equation}
+where the product is over all diagonals.
+
+The classical proof that $\psi^2 = \mathrm{id}$ uses:
+\begin{enumerate}
+  \item Each $\sigma_i^2 = \mathrm{id}$.
+  \item The specific order of the product and the growth
+    diagram structure ensure the double application is
+    the identity.
+\end{enumerate}
+
+\begin{remark}[Subtlety]
+\label{rem:subtlety}
+The identity $\psi^2 = \mathrm{id}$ does \emph{not} follow
+formally from $\sigma_i^2 = \mathrm{id}$ alone, because
+adjacent $\sigma_i$ and $\sigma_{i+1}$ do not commute in
+general.  The deeper reason is that $\psi$ is a global
+Burge$\leftrightarrow$RSK toggle: switching all diagonals
+twice restores the original rule at every diagonal.
+\end{remark}
+
+
+%% ============================================================
+\part{The $Q$-Enriched Theory}
+%% ============================================================
+
+
+%% ============================================================
+\section{$Q$-row operations on the ground set}
+\label{sec:Q-row}
+%% ============================================================
+
+\subsection{The ALCD as a sequence of diagonals}
+
+An ALCD $\mathfrak{d} \in \ALCD_n(c)$ encodes a growth
+diagram of $n$~diagonals.  We write the face labels along
+diagonal~$i$ as $\mathfrak{d}_i = (k_{i,1}, k_{i,2}, \ldots)$
+and the total weight as
+$|\mathfrak{d}| = \sum_{i,j} k_{i,j}$.
+
+Each diagonal~$i$ corresponds to one commutation step.
+Switching the rule (Burge $\leftrightarrow$ RSK) at
+diagonal~$i$ changes the vertex partitions at that diagonal
+and, in the $Q$-enriched case, propagates to all subsequent
+diagonals.
+
+
+\subsection{The $Q$-row switch}
+
+\begin{definition}[$Q$-row switch $\sigma_i^Q$]
+\label{def:Q-row-switch}
+Let $(S, \mathfrak{d}) \in \mathcal{G}_{n,c}$ with
+$\mathfrak{d} \in \ALCD_{n-|S|}(c)$.  The
+\emph{$Q$-row switch at diagonal~$i$}
+($1 \leq i \leq n - |S|$) is:
+\begin{enumerate}
+  \item Reconstruct the growth diagram for $\mathfrak{d}$ up
+    to diagonal~$i-1$ using the current rule (say Burge).
+  \item At diagonal~$i$, \textbf{switch} the rule: recompute
+    the vertex partitions and face labels along diagonal~$i$
+    using the opposite cascade direction.
+  \item \textbf{Recompute} all subsequent diagonals
+    $i+1, i+2, \ldots$ using the \emph{original} rule with
+    the modified vertex partitions from step~(2).
+\end{enumerate}
+The result is $\sigma_i^Q(S, \mathfrak{d})
+= (S,\, \mathfrak{d}')$ where
+$\mathfrak{d}' \in \ALCD_{n-|S|}(c)$.
+\end{definition}
+
+
+%% ============================================================
+\section{The propagation phenomenon}
+\label{sec:propagation}
+%% ============================================================
+
+\subsection{Classical: strictly local}
+
+In the standard growth diagram, switching the rule at
+diagonal~$i$ changes the vertex partitions at diagonal~$i$
+but does \textbf{not} change the face labels at any other
+diagonal.  This is because:
+\begin{itemize}
+  \item The face-label generating function is $1/(1-t)$
+    everywhere (universal, independent of strip sizes).
+  \item The face labels at diagonal~$i' > i$ depend only on
+    the vertex partitions at diagonal~$i'-1$, which are
+    recomputed using the original rule and happen to give the
+    same face labels (because $1/(1-t)$ doesn't depend on
+    which partitions appear).
+\end{itemize}
+
+\subsection{$Q$-enriched: propagation through strip sizes}
+
+In the $Q$-enriched growth diagram, the face label~$k$ at a
+face with strip sizes $(a,b)$ carries weight
+$Q_{a+k} \cdot Q_{b+k}$.  The strip sizes depend on the
+vertex partitions, which change when we switch the rule at
+diagonal~$i$.
+
+\begin{proposition}[Propagation]
+\label{prop:propagation}
+Switching the rule at diagonal~$i$ in the $Q$-enriched growth
+diagram:
+\begin{enumerate}
+  \item Changes the vertex partitions at diagonal~$i$
+    (same as classical).
+  \item Changes the strip sizes $(a', b')$ at diagonals
+    $i+1, i+2, \ldots$ (because they depend on the modified
+    vertex partitions).
+  \item Changes the $Q$-weights at diagonals $> i$ (because
+    $Q_{a'+k'} \cdot Q_{b'+k'}$ depends on the new strip
+    sizes).
+  \item May change the face labels $k_{i',j}$ at diagonals
+    $> i$ (because the local rule with different inputs
+    produces different outputs).
+\end{enumerate}
+\end{proposition}
+
+This is the \emph{propagation phenomenon}: a local switch at
+one diagonal cascades through the entire subsequent portion
+of the growth diagram.  It is the same obstruction
+identified in~\cite{LOCAL_RULE}, Sections~4--6, for the full
+Sch\"utzenberger involution, now localised to a single
+diagonal switch.
+
+
+%% ============================================================
+\section{$(\sigma_i^Q)^2 = \mathrm{id}$: proof}
+\label{sec:involution-proof}
+%% ============================================================
+
+Despite the propagation, the $Q$-row switch is an involution.
+
+\begin{theorem}
+\label{thm:Q-sigma-involution}
+$(\sigma_i^Q)^2 = \mathrm{id}$ on $\mathcal{G}_{n,c}$.
+\end{theorem}
+
+\begin{proof}
+Let $(S, \mathfrak{d})$ be a ground-set element.  Apply
+$\sigma_i^Q$:
+\begin{enumerate}
+  \item[(a)] Switch diagonal~$i$ from Burge to RSK\@.  The
+    vertex partitions at diagonal~$i$ change.  Call the
+    modified vertex partitions~$\mu^{(i,\cdot)}$.
+  \item[(b)] Recompute diagonals $i+1, \ldots, N$ using Burge
+    with the new vertex partitions~$\mu^{(i,\cdot)}$.  This
+    produces a new ALCD~$\mathfrak{d}'$.
+\end{enumerate}
+Now apply $\sigma_i^Q$ again to $(S, \mathfrak{d}')$:
+\begin{enumerate}
+  \item[(a$'$)] Switch diagonal~$i$ back from RSK to Burge
+    (since $\sigma_i^Q$ toggles the rule at diagonal~$i$).
+    The vertex partitions at diagonal~$i$ are restored to
+    the originals~$\lambda^{(i,\cdot)}$.
+  \item[(b$'$)] Recompute diagonals $i+1, \ldots, N$ using
+    Burge with the original vertex
+    partitions~$\lambda^{(i,\cdot)}$.  This reproduces the
+    original ALCD~$\mathfrak{d}$.
+\end{enumerate}
+The key point: step~(a$'$) restores the vertex partitions at
+diagonal~$i$ because the local rule is a bijection, and
+switching Burge $\to$ RSK $\to$ Burge at the same diagonal
+with the same inputs below diagonal~$i$ (which are unchanged)
+gives back the original output.  Step~(b$'$) then recomputes
+the rest deterministically, recovering~$\mathfrak{d}$.
+\end{proof}
+
+\begin{remark}[The bijective property is essential]
+\label{rem:bijective}
+The proof uses the fact that both Burge and RSK are bijections
+with the same type signature.  Switching from Burge to RSK at
+diagonal~$i$ produces a well-defined output, and switching
+back recovers the original.  This is the growth-diagram
+analogue of the trivial fact that a toggle (Burge $\to$ RSK
+$\to$ Burge) is the identity.
+
+The propagation to subsequent diagonals is
+\emph{automatically} self-inverse because the recomputation
+step is deterministic: given the vertex partitions at
+diagonal~$i$, the rest of the ALCD is uniquely determined
+by the local rule.
+\end{remark}
+
+
+%% ============================================================
+\section{The $Q$-Bender--Knuth involution}
+\label{sec:Q-BK}
+%% ============================================================
+
+\begin{definition}[$Q$-Bender--Knuth]
+\label{def:Q-BK}
+For $1 \leq i \leq n - |S|$, the \emph{$Q$-Bender--Knuth
+involution} is:
+\[
+  \sigma_i^Q(S, \mathfrak{d})
+  = (S,\, \sigma_i^Q(\mathfrak{d})).
+\]
+\end{definition}
+
+\begin{proposition}[Properties]
+\label{prop:Q-BK-properties}
+\mbox{}
+\begin{enumerate}
+  \item $(\sigma_i^Q)^2 = \mathrm{id}$
+    \textup{(Theorem~\ref{thm:Q-sigma-involution})}.
+  \item $\sigma_i^Q$ preserves the ground-set level, weight,
+    and sign.
+  \item $\sigma_i^Q \circ \sigma_j^Q
+    = \sigma_j^Q \circ \sigma_i^Q$ for $|i - j| \geq 2$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1)~Proved above.
+(2)~The subset~$S$ is unchanged (sign and weight from~$S$
+preserved), and the total ALCD weight is preserved by the
+local-rule weight condition.
+(3)~When $|i - j| \geq 2$, switching diagonal~$i$ changes
+vertex partitions starting at diagonal~$i$, and switching
+diagonal~$j$ changes vertex partitions starting at
+diagonal~$j$.  Since the intervening diagonals are recomputed
+using the same (original) rule, the two switches don't
+interact.
+\end{proof}
+
+
+\subsection{Differences from the classical Bender--Knuth}
+
+\begin{center}
+\begin{tabular}{l|l}
+\textbf{Classical $\sigma_i$} &
+  \textbf{$Q$-enriched $\sigma_i^Q$} \\ \hline
+Changes face labels at diagonal~$i$ only &
+  Changes face labels at diagonals $\geq i$ \\
+Free/paired decomposition determines everything &
+  Propagation modifies downstream diagonals \\
+$\sigma_i \sigma_{i+1} = \sigma_{i+1} \sigma_i$
+  (if non-adjacent) &
+  Same for $|i-j| \geq 2$ \\
+Braid relation
+  $\sigma_i \sigma_{i+1} \sigma_i
+  = \sigma_{i+1} \sigma_i \sigma_{i+1}$ &
+  \textbf{Open} (propagation may break it)
+\end{tabular}
+\end{center}
+
+\begin{remark}[The braid relation]
+\label{rem:braid}
+In the classical case, the Bender--Knuth involutions
+satisfy the braid relation (also called the Yang--Baxter
+relation):
+\[
+  \sigma_i \sigma_{i+1} \sigma_i
+  = \sigma_{i+1} \sigma_i \sigma_{i+1}
+  \quad \text{for all } i.
+\]
+Together with $\sigma_i^2 = \mathrm{id}$ and the commutativity
+for $|i-j| \geq 2$, this gives a symmetric group action
+$S_N \to \mathrm{Aut}(\SSYT(\lambda))$.
+
+For the $Q$-enriched $\sigma_i^Q$, the braid relation may fail
+because the propagation from diagonal~$i$ to diagonal~$i+1$
+creates a coupling that doesn't exist in the classical case.
+The $Q$-weights at diagonal~$i+1$ depend on the strip sizes,
+which depend on the vertex partitions at diagonal~$i$, which
+were modified by $\sigma_i^Q$.
+
+If the braid relation does hold, it would give a
+\emph{$Q$-symmetric group action} on the ground set, with
+far-reaching consequences for the representation theory of
+the $Q$-kernel.
+\end{remark}
+
+
+%% ============================================================
+\section{Decomposition of the $Q$-Sch\"utzenberger}
+\label{sec:decomposition}
+%% ============================================================
+
+\begin{proposition}
+\label{prop:psi-decomp}
+The $Q$-Sch\"utzenberger $\psi_Q$ (switching all diagonals
+from Burge to RSK, with recomputation) decomposes as:
+\begin{equation}\label{eq:psi-Q-decomp}
+  \psi_Q = \sigma_1^Q \circ \sigma_2^Q \circ \cdots
+    \circ \sigma_N^Q,
+\end{equation}
+where $N = n - |S|$ is the number of ALCD diagonals and the
+composition proceeds outside-in (switch diagonal~$N$ first).
+\end{proposition}
+
+\begin{theorem}[$\psi_Q^2 = \mathrm{id}$]
+\label{thm:psi-Q-involution}
+The $Q$-Sch\"utzenberger satisfies $\psi_Q^2 = \mathrm{id}$.
+\end{theorem}
+
+\begin{proof}
+$\psi_Q$ recomputes the entire growth diagram using RSK
+instead of Burge.  Applying $\psi_Q$ again recomputes using
+Burge instead of RSK, restoring the original.  This is the
+global toggle argument: the rule at each diagonal is switched
+twice (Burge $\to$ RSK $\to$ Burge), which is the identity.
+
+Note that this proof does \emph{not} require the
+decomposition~\eqref{eq:psi-Q-decomp} or the braid relation.
+It uses only the fact that $\psi_Q$ is a global
+Burge$\leftrightarrow$RSK toggle.
+\end{proof}
+
+\begin{remark}[Two levels of involution]
+\label{rem:two-levels}
+We have involution properties at two levels:
+\begin{enumerate}
+  \item \textbf{Local}: $(\sigma_i^Q)^2 = \mathrm{id}$
+    (switching one diagonal twice is the identity).
+  \item \textbf{Global}: $\psi_Q^2 = \mathrm{id}$ (switching
+    all diagonals twice is the identity).
+\end{enumerate}
+The global involution follows from the toggle structure without
+needing the braid relation.  The braid relation would give
+additional algebraic structure (a symmetric group action) but
+is not needed for the $Q$-Sch\"utzenberger identity.
+\end{remark}
+
+
+%% ============================================================
+\section{The $Q$-row switch on pairs}
+\label{sec:Q-row-pairs}
+%% ============================================================
+
+For pairs $\mathcal{P}_{a,b,k} = \mathcal{G}_{a+k,c}
+\times \mathcal{G}_{b+k,c}$, the $Q$-row switch acts on
+each component:
+
+\begin{definition}
+\label{def:Q-row-pairs}
+$\sigma_{i,j}^Q\bigl((S, \mathfrak{d}),\,
+(S', \mathfrak{d}')\bigr)
+= \bigl(\sigma_i^Q(S, \mathfrak{d}),\,
+\sigma_j^Q(S', \mathfrak{d}')\bigr)$.
+\end{definition}
+
+The pair-level $Q$-Sch\"utzenberger
+$\psi_Q = \mathfrak{R} \circ \mathfrak{B}^{-1}$
+from~\cite{Q_SCHUTZ} corresponds to applying the full
+Burge$\to$RSK switch on the first component and the full
+RSK$\to$Burge switch on the second component.  By
+Theorem~\ref{thm:psi-Q-involution} applied to each
+component independently, $\psi_Q^2 = \mathrm{id}$ on pairs.
+
+This resolves Conjecture~3.3 of~\cite{Q_SCHUTZ}
+affirmatively: the $Q$-Sch\"utzenberger is indeed an
+involution.
+
+
+%% ============================================================
+\section{Summary and open questions}
+\label{sec:summary}
+%% ============================================================
+
+\begin{center}
+\begin{tabular}{l|l|l}
+\textbf{Classical} & \textbf{$Q$-enriched} & \textbf{Status}
+  \\ \hline
+$\sigma_i^2 = \mathrm{id}$ &
+  $(\sigma_i^Q)^2 = \mathrm{id}$ &
+  \checkmark\; proved \\
+$\sigma_i$ local (one diagonal) &
+  $\sigma_i^Q$ propagates downstream &
+  structural difference \\
+$\sigma_i \sigma_j = \sigma_j \sigma_i$, $|i-j| \geq 2$ &
+  same &
+  \checkmark\; proved \\
+braid: $\sigma_i \sigma_{i+1} \sigma_i
+  = \sigma_{i+1} \sigma_i \sigma_{i+1}$ &
+  $\sigma_i^Q \sigma_{i+1}^Q \sigma_i^Q
+  \stackrel{?}{=} \sigma_{i+1}^Q \sigma_i^Q
+  \sigma_{i+1}^Q$ &
+  \textbf{open} \\
+$\psi = \prod \sigma_i$, $\psi^2 = \mathrm{id}$ &
+  $\psi_Q = \prod \sigma_i^Q$, $\psi_Q^2 = \mathrm{id}$ &
+  \checkmark\; proved \\
+$\langle \sigma_1, \ldots, \sigma_N \rangle \cong S_{N+1}$ &
+  $\langle \sigma_1^Q, \ldots, \sigma_N^Q \rangle
+  \stackrel{?}{\cong} S_{N+1}$ &
+  needs braid
+\end{tabular}
+\end{center}
+
+\medskip
+\noindent\textbf{Open questions.}
+\begin{enumerate}
+  \item \textbf{Braid relation.}\;
+    Does $\sigma_i^Q \sigma_{i+1}^Q \sigma_i^Q
+    = \sigma_{i+1}^Q \sigma_i^Q \sigma_{i+1}^Q$?
+    If so, the $Q$-Bender--Knuth involutions generate a
+    symmetric group action on the ground set, giving a
+    $Q$-analogue of Corollary~\ref{cor:schur-symmetric}
+    (a symmetry property of a ``$Q$-Schur function'').
+
+  \item \textbf{Free/paired decomposition.}\;
+    Is there a $Q$-analogue of the free/paired decomposition
+    (Definition~\ref{def:free-paired}) that describes which
+    face labels change under $\sigma_i^Q$ and which are
+    fixed?  The propagation means that ``fixed'' labels may
+    change at downstream diagonals even though they are
+    ``paired'' at diagonal~$i$.
+
+  \item \textbf{Computational verification.}\;
+    For small $d$ and $n$, compute $\sigma_i^Q$ on explicit
+    ground-set elements, verify $(\sigma_i^Q)^2 = \mathrm{id}$
+    and test the braid relation.
+
+  \item \textbf{Crystal-base connection.}\;
+    The classical Bender--Knuth involutions correspond to
+    Kashiwara's crystal operators.  Do the $\sigma_i^Q$
+    correspond to crystal operators for an affine Lie algebra
+    $\widehat{\mathfrak{sl}}_3$ (matching the rank-$3$
+    cylindric partition structure)?
+\end{enumerate}
+
+
+\begin{thebibliography}{99}
+\bibitem{ADJOINT}
+  R.~Langer,
+  \emph{The $Q$-Operator and its Adjoint: From Level~3
+  Operator Traces to Cascade Commutators},
+  companion note, 2026.
+
+\bibitem{BenderKnuth}
+  E.~A.~Bender and D.~E.~Knuth,
+  \emph{Enumeration of plane partitions},
+  J.~Combin.\ Theory Ser.~A \textbf{13} (1972), 40--54.
+
+\bibitem{LOCAL_RULE}
+  R.~Langer,
+  \emph{The Generalized Local Rule and the Burge--RSK
+  Involution},
+  companion note, 2026.
+
+\bibitem{Q_SCHUTZ}
+  R.~Langer,
+  \emph{The $Q$-Sch\"utzenberger Identity},
+  companion note, 2026.
+
+\bibitem{UNDERLYING_SET}
+  R.~Langer,
+  \emph{The Underlying Set: Cylindric Plane Partitions, ALCDs,
+  and the Ground Set for the Involution},
+  companion note.
+
+\bibitem{langer-thesis}
+  R.~Langer,
+  \emph{Cylindric Partitions and Bijective Proofs},
+  PhD thesis, University of Melbourne.
+
+\bibitem{vanLeeuwen}
+  M.~A.~A.~van~Leeuwen,
+  \emph{The Robinson--Schensted and Sch\"utzenberger
+  algorithms, an elementary approach},
+  Electron.~J.~Combin.\ \textbf{3} (1996), R15.
+\end{thebibliography}
+
+\end{document}

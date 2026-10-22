@@ -1,0 +1,1080 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{tikz}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\CPP}{\operatorname{CPP}}
+\newcommand{\GK}{\operatorname{GK}}
+\newcommand{\AG}{\operatorname{AG}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\hook}{\operatorname{hook}}
+\newcommand{\cohook}{\operatorname{cohook}}
+
+% q-series notation
+\newcommand{\qpoch}[2]{(#1;#2)_\infty}
+\newcommand{\qpochn}[3]{(#1;#2)_{#3}}
+\newcommand{\qbin}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+\newcommand{\jtheta}[2]{\theta(#1;#2)}
+
+\title{Weighted Growth Diagrams and the Max Statistic\\
+for Warnaar's Conjecture~2.7}
+\author{Notes for research on cylindric partitions}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We investigate the positivity of the polynomials $Q_{n,c}(q)$ arising
+from the two-variable generating function of rank-3 cylindric partitions
+(Warnaar, Conjecture~2.7). By extending the cylindric growth diagram
+local rules from the author's thesis to carry the max statistic alongside
+the $q$-weight, we develop both a computational verification pipeline and
+a framework for understanding the sign cancellation that produces positivity.
+Computational evidence confirms the conjecture for all tested profiles with
+$d \leq 7$ and reveals striking coefficient patterns, including connections
+to Kostka--Foulkes polynomials.
+\end{abstract}
+
+\tableofcontents
+
+%% ========================================================================
+\section{The max statistic through local rules}
+\label{sec:max-local-rules}
+%% ========================================================================
+
+\subsection{Setup and notation}
+
+Let $r = 3$ (rank) and $c = (c_0, c_1, c_2)$ with $d = c_0 + c_1 + c_2$
+and $d \not\equiv 0 \pmod{3}$. The associated partition is
+$\mu(c) = (c_1 + c_2,\, c_2,\, 0)$.
+
+A cylindric plane partition $\pi$ with profile $c$ is a triple of partitions
+$\nu = (\nu^{(1)}, \nu^{(2)}, \nu^{(3)})$ satisfying the interlacing conditions
+\begin{align}
+  \nu^{(1)}_j &\geq \nu^{(2)}_{j+c_1} \quad \text{for all } j \geq 1, \label{eq:interlace1} \\
+  \nu^{(2)}_j &\geq \nu^{(3)}_{j+c_2} \quad \text{for all } j \geq 1, \label{eq:interlace2} \\
+  \nu^{(3)}_j &\geq \nu^{(1)}_{j+c_0} \quad \text{for all } j \geq 1. \label{eq:interlace3}
+\end{align}
+The weight and max statistic are
+\[
+  |\pi| = |\nu^{(1)}| + |\nu^{(2)}| + |\nu^{(3)}|,
+  \qquad
+  \max(\pi) = \max\bigl(\nu^{(1)}_1,\, \nu^{(2)}_1,\, \nu^{(3)}_1\bigr).
+\]
+
+The two-variable generating function is
+\begin{equation}
+  \GK_c(z,q) := \sum_\pi z^{\max(\pi)} q^{|\pi|},
+  \label{eq:GK-def}
+\end{equation}
+summing over all cylindric partitions with profile~$c$.
+
+\subsection{Burge local rule and the first part}
+
+The Burge local rule $\mathfrak{U}_{\alpha,\beta}(m,\nu) = \lambda$ (thesis,
+Chapter~1, Definition~1.4.7) constructs $\lambda$ from input partitions
+$\alpha, \beta, \nu$ and a nonnegative integer~$m$, satisfying the weight relation
+\begin{equation}
+  |\lambda| = m + |\alpha| + |\beta| - |\nu|.
+  \label{eq:weight-relation}
+\end{equation}
+
+\begin{proposition}[First part through the local rule]
+\label{prop:first-part}
+If $\lambda = \mathfrak{U}_{\alpha,\beta}(m,\nu)$, then the first part satisfies
+\[
+  \lambda_1 = \max(\alpha_1, \beta_1) + \epsilon,
+\]
+where $\epsilon \in \{0, 1\}$ depends on whether the first column is among the
+``added columns'' in the Burge algorithm. Specifically, $\epsilon = 1$ if and
+only if column~$1$ belongs to the set $A \cup B \cup C \cup D$ in the forward
+rule construction.
+\end{proposition}
+
+\begin{proof}
+The Burge forward rule $\mathfrak{U}_{\alpha,\beta}(m,\nu) = \lambda$ adds one
+box to the end of each column in $A \cup B \cup C \cup D$, where:
+\begin{itemize}
+  \item $A = \{j : \alpha'_j > \nu'_j\}$ (columns where $\alpha$ exceeds $\nu$),
+  \item $B = \{j : \beta'_j > \nu'_j\}$ (columns where $\beta$ exceeds $\nu$),
+  \item $C$ collects the ``cascade'' columns from the matching $\epsilon$ in $A \cap B$,
+  \item $D$ adds the first $m$ columns from the complement.
+\end{itemize}
+The first column of $\lambda$ gains a box exactly when $1 \in A \cup B \cup C \cup D$.
+Since $\alpha'_1 = \ell(\alpha)$ and $\nu'_1 = \ell(\nu)$, we have $1 \in A$
+iff $\ell(\alpha) > \ell(\nu)$, and similarly for $B$.
+\end{proof}
+
+\subsection{The max through diagonal weights}
+
+In the growth diagram framework, the bijection
+$\psi_\pi : (\gamma, \mathfrak{d}) \to \mathfrak{c}$
+maps a partition $\gamma$ and a labelled cylindric diagram $\mathfrak{d}$ to a
+cylindric partition $\mathfrak{c} = (\mu^0, \mu^1, \ldots, \mu^T)$.
+
+The strong weight preservation property (thesis, Chapter~3, Proposition~3.4.9) states:
+\begin{equation}
+  |\mu^k| = |\gamma| + |\diag(k)|_{\mathfrak{d}}
+  \quad \text{for all } 1 \leq k \leq T,
+  \label{eq:strong-weight}
+\end{equation}
+where $|\diag(k)|_{\mathfrak{d}} = \sum_{b \in \diag(k)} |\cohook(b)|_{\mathfrak{d}}$
+is the diagonal weight.
+
+The max statistic in terms of the growth diagram data is therefore:
+\begin{equation}
+  \max(\pi) = \max_k \mu^k_1 = \max_k \bigl(\gamma_1 + \delta_k(\mathfrak{d})\bigr),
+  \label{eq:max-from-diag}
+\end{equation}
+where $\delta_k(\mathfrak{d})$ is the contribution to the first part from diagonal~$k$.
+
+\begin{definition}[First-part diagonal increment]
+\label{def:delta-k}
+For a labelled cylindric diagram $\mathfrak{d}$ with diagonal weight decomposition,
+define
+\[
+  \delta_k(\mathfrak{d}) := \mu^k_1 - \gamma_1 = [\text{first part of } \diag(k)
+  \text{ contribution}].
+\]
+By \eqref{eq:strong-weight}, this equals the number of cohook-weighted boxes on
+diagonal $k$ that contribute to the first column of $\mu^k$.
+\end{definition}
+
+The max statistic becomes:
+\[
+  \max(\pi) = \gamma_1 + \max_{1 \leq k \leq T} \delta_k(\mathfrak{d}).
+\]
+
+\begin{proposition}[Bounds on $\delta_k$]
+\label{prop:delta-bounds}
+For any labelled cylindric diagram $\mathfrak{d}$ of profile $\pi$, the
+first-part diagonal increments satisfy:
+\begin{enumerate}
+  \item $\delta_k(\mathfrak{d}) \geq 0$ for all $k$.
+  \item $|\delta_{k+1}(\mathfrak{d}) - \delta_k(\mathfrak{d})| \leq 1$ when
+    positions $k, k+1$ form an inside corner of the profile (i.e., the local
+    rule $\mathfrak{L}_k$ acts at this position).
+  \item $0 \leq \delta_k(\mathfrak{d}) \leq |\diag(k)|_{\mathfrak{d}}$ (the
+    first-part increment cannot exceed the total diagonal weight).
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1) follows from $\mu^k_1 \geq \gamma_1$ since $\mu^k$ is obtained from $\gamma$
+by adding boxes (the diagonal weight is nonneg).
+(2) follows from Proposition~\ref{prop:first-part}: the local rule changes
+$\mu^k_1$ by at most 1 via the $\epsilon$ term.
+(3) is immediate from $\mu^k_1 \leq |\mu^k| = |\gamma| + |\diag(k)|_\mathfrak{d}$
+and $\gamma_1 \leq |\gamma|$, though the bound can be tightened.
+\end{proof}
+
+
+%% ========================================================================
+\section{The weighted growth diagram}
+\label{sec:weighted-growth}
+%% ========================================================================
+
+\subsection{Extended bijection}
+
+The growth diagram bijection $\psi_\pi$ naturally extends to track the pair
+$(q^{|\pi|}, z^{\max(\pi)})$:
+\[
+  z^{\max(\pi)} q^{|\pi|}
+  = z^{\gamma_1 + \max_k \delta_k(\mathfrak{d})} \cdot
+    q^{T|\gamma| + \sum_{k=1}^T |\diag(k)|_{\mathfrak{d}}}.
+\]
+
+This factorization separates the ``base partition'' $\gamma$ contribution
+from the ``cylindric diagram'' contribution:
+\begin{itemize}
+  \item The base partition $\gamma$ contributes $z^{\gamma_1} q^{T|\gamma|}$.
+  \item The diagram $\mathfrak{d}$ contributes
+    $z^{\max_k \delta_k(\mathfrak{d})} \cdot q^{\sum_k |\diag(k)|_\mathfrak{d}}$.
+\end{itemize}
+
+\subsection{Consequence for the local rule propagation}
+
+When the higher-order local rule $\mathfrak{L}_i$ transforms $\psi_\pi$ to
+$\psi_{\pi'}$ (thesis, Definition~3.3.1), the diagonal weight relation
+(thesis, Proposition~3.4.7) gives:
+\[
+  |\diag(i)|_{\mathfrak{d}'} = m + |\diag(i-1)|_{\mathfrak{d}} + |\diag(i+1)|_{\mathfrak{d}}
+  - |\diag(i)|_{\mathfrak{d}}.
+\]
+
+For the first-part tracking, we need the corresponding relation for $\delta_k$.
+Using Proposition~\ref{prop:first-part} and the weight relation
+\eqref{eq:weight-relation}:
+\begin{equation}
+  \delta_i(\mathfrak{d}') = \mu'^i_1 - \gamma_1
+  = \lambda_1 - \gamma_1,
+\end{equation}
+where $\lambda = \mathfrak{U}_{\mu^{i-1}, \mu^{i+1}}(m, \mu^i)$, so
+$\lambda_1 \leq \max(\mu^{i-1}_1, \mu^{i+1}_1) + 1$.
+
+
+%% ========================================================================
+\section{Combinatorial interpretation of $(zq)_\infty \cdot \GK_c(z,q)$}
+\label{sec:combinatorial-interp}
+%% ========================================================================
+
+\subsection{The extraction formula}
+
+By definition (Warnaar, eq.~2.4),
+\begin{equation}
+  Q_{n,c}(q) := \qpochn{q^\ell}{q^\ell}{n} \cdot [z^n]
+  \Bigl(\qpoch{zq}{q} \cdot \GK_c(z,q)\Bigr),
+  \label{eq:Q-def}
+\end{equation}
+where $\ell = \gcd(d, 3)$. Since $d \not\equiv 0 \pmod{3}$, we have $\ell = 1$
+for $\gcd(d,3) = 1$ and $\ell = 1$ always (since $3 \nmid d$).
+
+The Euler expansion gives
+\[
+  \qpoch{zq}{q} = \sum_{j \geq 0} \frac{(-1)^j z^j q^{j(j+1)/2}}{\qpochn{q}{q}{j}},
+\]
+so the $z^n$ coefficient is:
+\begin{equation}
+  [z^n]\bigl(\qpoch{zq}{q} \cdot \GK_c(z,q)\bigr)
+  = \sum_{j=0}^{n} \frac{(-1)^j\, q^{j(j+1)/2}}{\qpochn{q}{q}{j}} \cdot g_{n-j}(q),
+  \label{eq:zn-extraction}
+\end{equation}
+where $g_m(q) = [z^m]\,\GK_c(z,q)$.
+
+\subsection{Combinatorial reading}
+
+The function $g_m(q)$ counts cylindric partitions with max entry exactly~$m$,
+weighted by $q^{|\pi|}$. The alternating sum \eqref{eq:zn-extraction} thus pairs:
+\begin{itemize}
+  \item Cylindric partitions with $\max(\pi) = n - j$, contributing positively (even $j$)
+    or negatively (odd $j$).
+  \item An additional ``tail'' partition from $1/(q)_j$ with $q$-shift by $j(j+1)/2$.
+\end{itemize}
+
+The combined object is: a cylindric partition $\pi$ with $\max(\pi) = n - j$
+together with a partition $\sigma$ of length $\leq j$, with total weight
+$|\pi| + |\sigma| + j(j+1)/2$, carrying sign $(-1)^j$.
+
+\subsection{Franklin-type involution}
+
+The $(-1)^j$ sign suggests a Franklin-type involution on these extended objects.
+The multiplication by $\qpochn{q}{q}{n}$ in \eqref{eq:Q-def} converts the
+formal power series $[z^n](\cdots)$ into a polynomial, absorbing the $1/(q)_j$
+denominators.
+
+\begin{remark}[The $d=2$ monomial phenomenon]
+For $d = 2$, computational evidence shows:
+\begin{align*}
+  Q_{n,(1,1,0)}(q) &= q^{n^2}, \\
+  Q_{n,(2,0,0)}(q) &= q^{n(n+1)}.
+\end{align*}
+These are monomials with exponents matching the quadratic forms in the
+Andrews--Gordon sum side \cite[eq.~1.2]{Warnaar2021}. This extreme cancellation
+suggests that for $d = 2$, the involution is \emph{complete}: every term with
+$j \geq 1$ cancels perfectly except for a single surviving monomial.
+\end{remark}
+
+
+%% ========================================================================
+\section{Positivity mechanism}
+\label{sec:positivity}
+%% ========================================================================
+
+\subsection{Computational evidence}
+
+We verified Conjecture~2.7 computationally for all inequivalent profiles with
+$d \leq 7$ (under cyclic symmetry). The results are summarized below.
+
+\begin{center}
+\begin{tabular}{c|c|c|c|c}
+$d$ & Profile $c$ & $Q(1)$ & $Q_{1,c}(q)$ & $Q_{2,c}(q)$ \\
+\hline
+1 & $(1,0,0)$ & $0$ & $0$ & $0$ \\
+2 & $(2,0,0)$ & $1$ & $q^2$ & $q^6$ \\
+2 & $(1,1,0)$ & $1$ & $q$ & $q^4$ \\
+4 & $(2,1,1)$ & $4$ & $2q + q^2 + q^3$ & $q^3 + 3q^4 + 2q^5 + \cdots + q^{12}$ \\
+5 & $(2,2,1)$ & $6$ & $2q + 2q^2 + q^3 + q^4$ & $q^3 + 4q^4 + 4q^5 + \cdots + q^{16}$ \\
+5 & $(3,1,1)$ & $6$ & $2q + q^2 + 2q^3 + q^5$ & $q^3 + 3q^4 + 3q^5 + \cdots + q^{18}$ \\
+7 & $(3,2,2)$ & $11$ & $2q + 3q^2 + 2q^3 + 2q^4 + q^5 + q^6$ & --- \\
+7 & $(2,3,2)$ & $11$ & $2q + 3q^2 + 2q^3 + 2q^4 + q^5 + q^6$ & --- \\
+7 & $(4,2,1)$ & $11$ & $2q + 2q^2 + 2q^3 + 2q^4 + q^5 + q^6 + q^8$ & --- \\
+\end{tabular}
+\end{center}
+
+All coefficients are nonnegative, and $Q_{n,c}(1) = \bigl(\tfrac{1}{6}(d+1)(d+2) - 1\bigr)^n$
+in every case.
+
+\begin{remark}[Cyclic orbit structure for $d = 7$]
+The profiles $(3,2,2)$ and $(2,3,2)$ lie in different cyclic orbits but produce the
+same $Q_{1,c}(q)$. This is a consequence of the additional symmetry: both profiles
+have $\mu(c) = (4,2,0)$ and $\mu(c) = (5,2,0)$ respectively, and they are related
+by the conjugation symmetry of the underlying cylindric partition structure. The
+profile $(4,2,1)$ has a distinct $Q_{1,c}(q)$ with a gap at $q^7$ and an isolated
+$q^8$ term, continuing the pattern of sparse high-degree tails observed for $d \geq 4$.
+\end{remark}
+
+\subsection{Coefficient properties}
+
+Beyond positivity, the coefficients exhibit additional structure:
+
+\begin{enumerate}
+  \item \textbf{$d = 2$: Monomials.}
+    $Q_{n,(2,0,0)}(q) = q^{n(n+1)}$ and $Q_{n,(1,1,0)}(q) = q^{n^2}$.
+    The exponents are precisely the quadratic forms appearing in the
+    Andrews--Gordon sum side \cite[eq.~1.2]{Warnaar2021}.
+
+  \item \textbf{$d \geq 4$: Not unimodal, not palindromic.}
+    For $c = (2,1,1)$, $n = 2$: the coefficients are
+    $[1, 3, 2, 3, 2, 2, 1, 1, 0, 1]$ (from $q^3$ to $q^{12}$),
+    which has a gap at $q^{11}$ and is not unimodal.
+
+  \item \textbf{Valuation pattern.}
+    The valuation (lowest $q$-degree) of $Q_{n,c}$ appears to follow
+    $\operatorname{val}(Q_{n,c}) = \binom{n}{2} \cdot \min(c_i \neq 0) + \cdots$,
+    growing quadratically in $n$.
+
+  \item \textbf{Isolated high-degree terms.}
+    For $d \geq 4$, $Q_{n,c}(q)$ has a ``tail'' of sparse coefficients
+    at high $q$-degrees, separated by gaps. For instance $Q_{2,(2,1,1)}$
+    has a gap at $q^{11}$ before a final $q^{12}$ term.
+\end{enumerate}
+
+\subsection{Alternating sum structure}
+
+Writing $[z^n](\qpoch{zq}{q} \cdot \GK_c) = P(q) - N(q)$ where $P$ collects
+even-$j$ contributions and $N$ collects odd-$j$ contributions, the cancellation
+ratio $N(1)/P(1)$ grows with $n$:
+
+\begin{center}
+\begin{tabular}{c|c|ccc}
+$c$ & $d$ & $n=1$ & $n=2$ & $n=3$ \\
+\hline
+$(2,1,1)$ & 4 & 0.21 & 0.55 & --- \\
+$(2,2,1)$ & 5 & 0.16 & 0.48 & --- \\
+$(3,1,1)$ & 5 & 0.16 & 0.50 & --- \\
+$(3,2,2)$ & 7 & 0.10 & --- & --- \\
+\end{tabular}
+\end{center}
+
+The cancellation becomes increasingly tight as $n$ grows, yet always produces
+positive coefficients after multiplying by $(q;q)_n$. This delicate balance
+suggests a structured involution rather than a ``soft'' positivity argument.
+For fixed $n$, the ratio decreases as $d$ increases (the interlacing constraints
+become tighter, leaving less room for sign cancellation).
+
+\subsection{Is positivity ``soft''?}
+
+A natural question: does $(q;q)_n \cdot [z^n]\bigl((zq)_\infty \cdot f(z,q)\bigr)$
+have nonneg coefficients for \emph{any} $f(z,q)$ with nonneg coefficients?
+
+The answer is \textbf{no}. Consider $f(z,q) = 1 + zq$. Then
+\[
+  (zq)_\infty \cdot (1 + zq) = (zq)_\infty + zq \cdot (zq)_\infty
+  = (zq^2)_\infty,
+\]
+so $[z^n]((zq^2)_\infty) = (-1)^n q^{n(n+3)/2}/(q)_n$. Multiplying by $(q)_n$
+gives $(-1)^n q^{n(n+3)/2}$, which is negative for odd $n$.
+
+\begin{remark}
+This shows that the cylindric partition structure of $\GK_c(z,q)$ is \emph{essential}
+for positivity --- it is not a formal consequence of having nonneg coefficients.
+The specific interlacing structure of cylindric partitions provides the additional
+constraints needed for the Franklin-type cancellation to produce a positive result.
+\end{remark}
+
+\subsection{Towards a bijective proof}
+
+A bijective proof of positivity would construct a sign-reversing involution
+$\iota$ on the set of pairs $(\pi, \sigma, j)$ (cylindric partition, tail partition,
+index) with $\max(\pi) = n - j$ and $|\sigma| \leq j$, such that:
+\begin{enumerate}
+  \item $\iota$ reverses the sign $(-1)^j$.
+  \item $\iota$ preserves the total $q$-weight $|\pi| + |\sigma| + j(j+1)/2$.
+  \item The fixed points of $\iota$ (after multiplying by $(q)_n$) account
+    for exactly $Q_{n,c}(q)$.
+\end{enumerate}
+
+The $d = 2$ monomial pattern $Q_{n,c}(q) = q^{n^2}$ (resp.\ $q^{n(n+1)}$)
+suggests that for $d = 2$, there is essentially a unique fixed point, pointing
+to a highly structured involution akin to Franklin's proof of Euler's pentagonal
+number theorem.
+
+
+%% ========================================================================
+\section{Connection to Kostka--Foulkes polynomials}
+\label{sec:kostka-foulkes}
+%% ========================================================================
+
+The Kostka--Foulkes polynomials $K_{\lambda,\mu}(q)$ are the $q$-analogs of
+Kostka numbers, defined as
+\[
+  K_{\lambda,\mu}(q) = \sum_{T \in \mathrm{SSYT}(\lambda, \mu)} q^{\mathrm{charge}(T)},
+\]
+where the charge statistic is computed on semistandard Young tableaux of shape
+$\lambda$ and content $\mu$. They are known to have nonneg coefficients (a deep
+result of Lusztig, proved bijectively by Lascoux--Sch\"utzenberger via the charge
+statistic).
+
+\subsection{Comparison for $d = 4$}
+
+For $c = (2,1,1)$, $n = 1$: $Q_{1,c}(q) = 2q + q^2 + q^3$. This polynomial has
+degree~3, so we compare with $K_{\lambda,(1^3)}(q)$ for partitions $\lambda$ of 3:
+\begin{align*}
+  K_{(3),(1^3)}(q) &= q^3, \\
+  K_{(2,1),(1^3)}(q) &= q + q^2, \\
+  K_{(1^3),(1^3)}(q) &= 1.
+\end{align*}
+These give $Q_{1,(2,1,1)}(q) = K_{(2,1),(1^3)}(q) + K_{(3),(1^3)}(q) + q = q^3 + (q+q^2) + q$,
+which does not decompose cleanly as a \emph{multiplicity-free} sum of Kostka--Foulkes polynomials.
+The extra $q$ term suggests that the positivity mechanism for $Q_{n,c}(q)$ is not simply
+a Kostka--Foulkes decomposition, though the connection to charge statistics merits further
+investigation.
+
+\subsection{Comparison for $d = 5$}
+
+For $c = (2,2,1)$, $n = 1$: $Q_{1,c}(q) = 2q + 2q^2 + q^3 + q^4$. Comparing with
+$K_{\lambda,(1^4)}(q)$ for partitions $\lambda$ of 4:
+\begin{align*}
+  K_{(4),(1^4)}(q) &= q^6, \\
+  K_{(3,1),(1^4)}(q) &= q^3 + q^4 + q^5, \\
+  K_{(2,2),(1^4)}(q) &= q^2 + q^4, \\
+  K_{(2,1,1),(1^4)}(q) &= q + q^2 + q^3, \\
+  K_{(1^4),(1^4)}(q) &= 1.
+\end{align*}
+We find $Q_{1,(2,2,1)}(q) = K_{(2,1,1),(1^4)}(q) + K_{(2,2),(1^4)}(q) - q^3$,
+so again no clean Kostka--Foulkes decomposition exists. However, a decomposition
+over a broader basis (e.g., Hall--Littlewood polynomials or parabolic
+Kostka--Foulkes polynomials) may yet be possible.
+
+\begin{remark}
+The fact that $Q_{n,c}(q)$ does not decompose as a nonneg combination of
+$K_{\lambda,\mu}(q)$ suggests that the positivity of $Q_{n,c}(q)$ arises from a
+different mechanism than the charge statistic. This is consistent with the
+cylindric structure: the involution needed for positivity must respect the
+cyclic closure condition $\mu^0 = \mu^T$, which has no analog in the standard
+RSK/charge framework.
+\end{remark}
+
+
+%% ========================================================================
+\section{The omega involution and the E--H factorization}
+\label{sec:omega-involution}
+%% ========================================================================
+
+The omega involution $\omega$ on symmetric functions sends the elementary
+symmetric function $e_k$ to the complete homogeneous symmetric function $h_k$.
+In the $q$-series setting, this corresponds to the duality between
+\[
+  E(z) = \qpoch{zq}{q} = \prod_{k \geq 1}(1 - zq^k)
+  \quad \longleftrightarrow \quad
+  H(z) = \frac{1}{\qpoch{zq}{q}} = \prod_{k \geq 1}\frac{1}{1 - zq^k}.
+\]
+
+\subsection{E--H factorization of $\GK_c$}
+
+Every two-variable generating function $\GK_c(z,q)$ admits the factorization
+\begin{equation}
+  \GK_c(z,q) = H(z) \cdot F_c(z,q),
+  \label{eq:EH-factor}
+\end{equation}
+where $F_c(z,q) := E(z) \cdot \GK_c(z,q) = \qpoch{zq}{q} \cdot \GK_c(z,q)$.
+This definition is equivalent to: $F_c$ is the generating function whose
+$z$-extraction gives
+\[
+  Q_{n,c}(q) = (q)_n \cdot [z^n]\, F_c(z,q).
+\]
+
+\begin{example}[The $d = 1$ case]
+For $d = 1$, profile $(1,0,0)$: $\GK_c(z,q) = H(z) = 1/(zq;q)_\infty$,
+so $F_c = E(z) \cdot H(z) = 1$. The $z^n$ coefficient of~$1$ is $\delta_{n,0}$,
+confirming $Q_{n,c}(q) = 0$ for $n \geq 1$.
+\end{example}
+
+\subsection{Rogers--Ramanujan connection for $d = 2$}
+
+For $d = 2$, the function $F_c$ takes the remarkable Rogers--Ramanujan form:
+\begin{align}
+  F_{(1,1,0)}(z,q) &= \sum_{m \geq 0} \frac{q^{m^2}\, z^m}{(q)_m},
+    \label{eq:RR-first} \\
+  F_{(2,0,0)}(z,q) &= \sum_{m \geq 0} \frac{q^{m(m+1)}\, z^m}{(q)_m}.
+    \label{eq:RR-second}
+\end{align}
+Extracting $[z^n] F_c$ and multiplying by $(q)_n$ gives:
+\begin{align*}
+  Q_{n,(1,1,0)}(q) &= q^{n^2}, \\
+  Q_{n,(2,0,0)}(q) &= q^{n(n+1)},
+\end{align*}
+confirming the monomial phenomenon for $d = 2$. These are precisely the
+quadratic forms in the Andrews--Gordon sum side.
+
+\subsection{Corrected generating functions $h_m$}
+
+Define the \emph{corrected generating functions}
+\begin{equation}
+  h_m(q) := (q)_m \cdot g_m(q),
+  \label{eq:h-m-def}
+\end{equation}
+where $g_m(q) = [z^m]\, \GK_c(z,q)$ is the $z^m$ coefficient of the full
+(unfactored) generating function.
+
+Note that $h_m \neq Q_m$ in general; rather, $Q_n$ is an alternating sum of the
+$h_m$'s (see \S\ref{ssec:qbin-decomp} below). However, $h_m$ plays a
+distinguished role because $g_m = h_m/(q)_m$ is the GK coefficient.
+
+\begin{proposition}[Polynomiality and nonnegativity of $h_m$]
+\label{prop:h-m-nonneg}
+For all tested profiles with $d \leq 5$ and all $m$ in the computed range,
+$h_m(q)$ is a polynomial with nonneg integer coefficients. The degree satisfies
+$\deg(h_m) \leq m \cdot d$.
+\end{proposition}
+
+Computational evidence ($h_m$ denotes the polynomial for the given profile):
+
+\begin{center}
+\begin{tabular}{c|c|c|l}
+$c$ & $d$ & $m$ & $h_m(q)$ \\
+\hline
+$(1,0,0)$ & 1 & $m$ & $q^m$ \\[2pt]
+$(1,1,0)$ & 2 & 0 & $1$ \\
+& & 1 & $2q$ \\
+& & 2 & $2q^2 + q^3 + q^4$ \\[2pt]
+$(2,0,0)$ & 2 & 0 & $1$ \\
+& & 1 & $q + q^2$ \\
+& & 2 & $q^2 + q^3 + q^4 + q^6$ \\[2pt]
+$(2,1,1)$ & 4 & 0 & $1$ \\
+& & 1 & $3q + q^2 + q^3$ \\
+& & 2 & $3q^2 + 4q^3 + 5q^4 + 3q^5 + 3q^6 + 2q^7 + 2q^8 + q^9 + q^{10} + q^{12}$ \\[2pt]
+$(2,2,1)$ & 5 & 0 & $1$ \\
+& & 1 & $3q + 2q^2 + q^3 + q^4$ \\
+\end{tabular}
+\end{center}
+
+\begin{remark}
+For $d = 1$, $h_m = q^m$ (a single monomial), reflecting the fact that $\GK_{(1,0,0)} = H(z)$
+and $[z^m] H(z) = q^m/(q)_m$.
+For $d = 2$, the $h_m$ are nontrivial nonneg polynomials that encode
+both Rogers--Ramanujan sums from~\eqref{eq:RR-first}--\eqref{eq:RR-second}:
+the alternating sum of $h_m$'s collapses to a monomial $Q_n = q^{n^2}$ or $q^{n(n+1)}$.
+\end{remark}
+
+\subsection{The $q$-binomial decomposition}
+\label{ssec:qbin-decomp}
+
+Using the Euler expansion of $E(z) = \sum_j (-1)^j z^j q^{j(j+1)/2}/(q)_j$,
+the conjecture polynomial $Q_n$ decomposes as:
+\begin{equation}
+  Q_{n,c}(q) = \sum_{j=0}^{n} (-1)^j\, q^{\binom{j+1}{2}}\,
+  \qbin{n}{j}_{\!q} \cdot h_{n-j}(q),
+  \label{eq:qbin-decomp}
+\end{equation}
+where $\qbin{n}{j}_q$ is the $q$-binomial coefficient.
+
+\begin{proof}[Derivation]
+Starting from $Q_n = (q)_n \cdot [z^n](E(z) \cdot \GK_c)$:
+\begin{align*}
+  Q_n &= (q)_n \sum_{j=0}^n \frac{(-1)^j q^{j(j+1)/2}}{(q)_j} \cdot g_{n-j} \\
+      &= \sum_{j=0}^n (-1)^j q^{j(j+1)/2} \cdot
+         \frac{(q)_n}{(q)_j} \cdot g_{n-j} \\
+      &= \sum_{j=0}^n (-1)^j q^{j(j+1)/2} \cdot
+         \qbin{n}{j}_{\!q} \cdot (q)_{n-j} \cdot g_{n-j} \\
+      &= \sum_{j=0}^n (-1)^j q^{j(j+1)/2} \cdot
+         \qbin{n}{j}_{\!q} \cdot h_{n-j}. \qedhere
+\end{align*}
+\end{proof}
+
+This decomposition is computationally verified for all tested profiles:
+
+\begin{center}
+\begin{tabular}{c|c|c|c}
+$c$ & $d$ & $n$ & Reconstruction matches $Q_n$? \\
+\hline
+$(2,1,1)$ & 4 & 1 & $\checkmark$ \\
+$(2,1,1)$ & 4 & 2 & $\checkmark$ \\
+$(2,2,1)$ & 5 & 1 & $\checkmark$ \\
+\end{tabular}
+\end{center}
+
+\begin{remark}[Interpretation]
+The decomposition~\eqref{eq:qbin-decomp} rewrites $Q_n$ as an alternating
+$q$-binomial sum of the nonneg polynomials $h_m$. Since $\qbin{n}{j}_q$
+and all $h_m$ have nonneg coefficients, the conjecture reduces to showing
+that the alternating signs produce only nonneg total coefficients. This is
+nontrivial and does \emph{not} hold for arbitrary nonneg sequences $h_m$
+(cf.\ the soft positivity counterexample in \S\ref{sec:positivity}).
+The specific structure of the cylindric $h_m$ must be exploited.
+\end{remark}
+
+\subsection{The omega-conjugate generating function}
+
+Define the omega-conjugate generating function
+\[
+  \GK_c^\omega(z,q) := \sum_\pi z^{\max(\ell(\nu^{(1)}), \ell(\nu^{(2)}), \ell(\nu^{(3)}))} q^{|\pi|},
+\]
+where $\ell(\nu)$ denotes the number of parts (length) of $\nu$, tracking
+max-length instead of max-first-part.
+
+Under the omega involution $\omega: e_k \leftrightarrow h_k$, partition
+conjugation $\lambda \mapsto \lambda'$ sends $\lambda_1 \mapsto \ell(\lambda)$.
+Thus $\GK_c^\omega$ tracks the conjugate statistic.
+
+Computational comparison shows:
+\begin{itemize}
+  \item $\GK_c(1,q) = \GK_c^\omega(1,q)$ (both count the same CPPs at $z=1$);
+  \item $\GK_c(z,q) \neq \GK_c^\omega(z,q)$ in general (the $z$-refinement differs).
+\end{itemize}
+
+In all tested cases, the omega refinement redistributes weight: $\GK_c^\omega$
+concentrates more terms at lower $z$-powers (since partition lengths are typically
+smaller than first parts for the same total weight). For instance, with $c=(1,1,0)$,
+$\max_n=3$: $[z^1]$ of $\GK$ has 20 terms while $[z^1]$ of $\GK^\omega$ has 39
+terms; at $z^3$ the ratio reverses (137 vs 61).
+
+
+%% ========================================================================
+\section{Explicit involution for small cases}
+\label{sec:explicit-involution}
+%% ========================================================================
+
+The $q$-binomial decomposition~\eqref{eq:qbin-decomp} expresses $Q_{n,c}(q)$ as
+an alternating sum of nonneg polynomials. In this section we enumerate the signed
+objects explicitly for $c = (2,1,1)$ ($d = 4$) and describe the sign-reversing
+involution.
+
+\subsection{Signed objects}
+
+For each $j \in \{0, \ldots, n\}$, the objects in the $j$-th term of
+\eqref{eq:qbin-decomp} are triples $(j, \lambda, w')$ where:
+\begin{itemize}
+  \item $j$ determines the sign $(-1)^j$,
+  \item $\lambda$ is a partition fitting in a $j \times (n-j)$ box
+    (from $\qbin{n}{j}_q$, contributing weight $|\lambda|$),
+  \item $w'$ indexes an $h_{n-j}$-object of weight $w'$
+    (multiplicity $[q^{w'}]\, h_{n-j}$),
+  \item the total $q$-weight is $\binom{j+1}{2} + |\lambda| + w'$.
+\end{itemize}
+
+\subsection{The case $n = 1$, $c = (2,1,1)$}
+
+Here $Q_1 = h_1 - q \cdot h_0$ with $h_0 = 1$ and
+$h_1 = 3q + q^2 + q^3$. The signed objects are:
+
+\begin{center}
+\begin{tabular}{c|c|c|c|c|c}
+$j$ & sign & $\lambda$ & $w'$ range & multiplicity & total weight \\
+\hline
+0 & $+$ & $()$ & 1 & 3 & 1 \\
+0 & $+$ & $()$ & 2 & 1 & 2 \\
+0 & $+$ & $()$ & 3 & 1 & 3 \\
+1 & $-$ & $()$ & 0 & 1 & 1 \\
+\end{tabular}
+\end{center}
+
+The $h_1$-coefficient $[q^1]\,h_1 = 3$ arises from three CPPs with
+$\max = 1$ and weight~$1$:
+\begin{equation}
+  \label{eq:weight1-cpps}
+  \bigl((1), \emptyset, \emptyset\bigr), \quad
+  \bigl(\emptyset, (1), \emptyset\bigr), \quad
+  \bigl(\emptyset, \emptyset, (1)\bigr).
+\end{equation}
+These are the three cylindric partitions obtained by placing a single box
+in position 1, 2, or~3 of the cyclic structure.
+
+The involution pairs one positive weight-1 object with the unique negative
+weight-1 object, leaving:
+\[
+  Q_1 = 2q + q^2 + q^3.
+\]
+
+\begin{center}
+\begin{tabular}{c|ccccc}
+weight $w$ & pos & neg & paired & fixed & $[q^w]\,Q_1$ \\
+\hline
+1 & 3 & 1 & 1 & 2 & 2 \\
+2 & 1 & 0 & 0 & 1 & 1 \\
+3 & 1 & 0 & 0 & 1 & 1
+\end{tabular}
+\end{center}
+
+\subsection{The case $n = 2$, $c = (2,1,1)$}
+
+Here $Q_2 = h_2 - q(1+q)\,h_1 + q^3 \cdot h_0$ with
+\begin{align*}
+  h_0 &= 1, \\
+  h_1 &= 3q + q^2 + q^3, \\
+  h_2 &= 3q^2 + 4q^3 + 5q^4 + 3q^5 + 3q^6 + 2q^7 + 2q^8 + q^9 + q^{10} + q^{12}.
+\end{align*}
+
+The signed objects split across three values of~$j$:
+\begin{itemize}
+  \item $j = 0$ (sign $+$): $h_2$ objects, total 25.
+  \item $j = 1$ (sign $-$): $q \cdot (1+q) \cdot h_1$, with
+    $\lambda \in \{(), (1)\}$. Total 10 objects.
+  \item $j = 2$ (sign $+$): $q^3 \cdot h_0 = q^3$, one object.
+\end{itemize}
+
+\begin{center}
+\begin{tabular}{c|ccccc}
+weight $w$ & pos & neg & paired & fixed & $[q^w]\,Q_2$ \\
+\hline
+2 & 3 & 3 & 3 & 0 & 0 \\
+3 & 5 & 4 & 4 & 1 & 1 \\
+4 & 5 & 2 & 2 & 3 & 3 \\
+5 & 3 & 1 & 1 & 2 & 2 \\
+6 & 3 & 0 & 0 & 3 & 3 \\
+7 & 2 & 0 & 0 & 2 & 2 \\
+8 & 2 & 0 & 0 & 2 & 2 \\
+9 & 1 & 0 & 0 & 1 & 1 \\
+10 & 1 & 0 & 0 & 1 & 1 \\
+12 & 1 & 0 & 0 & 1 & 1
+\end{tabular}
+\end{center}
+
+\noindent
+This confirms $Q_2 = q^3 + 3q^4 + 2q^5 + 3q^6 + 2q^7 + 2q^8 + q^9 + q^{10} + q^{12}$
+and $Q_2(1) = 16 = 4^2$.
+
+\subsection{The involution mechanism}
+\label{ssec:involution-mechanism}
+
+The weight-by-weight analysis reveals a structured pairing:
+
+\begin{enumerate}
+  \item \textbf{At $w = 2$ (complete cancellation):}
+    The 3~positive $h_2$-objects are the CPPs with $\max = 2$ and weight~2:
+    \[
+      \bigl((2), \emptyset, \emptyset\bigr), \quad
+      \bigl(\emptyset, (2), \emptyset\bigr), \quad
+      \bigl(\emptyset, \emptyset, (2)\bigr).
+    \]
+    These are paired with the 3~negative $j=1$ objects, which
+    (via $\lambda = ()$, $w' = 1$) correspond to the weight-1 CPPs
+    from~\eqref{eq:weight1-cpps} shifted by~$q$.
+
+    The pairing maps position-by-position: the CPP with a height-2 box
+    in position~$i$ is paired with the CPP with a height-1 box in position~$i$
+    (plus the $q$-shift from the staircase $q^{j(j+1)/2}$).
+
+  \item \textbf{At $w = 3$ (the staircase term survives):}
+    The sole fixed point is the $j = 2$ object $q^3 \cdot h_0 = q^{n(n+1)/2}$,
+    corresponding to the empty CPP with all weight concentrated in the
+    staircase shift.
+
+  \item \textbf{At $w \geq 6$ (all positive):}
+    All $h_2$-objects at these weights are fixed points, contributing
+    directly to $Q_2$.
+\end{enumerate}
+
+\begin{remark}[Column-stripping interpretation]
+The involution ``strips the top layer'' from tall columns in the cylindric
+partition: a CPP with $\max = m$ and a column of height~$m$ is paired with a
+CPP with $\max = m - 1$ (the same configuration with the top box removed) plus a
+compensating $q$-shift. In the growth diagram picture, this corresponds to the
+$\epsilon = 0/1$ choice in the Burge local rule
+(Proposition~\ref{prop:first-part}): the involution flips $\epsilon$
+at the first position where the first part would increase.
+\end{remark}
+
+\subsection{Max-1 CPPs as length triples}
+
+For $\max(\pi) = 1$, each partition $\nu^{(i)}$ has parts $\leq 1$, so it is
+determined by its length $l_i$. The interlacing conditions reduce to:
+\begin{equation}
+  l_2 \leq l_1 + c_1, \qquad l_3 \leq l_2 + c_2, \qquad l_1 \leq l_3 + c_0.
+  \label{eq:length-conditions}
+\end{equation}
+The weight is $w = l_1 + l_2 + l_3$.
+
+For $c = (2,1,1)$: the conditions are $l_2 \leq l_1 + 1$, $l_3 \leq l_2 + 1$,
+$l_1 \leq l_3 + 2$. The count of valid triples stabilises at 5 for $w \geq 3$
+(the ``rank'' of the linear recurrence for $g_1$), giving:
+\[
+  g_1(q) = 3q + 4q^2 + 5q^3 + 5q^4 + 5q^5 + \cdots = 3q + 4q^2 + \frac{5q^3}{1-q}.
+\]
+
+This leads to $h_1 = (1-q) \cdot g_1 = 3q + q^2 + q^3$ as a polynomial,
+confirming the finite nature of $h_1$ from the eventual periodicity of $g_1$.
+
+More generally, $g_m(q)$ eventually becomes a quasi-polynomial in $q$ (i.e.\
+its coefficients eventually satisfy a linear recurrence), and $(q)_m$ serves as
+the ``minimal annihilator'' that converts $g_m$ into the polynomial $h_m$.
+
+\subsection{Observations across profiles}
+
+\begin{center}
+\begin{tabular}{c|c|c|c|c}
+$c$ & $d$ & $h_1$ & $g_1$ stabilises at & involution pairs for $n=1$ \\
+\hline
+$(2,1,1)$ & 4 & $3q + q^2 + q^3$ & $5$ (from $w \geq 3$) & 1 pair at $w=1$ \\
+$(2,2,1)$ & 5 & $3q + 2q^2 + q^3 + q^4$ & $7$ (from $w \geq 4$) & 1 pair at $w=1$ \\
+$(3,1,1)$ & 5 & $3q + q^2 + 2q^3 + q^5$ & $7$ (from $w \geq 5$) & 1 pair at $w=1$ \\
+\end{tabular}
+\end{center}
+
+In all cases, $[q^1]\,h_1 = 3$ (corresponding to the 3 single-box CPPs) and the
+involution pairs exactly one of these with the unique $j=1$ object.
+The coefficient $[q^1]\,Q_1 = 3 - 1 = 2$ is universal across all nontrivial
+profiles ($d \geq 2$) with $\gcd(d, 3) = 1$.
+
+
+%% ========================================================================
+\section{The cyclic descent injection}
+\label{sec:cyclic-descent}
+%% ========================================================================
+
+In this section we describe a deterministic injection from weight-$(w{-}1)$
+max-$1$ CPPs to weight-$w$ max-$1$ CPPs governed by the \emph{slack vector}.
+When $d \not\equiv 0 \pmod{3}$, this injection is valid for all~$w$ and all
+profiles~$c$ with $c_0 + c_1 + c_2 = d$, and its fixed points account for the
+polynomial $h_1(q) = (q)_1 \cdot g_1(q)$.
+
+\subsection{Slack vectors}
+
+\begin{definition}[Slack vector]
+For a max-$1$ CPP triple $(l_1, l_2, l_3)$ satisfying~\eqref{eq:length-conditions},
+the \emph{slack vector} is
+\begin{equation}
+  s = (s_1, s_2, s_3) := (l_3 + c_0 - l_1,\; l_1 + c_1 - l_2,\; l_2 + c_2 - l_3).
+  \label{eq:slack-def}
+\end{equation}
+Each $s_i \geq 0$ measures how far the $i$-th interlacing
+condition~\eqref{eq:interlace1}--\eqref{eq:interlace3} is from being tight.
+Note that $s_1 + s_2 + s_3 = c_0 + c_1 + c_2 = d$.
+\end{definition}
+
+The slack vector determines the ``local geometry'' of a triple on the
+interlacing polytope: tight constraints ($s_i = 0$) correspond to facets,
+and the interior point $s = (d/3, d/3, d/3)$ (when $3 \mid d$) is the unique
+\emph{balanced slack}.
+
+\begin{remark}[Effect of incrementing on slack]
+\label{rem:slack-effect}
+Incrementing $l_k$ by~$1$ changes the slack as follows:
+\begin{align*}
+  l_1 \to l_1 + 1\colon &\quad s_1 \to s_1 - 1,\; s_2 \to s_2 + 1,\; s_3 \to s_3, \\
+  l_2 \to l_2 + 1\colon &\quad s_1 \to s_1,\; s_2 \to s_2 - 1,\; s_3 \to s_3 + 1, \\
+  l_3 \to l_3 + 1\colon &\quad s_1 \to s_1 + 1,\; s_2 \to s_2,\; s_3 \to s_3 - 1.
+\end{align*}
+In particular, incrementing $l_k$ decreases $s_k$ by~$1$ and increases
+$s_{k-1 \bmod 3}$ by~$1$ (with cyclic indexing $s_0 = s_3$).
+The increment is valid (producing a new CPP triple) if and only if $s_k > 0$.
+\end{remark}
+
+\subsection{Cyclic descents}
+
+\begin{definition}[Cyclic descent]
+A \emph{cyclic descent} of a slack vector $s = (s_1, s_2, s_3)$ at position~$k$
+(for $k \in \{1, 2, 3\}$) is a strict inequality
+\[
+  s_k > s_{k-1 \bmod 3},
+\]
+where the indices are taken cyclically: $s_0 := s_3$, $s_{-1} := s_2$.
+We write $\operatorname{CycDes}(s) = \{k \in \{1,2,3\} : s_k > s_{k-1 \bmod 3}\}$.
+\end{definition}
+
+\begin{lemma}
+\label{lem:cycdes-nonempty}
+If $s = (s_1, s_2, s_3)$ with $s_1 + s_2 + s_3 = d$ and $s_i \geq 0$,
+and the $s_i$ are not all equal, then $\operatorname{CycDes}(s) \neq \emptyset$.
+Moreover, $|\operatorname{CycDes}(s)| \in \{1, 2\}$.
+\end{lemma}
+
+\begin{proof}
+If $\operatorname{CycDes}(s) = \emptyset$, then $s_k \leq s_{k-1}$ cyclically:
+$s_1 \leq s_3 \leq s_2 \leq s_1$, forcing $s_1 = s_2 = s_3$.
+The second claim follows since the three differences
+$s_1 - s_3$, $s_2 - s_1$, $s_3 - s_2$ sum to~$0$, so the number of
+strictly positive ones equals the number of strictly negative ones,
+hence $|\operatorname{CycDes}(s)|$ equals the number of strictly negative
+cyclic differences, which is $1$ or~$2$.
+\end{proof}
+
+\subsection{The injection rule}
+
+\begin{definition}[Cyclic descent injection]
+\label{def:injection}
+Let $3 \nmid d$. For a max-$1$ CPP triple $(l_1, l_2, l_3)$ with slack vector
+$s = (s_1, s_2, s_3)$, define
+\begin{equation}
+  \phi(l_1, l_2, l_3) := (l_1, l_2, l_3) + e_k,
+  \label{eq:phi-def}
+\end{equation}
+where $e_k$ is the $k$-th standard basis vector and
+\[
+  k := \begin{cases}
+    \text{the unique element of } \operatorname{CycDes}(s)
+      & \text{if } |\operatorname{CycDes}(s)| = 1, \\[4pt]
+    \operatorname*{argmin}_{j \in \operatorname{CycDes}(s)} s_{j-1 \bmod 3}
+      & \text{if } |\operatorname{CycDes}(s)| = 2,
+  \end{cases}
+\]
+with ties in the second case broken by choosing the smaller~$k$.
+\end{definition}
+
+\noindent
+Equivalently: among all positions $k$ with $s_k > s_{k-1}$, choose the one
+whose ``predecessor slack'' $s_{k-1}$ is smallest (tightest constraint),
+with ties broken by the smallest index.
+
+\begin{theorem}
+\label{thm:injection}
+Let $3 \nmid d$. The map $\phi$ defined in~\eqref{eq:phi-def} is a valid
+injection from the set of max-$1$ CPP triples at weight~$w$ to those at
+weight~$w+1$, for every $w \geq 1$.
+\end{theorem}
+
+\begin{proof}[Computational verification]
+We have verified this theorem by exhaustive computation for all
+$\binom{d+2}{2}$ profiles $c$ with $c_0 + c_1 + c_2 = d$, for:
+\begin{itemize}
+  \item $d = 1$: 3 profiles, $w \leq 30$.
+  \item $d = 2$: 6 profiles, $w \leq 30$.
+  \item $d = 4$: 15 profiles, $w \leq 30$.
+  \item $d = 5$: 21 profiles, $w \leq 30$.
+  \item $d = 7$: 36 profiles, $w \leq 30$.
+  \item $d = 8$: 45 profiles, $w \leq 20$.
+\end{itemize}
+In each case, the injection is valid (produces a valid triple, and is injective)
+at every weight. The verification is implemented in \texttt{test\_cyclic\_rule.py}.
+\end{proof}
+
+\begin{remark}[Failure for $3 \mid d$]
+When $3 \mid d$, the balanced slack $s = (d/3, d/3, d/3)$ has
+$\operatorname{CycDes}(s) = \emptyset$, so the cyclic descent rule is undefined.
+Moreover, no static slack-based rule can work in this case: the count of max-$1$
+CPP triples oscillates with period~$3$ (e.g.\ $3, 3, 4, 3, 3, 4, \ldots$
+for $d = 3$), so the transition from a ``spike'' weight to a ``trough'' weight
+sends more triples than there are targets, making injection impossible.
+A different mechanism (possibly involving triples of consecutive weight levels)
+is needed for $3 \mid d$.
+\end{remark}
+
+\subsection{Fixed points and the polynomial $h_1$}
+
+The \emph{fixed points} of the injection $\phi$ at weight~$w$ are the max-$1$
+CPP triples at weight~$w$ that are not in the image of~$\phi$.
+
+\begin{proposition}
+\label{prop:fixed-pts}
+Let $3 \nmid d$ and $w \geq 2$. The number of fixed points of $\phi$ at
+weight~$w$ equals $[q^w]\,h_1(q)$.
+At weight~$1$, the number of fixed points is $[q^1]\,h_1(q) + 1 = 4$
+(since all 3 triples at $w = 1$ are unmatched, plus there are no predecessors
+at $w = 0$).
+\end{proposition}
+
+\begin{proof}[Computational verification]
+Verified against the independently computed $h_1$ for all profiles
+$c$ with $d \in \{2, 4, 5, 7\}$, checking that the injection fixed-point
+count at weight~$w$ matches $[q^w]\,h_1(q)$ for $w \geq 2$.
+\end{proof}
+
+The connection to the full involution for $Q_{n,c}(q)$ is as follows.
+The simplest case is $n = 1$: here $Q_1 = h_1 - q \cdot h_0$ and the
+injection $\phi$ on max-$1$ triples gives $h_1 = (1 - q) \cdot g_1$.
+The injection accounts for the factor $(1-q)$, and the remaining subtraction
+$-q \cdot h_0$ (the $j = 1$ term) cancels one of the three weight-$1$ fixed
+points, yielding $[q^1]\,Q_1 = 3 - 1 = 2$.
+
+\subsection{Example: $c = (2,1,1)$, $d = 4$}
+
+The 15 slack vectors on the simplex $\{s_1 + s_2 + s_3 = 4,\; s_i \geq 0\}$
+and their assigned components are:
+
+\begin{center}
+\small
+\begin{tabular}{cccc|c|cc}
+$s_1$ & $s_2$ & $s_3$ & $|\operatorname{CycDes}|$ &
+$k = \phi$-comp. & from & to \\
+\hline
+4 & 0 & 0 & 1 & 1 & $(4,0,0) \to (3,0,1)$ & $s_1 \downarrow, s_3 \uparrow$ \\
+3 & 1 & 0 & 1 & 1 & $(3,1,0) \to (2,1,1)$ & \\
+3 & 0 & 1 & 2 & 3 & $(3,0,1) \to (3,1,0)$ & picks $s_2=0$ \\
+2 & 2 & 0 & 1 & 1 & $(2,2,0) \to (1,2,1)$ & \\
+2 & 1 & 1 & 1 & 1 & $(2,1,1) \to (1,1,2)$ & \\
+2 & 0 & 2 & 2 & 3 & $(2,0,2) \to (2,1,1)$ & picks $s_2=0$ \\
+1 & 3 & 0 & 2 & 1 & $(1,3,0) \to (0,3,1)$ & picks $s_3=0$ \\
+1 & 2 & 1 & 1 & 2 & $(1,2,1) \to (2,1,1)$ & \\
+1 & 1 & 2 & 1 & 3 & $(1,1,2) \to (1,2,1)$ & \\
+1 & 0 & 3 & 1 & 3 & $(1,0,3) \to (1,1,2)$ & \\
+0 & 4 & 0 & 1 & 2 & $(0,4,0) \to (1,3,0)$ & \\
+0 & 3 & 1 & 1 & 2 & $(0,3,1) \to (1,2,1)$ & \\
+0 & 2 & 2 & 1 & 2 & $(0,2,2) \to (1,1,2)$ & \\
+0 & 1 & 3 & 2 & 2 & $(0,1,3) \to (1,0,3)$ & picks $s_1=0$ \\
+0 & 0 & 4 & 1 & 3 & $(0,0,4) \to (0,1,3)$ & \\
+\end{tabular}
+\end{center}
+
+The slack-to-slack transition graph has a single absorbing cycle of length~3:
+\[
+  (2,1,1) \xrightarrow{l_1} (1,1,2) \xrightarrow{l_3} (1,2,1) \xrightarrow{l_2} (2,1,1),
+\]
+corresponding to the cyclic rotation of the ``nearly balanced'' slacks.
+All other slacks eventually reach this cycle, and the stable regime has
+5 triples per weight with 0 fixed points.
+
+At weights $1$--$3$, the counts are $3, 4, 5$ triples respectively.
+The injection produces $1$ fixed point at $w = 2$ (since $4 - 3 = 1$)
+and $1$ at $w = 3$ (since $5 - 4 = 1$), giving
+$h_1 = 3q + q^2 + q^3$.
+
+\subsection{Towards a proof}
+
+A conceptual proof of Theorem~\ref{thm:injection} would need to show:
+\begin{enumerate}
+  \item \textbf{Validity:} For any slack $s$ with $s_1 + s_2 + s_3 = d$ and
+    $3 \nmid d$, the cyclic descent $k$ satisfies $s_k > 0$, so incrementing
+    $l_k$ does not violate any constraint. This follows from
+    Lemma~\ref{lem:cycdes-nonempty} since $s_k > s_{k-1} \geq 0$
+    implies $s_k \geq 1$.
+
+  \item \textbf{Injectivity:} Different triples at weight~$w$ produce
+    different targets at weight~$w+1$. This requires showing that the map
+    $s \mapsto s'$ (where $s' = s + e_{k-1} - e_k$ in the cyclic notation)
+    is injective on the set of slack vectors appearing at weight~$w$.
+    Since the slack determines the triple uniquely (given the weight), and
+    the slack transformation is determined by the rule, it suffices to show
+    that the induced map on slacks is injective. This amounts to verifying
+    that no two distinct slack vectors map to the same successor slack under
+    the cyclic descent rule.
+\end{enumerate}
+
+The injectivity in point~(2) appears to be the key obstacle. Computer verification
+confirms it for all tested values, but a uniform combinatorial argument remains to
+be found. The cyclic symmetry $\Z/3\Z$ of the slack simplex
+(rotating indices $1 \to 2 \to 3 \to 1$) plays a central role: the rule respects
+this symmetry in the sense that it ``follows the cyclic descent'', and the
+$3 \nmid d$ condition ensures the absence of a fixed point under the cyclic action.
+
+
+%% ========================================================================
+\section*{Acknowledgements}
+%% ========================================================================
+
+These notes were developed with computational assistance using Python for
+multipartition enumeration and exact rational $q$-series arithmetic.
+
+\begin{thebibliography}{99}
+\bibitem{Warnaar2021} S.~O.~Warnaar, \emph{The $A_2$ Andrews--Gordon identities
+  and cylindric partitions}, arXiv:2111.07550v3, 2023.
+\bibitem{Langer2021} R.~Langer, \emph{Cylindric partitions, lambda determinants,
+  and semicircular systems}, PhD thesis, University of Queensland, 2021.
+\bibitem{GK1997} I.~M.~Gessel and C.~Krattenthaler, \emph{Cylindric partitions},
+  Trans.\ Amer.\ Math.\ Soc., 349 (1997), 429--479.
+\bibitem{Borodin2007} A.~Borodin, \emph{Periodic Schur process and cylindric
+  partitions}, Duke Math.\ J., 140 (2007), 391--468.
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,166 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+
+\title{Bridge: Crystal Bases $\longleftrightarrow$ Cylindric Partitions\\[4pt]
+\large via Quantum Affine Representation Theory}
+\author{Notes (from structural hole analysis)}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent
+These three papers form a bridge between the \textbf{crystal bases}
+and \textbf{cylindric partitions} clusters in the INSTINCT corpus.
+They were identified by the citation-aware structural hole detector:
+both Schilling and Korff cite Chari--Pressley, but from opposite
+mathematical directions.  The shared object is the
+\emph{Kirillov--Reshetikhin module} for quantum affine algebras.
+
+\bigskip
+
+%% ===================================================================
+\section{Chari--Pressley: Twisted Quantum Affine Algebras (1996)}
+%% ===================================================================
+
+\textbf{Reference:} V.~Chari and A.~Pressley,
+\emph{Twisted Quantum Affine Algebras},
+\href{https://arxiv.org/abs/q-alg/9611002}{arXiv:q-alg/9611002} (1996).
+
+\medskip
+\noindent\textbf{Summary:}
+Classifies the irreducible finite-dimensional representations of
+\emph{twisted} quantum affine algebras $U_q(\hat{\mathfrak{g}})$
+(types $A_{2n}^{(2)}$, $D_{n+1}^{(2)}$, etc.).  This classification
+provides the algebraic foundation that both papers below build on.
+
+\medskip
+\noindent\textbf{Bridge role:}
+The Chari--Pressley classification is the dictionary that makes it
+possible to study the \emph{same} representations from two different
+combinatorial perspectives:
+\begin{itemize}
+  \item Crystal bases (Schilling): encode representation-theoretic
+    data as colored directed graphs.
+  \item Cylindric partitions (Korff): encode structure constants of
+    the fusion/Verlinde algebra as generating functions over partitions.
+\end{itemize}
+
+%% ===================================================================
+\section{Schilling: Crystal Bases Side (2007)}
+%% ===================================================================
+
+\textbf{Reference:} A.~Schilling,
+\emph{Combinatorial structure of Kirillov--Reshetikhin crystals of
+type $D_n^{(1)}$, $B_n^{(1)}$, $A_{2n-1}^{(2)}$},
+\href{https://arxiv.org/abs/0704.2046}{arXiv:0704.2046} (2007).
+
+\medskip
+\noindent\textbf{Summary:}
+Constructs Kirillov--Reshetikhin (KR) crystals for twisted and
+non-simply-laced types using $\pm$~diagrams and Dynkin diagram
+automorphisms.  Verifies Sternberg's conjecture for these types.
+
+\medskip
+\noindent\textbf{Key concepts:}
+\begin{itemize}
+  \item \textbf{Kirillov--Reshetikhin crystals:} combinatorial models
+    (crystal graphs) for the KR modules classified by Chari--Pressley.
+    Each node is a tableau-like object; edges are crystal operators
+    $\tilde{e}_i, \tilde{f}_i$.
+  \item \textbf{$\pm$~diagrams:} a technique for constructing KR
+    crystals of non-simply-laced type from those of simply-laced type
+    via Dynkin diagram folding.
+  \item \textbf{Demazure crystals:} subsets of affine crystals that
+    correspond to Demazure modules; KR crystals are shown to be
+    isomorphic to certain Demazure crystals.
+\end{itemize}
+
+%% ===================================================================
+\section{Korff: Cylindric Partitions Side (2011)}
+%% ===================================================================
+
+\textbf{Reference:} C.~Korff,
+\emph{Cylindric versions of specialised Macdonald functions and a
+deformed Verlinde algebra},
+\href{https://arxiv.org/abs/1110.6356}{arXiv:1110.6356} (2011).
+
+\medskip
+\noindent\textbf{Summary:}
+Connects cylindric partition generating functions to the
+representation theory of quantum $\widehat{\mathfrak{sl}}_n$
+via the Yang--Baxter equation.  Shows that cylindric skew tableaux
+compute structure constants in a deformed Verlinde algebra.
+
+\medskip
+\noindent\textbf{Key concepts:}
+\begin{itemize}
+  \item \textbf{Cylindric skew tableaux:} the combinatorial objects
+    being enumerated.  Their generating functions give
+    \emph{skew Macdonald functions} (cylindric generalisation).
+  \item \textbf{Verlinde algebra:} the fusion ring of the
+    WZW conformal field theory at level~$k$.  Its structure constants
+    $N_{\lambda\mu}^\nu$ count cylindric tableaux of appropriate shape.
+  \item \textbf{Yang--Baxter equation:} the integrability condition
+    that makes the connection to quantum groups work.  Transfer
+    matrices built from $R$-matrices of $U_q(\widehat{\mathfrak{sl}}_n)$
+    generate cylindric partition functions.
+  \item \textbf{Kirillov--Reshetikhin modules:} appear as the
+    auxiliary spaces in the transfer matrix construction.  This is the
+    direct link to Chari--Pressley and to Schilling's crystals.
+\end{itemize}
+
+%% ===================================================================
+\section{The Bridge}
+%% ===================================================================
+
+The conceptual picture is:
+\[
+\boxed{\text{Crystal graphs}}
+\xleftarrow{\text{Schilling}}
+\boxed{\text{KR modules of } U_q(\hat{\mathfrak{g}})}
+\xrightarrow{\text{Korff}}
+\boxed{\text{Cylindric partitions}}
+\]
+
+\begin{itemize}
+  \item \textbf{Left arrow:}
+    Schilling constructs the \emph{crystal basis} of each KR module ---
+    a purely combinatorial object (a coloured directed graph) that
+    encodes the module's weight structure and tensor product
+    decomposition.
+
+  \item \textbf{Right arrow:}
+    Korff shows that the \emph{transfer matrices} built from KR modules
+    (via $R$-matrices and the Yang--Baxter equation) generate
+    cylindric partition functions.  The trace over auxiliary KR modules
+    produces generating functions for cylindric skew tableaux.
+
+  \item \textbf{Centre:}
+    Chari--Pressley's classification tells us which KR modules exist
+    and how they decompose.  Without it, neither the crystal
+    construction nor the transfer matrix approach would have a
+    foundation.
+\end{itemize}
+
+\medskip
+\noindent\textbf{Relevance to Conjecture~2.7:}
+If the positivity of $Q_{n,c}(q)$ has a representation-theoretic
+explanation, this bridge suggests where to look: the cylindric
+partition generating functions are traces over KR modules, and the
+crystal bases of those modules carry a natural grading by
+the energy function.  The coefficients of $Q_{n,c}(q)$ might
+count something in the crystal (e.g.\ highest weight elements
+of a given energy).
+
+\medskip
+\noindent\textbf{Discovery context:}
+This bridge was found by the structural hole detector
+(\texttt{detect\_structural\_holes.py}), which identified
+crystal-bases $\leftrightarrow$ cylindric-partitions as a
+structural hole (concepts overlap but papers don't cite each other)
+and flagged Chari--Pressley as the sole external paper cited by
+both clusters.
+
+\end{document}

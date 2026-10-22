@@ -1,0 +1,1569 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\La}{\Lambda}
+\newcommand{\GK}{\operatorname{GK}}
+\newcommand{\CPP}{\operatorname{CPP}}
+\newcommand{\ALCD}{\operatorname{ALCD}}
+\newcommand{\IP}{\operatorname{IP}}
+\newcommand{\qpoch}[2]{(#1;#2)_\infty}
+\newcommand{\qpochn}[3]{(#1;#2)_{#3}}
+\newcommand{\qbin}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+\DeclareMathOperator{\tr}{tr}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{The $Q$-Operator and its Adjoint:\\
+From Level~3 Operator Traces to Cascade Commutators}
+\author{Robin Langer}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We develop two complementary operator-theoretic frameworks for the
+cylindric Kostka polynomials $Q_{n,c}(q)$.
+
+\smallskip\noindent
+\textbf{Part~I} lifts the construction to Level~3 in the hierarchy
+of generating functions: the operator trace framework with free
+parameters.  This produces a genuine operator
+$\hat{Q}_{c,\mathbf{n}}$ on the ring of symmetric functions~$\La$
+whose trace recovers the multivariate cylindric Kostka polynomial.
+The adjoint $\hat{Q}_{c,\mathbf{n}}^*$ corresponds to the
+reversed-complementary profile, and we show that
+$\tr(\hat{Q}^*) = \tr(\hat{Q})$: the adjoint is invisible at
+the polynomial level.
+
+\smallskip\noindent
+\textbf{Part~II} defines a second operator $\mathbf{Q}(z)
+= \sum Q_m z^m P_m$ that packages the $Q$-polynomials as
+coefficients of Pieri multiplication operators.  Computing the
+products $\mathbf{Q}(z)\mathbf{Q}^*(w)$ and
+$\mathbf{Q}^*(w)\mathbf{Q}(z)$ reveals cross-correlation
+functions and a cascade commutator structure that couples
+different depth levels of the cylindric partition.
+\end{abstract}
+
+\tableofcontents
+
+
+%% ============================================================
+%% PART I: THE LEVEL 3 FRAMEWORK
+%% ============================================================
+
+\part{The Level~3 Operator Trace Framework}
+
+
+%% ============================================================
+\section{The Level~3 operator}
+\label{sec:level3}
+%% ============================================================
+
+\subsection{Setup}
+
+Let $\La$ denote the ring of symmetric functions with Hall inner
+product $\langle\,\cdot\,,\,\cdot\,\rangle$ satisfying
+$\langle s_\lambda, s_\mu \rangle = \delta_{\lambda,\mu}$,
+or equivalently $\langle h_\lambda, m_\mu \rangle
+= \delta_{\lambda,\mu}$.  The Cauchy identity reads:
+\begin{equation}\label{eq:cauchy}
+  \sum_\lambda s_\lambda(X)\, s_\lambda(Y)
+  = \prod_{i,j} \frac{1}{1 - x_i y_j}
+  = \Omega[XY].
+\end{equation}
+
+For rank~3 with profile $c = (c_0, c_1, c_2)$, set
+$T := d = c_0 + c_1 + c_2$, and let
+$\pi = (\pi_0, \ldots, \pi_{T-1}) \in \{0,1\}^T$ be the binary
+string encoding the profile (with $n$~ones and $m$~zeros,
+$n + m = T$).
+
+\subsection{The vertex operators}
+
+Define operators on $\La$ depending on a formal parameter~$u$:
+\begin{align}
+  G^1(u) &:= \Omega[Xu]
+    \quad\text{(Pieri addition: $s_\mu \mapsto \sum_{\lambda \in
+    U(\mu)} s_\lambda\, u^{|\lambda|-|\mu|}$)},
+    \label{eq:G1} \\
+  G^0(u) &:= \Omega^*[Xu]
+    \quad\text{(Pieri removal: the Hall-adjoint of $G^1(u)$)}.
+    \label{eq:G0}
+\end{align}
+In terms of the translation and multiplication operators of
+\cite{COMMUTATION}:
+\begin{equation}\label{eq:G-PT}
+  G^1(u) = P(u) = \mathcal{P}(u), \qquad
+  G^0(u) = T(u) = \mathcal{T}(u) = P^*(u).
+\end{equation}
+
+The \emph{degree operator} $D_w$ acts diagonally in the Schur basis:
+\begin{equation}\label{eq:Dw}
+  D_w\, s_\lambda = w^{|\lambda|}\, s_\lambda.
+\end{equation}
+
+\subsection{The operator product}
+
+\begin{definition}[Level~3 operator]
+\label{def:O-hat}
+The \emph{Level~3 operator} for profile $\pi$ with parameters
+$\mathbf{u} = (u_0, \ldots, u_{T-1})$ and $w$ is:
+\begin{equation}\label{eq:O-hat}
+  \hat{O}_c(\mathbf{u}, w)
+  := G^{\pi_0}(u_0)\, G^{\pi_1}(u_1) \cdots
+     G^{\pi_{T-1}}(u_{T-1})\, D_w
+  \;\colon\; \La \to \La.
+\end{equation}
+\end{definition}
+
+The multivariate generating function for cylindric plane partitions
+is recovered as the trace:
+\begin{equation}\label{eq:trace}
+  \GK_c(\mathbf{z})
+  = \tr(\hat{O}_c)
+  := \sum_\mu \langle s_\mu,\, \hat{O}_c\, s_\mu \rangle,
+\end{equation}
+under the specialisation
+\begin{equation}\label{eq:specialisation}
+  w = z_0 z_1 z_2, \qquad
+  u_k = \begin{cases}
+    z_0 z_1 \cdots z_{k-1} & \text{if } \pi_k = 1, \\
+    (z_0 z_1 \cdots z_{k-1})^{-1} & \text{if } \pi_k = 0.
+  \end{cases}
+\end{equation}
+
+\begin{remark}[Matrix elements]
+\label{rem:matrix-elements}
+The trace uses only the \emph{diagonal} matrix elements
+$\langle s_\mu, \hat{O}_c\, s_\mu \rangle$.
+The \emph{off-diagonal} elements
+$\langle s_\lambda, \hat{O}_c\, s_\mu \rangle$ with
+$\lambda \neq \mu$ count ``open'' interlacing sequences from~$\mu$
+to~$\lambda$ (without the cylindric periodicity condition
+$\mu^0 = \mu^T$).  The trace enforces periodicity.
+\end{remark}
+
+
+%% ============================================================
+\section{The adjoint operator}
+\label{sec:adjoint}
+%% ============================================================
+
+\subsection{Adjoint of the building blocks}
+
+With respect to the Hall inner product, the vertex operators are
+mutual adjoints:
+\begin{equation}\label{eq:G-adjoint}
+  (G^1(u))^* = G^0(u), \qquad (G^0(u))^* = G^1(u).
+\end{equation}
+This is the operator-theoretic content of the Pieri rules: adding a
+horizontal strip is adjoint to removing one.
+
+The degree operator is self-adjoint:
+\begin{equation}\label{eq:Dw-adjoint}
+  D_w^* = D_w,
+\end{equation}
+since $\langle D_w s_\lambda, s_\mu \rangle
+= w^{|\lambda|} \delta_{\lambda\mu}
+= \langle s_\lambda, D_w s_\mu \rangle$.
+
+\subsection{Adjoint of $\hat{O}_c$}
+
+Taking the adjoint of the product \eqref{eq:O-hat} reverses the
+order and replaces each factor by its adjoint:
+\begin{equation}\label{eq:O-adjoint}
+  \hat{O}_c^*
+  = D_w\; G^{\bar\pi_{T-1}}(u_{T-1})\;
+    G^{\bar\pi_{T-2}}(u_{T-2}) \cdots G^{\bar\pi_0}(u_0),
+\end{equation}
+where $\bar\pi_k := 1 - \pi_k$ is the complementary bit:
+addition~$\leftrightarrow$ removal.
+
+\begin{remark}[Profile transformation]
+\label{rem:profile-transform}
+The adjoint $\hat{O}_c^*$ is the Level~3 operator for the
+\emph{reversed-complementary profile}
+$\bar\pi^{\mathrm{rev}} = (\bar\pi_{T-1}, \bar\pi_{T-2}, \ldots,
+\bar\pi_0)$ with reversed parameters
+$\mathbf{u}^{\mathrm{rev}} = (u_{T-1}, \ldots, u_0)$, up to the
+position of~$D_w$.
+\end{remark}
+
+
+\subsection{Behaviour under the trace}
+
+\begin{proposition}[Trace invariance]
+\label{prop:trace-invariance}
+$\tr(\hat{O}_c^*) = \tr(\hat{O}_c)$.
+\end{proposition}
+
+\begin{proof}
+Since the Hall inner product is symmetric
+($\langle f, g \rangle = \langle g, f \rangle$):
+\[
+  \tr(\hat{O}_c^*)
+  = \sum_\mu \langle s_\mu,\, \hat{O}_c^*\, s_\mu \rangle
+  = \sum_\mu \langle \hat{O}_c\, s_\mu,\, s_\mu \rangle
+  = \sum_\mu \langle s_\mu,\, \hat{O}_c\, s_\mu \rangle
+  = \tr(\hat{O}_c). \qedhere
+\]
+\end{proof}
+
+\begin{corollary}[Profile symmetry]
+\label{cor:profile-symmetry}
+By cyclic invariance of the trace, $\hat{O}_c^*$ can be rewritten
+with $D_w$ at the end:
+\begin{equation}\label{eq:O-adj-cyclic}
+  \tr(\hat{O}_c^*)
+  = \tr\!\bigl(
+    G^{\bar\pi_{T-1}}(u_{T-1}) \cdots G^{\bar\pi_0}(u_0)\, D_w
+  \bigr)
+  = \GK_{\bar\pi^{\mathrm{rev}}}(\mathbf{u}^{\mathrm{rev}}, w).
+\end{equation}
+Combined with Proposition~\ref{prop:trace-invariance}, this gives:
+\begin{equation}\label{eq:GK-symmetry}
+  \boxed{%
+  \GK_\pi(\mathbf{u}, w)
+  = \GK_{\bar\pi^{\mathrm{rev}}}(\mathbf{u}^{\mathrm{rev}}, w).}
+\end{equation}
+The generating function for profile~$\pi$ equals that for the
+reversed-complementary profile with reversed parameters.
+\end{corollary}
+
+\begin{remark}[The adjoint paradox]
+\label{rem:paradox}
+The adjoint is \textbf{invisible at the trace level}: $\hat{O}_c$
+and $\hat{O}_c^*$ produce the same generating function.  The
+adjoint becomes nontrivial only at the level of individual matrix
+elements $\langle s_\lambda, \hat{O}_c\, s_\mu \rangle$.
+\end{remark}
+
+
+%% ============================================================
+\section{The multivariate $E$--$H$ factorisation}
+\label{sec:EH}
+%% ============================================================
+
+\subsection{Factorisation at the generating function level}
+
+The growth diagram bijection
+$\psi\colon (\IP, \ALCD(c)) \to \CPP(c)$ decomposes each cylindric
+plane partition into a base partition $\gamma$ (contributing
+$w^{|\gamma|}$ to every slice) and an ALCD $\mathfrak{d}$
+(contributing $z_k^{|\mathrm{diag}(k)|_\mathfrak{d}}$ to the
+$k$-th slice).  Setting $w = z_0 z_1 z_2$:
+\begin{equation}\label{eq:EH-multi}
+  \GK_c(\mathbf{z})
+  = \underbrace{\frac{1}{(w;\,w)_\infty}}_{\displaystyle\sum_\gamma
+    w^{|\gamma|}}
+  \cdot\; E_c(\mathbf{z}),
+\end{equation}
+where
+\begin{equation}\label{eq:Ec}
+  E_c(\mathbf{z})
+  := \sum_{\mathfrak{d} \in \ALCD(c)}
+     \prod_{k=0}^{T-1} z_k^{|\mathrm{diag}(k)|_\mathfrak{d}}
+\end{equation}
+encodes the purely cylindric content.
+
+The \emph{corrected multivariate generating function} is:
+\begin{equation}\label{eq:Gc-multi}
+  G_c(\mathbf{z})
+  := (w;\,w)_\infty \cdot \GK_c(\mathbf{z})
+  = E_c(\mathbf{z}).
+\end{equation}
+
+\subsection{The corrected operator}
+
+\begin{definition}[Corrected operator]
+\label{def:G-hat}
+Define the \emph{corrected operator-valued generating function}:
+\begin{equation}\label{eq:G-hat}
+  \hat{G}_c(\mathbf{z})
+  := (w;\,w)_\infty \cdot \hat{O}_c(\mathbf{z}),
+\end{equation}
+where $(w;\,w)_\infty = \prod_{k \geq 1}(1 - w^k)$ is a scalar
+(depending on $w = z_0 z_1 z_2$) that multiplies the operator.
+\end{definition}
+
+Its trace recovers the corrected generating function:
+\[
+  \tr(\hat{G}_c(\mathbf{z}))
+  = (w;\,w)_\infty \cdot \tr(\hat{O}_c(\mathbf{z}))
+  = G_c(\mathbf{z}).
+\]
+
+\subsection{Multi-index coefficients}
+
+Expand the corrected operator in a multi-index power series:
+\begin{equation}\label{eq:G-hat-expand}
+  \hat{G}_c(\mathbf{z})
+  = \sum_{\mathbf{n} \in \N^T}
+    \hat{G}_{c,\mathbf{n}}\;
+    z_0^{n_0}\, z_1^{n_1} \cdots z_{T-1}^{n_{T-1}},
+\end{equation}
+where each $\hat{G}_{c,\mathbf{n}} \colon \La \to \La$ is an
+operator.  Note that the Euler factor $(w;\,w)_\infty$ mixes
+multi-index coefficients: $\hat{G}_{c,\mathbf{n}}$ is \emph{not}
+simply $(w;\,w)_\infty$ times the $\mathbf{n}$-th coefficient
+of $\hat{O}_c$, because $(w;\,w)_\infty$ depends on
+$w = z_0 z_1 z_2$.
+
+The trace of each coefficient gives the corrected multi-index
+coefficient:
+\begin{equation}\label{eq:gn-multi}
+  g_{\mathbf{n},c}
+  = \tr(\hat{G}_{c,\mathbf{n}})
+  = [\mathbf{z}^\mathbf{n}]\, G_c(\mathbf{z}).
+\end{equation}
+
+
+%% ============================================================
+\section{The $Q$-operator at Level~3}
+\label{sec:Q-operator-L3}
+%% ============================================================
+
+\subsection{Definition}
+
+\begin{definition}[$Q$-operator]
+\label{def:Q-hat}
+For a multi-index $\mathbf{n} = (n_0, n_1, \ldots, n_{T-1})
+\in \N^T$, profile $c$ with $d \not\equiv 0 \pmod{3}$, define the
+\emph{$Q$-operator}:
+\begin{equation}\label{eq:Q-hat}
+  \hat{Q}_{c,\mathbf{n}}
+  := \prod_{k=0}^{T-1} \qpochn{q}{q}{n_k}
+     \cdot \hat{G}_{c,\mathbf{n}}
+  \;\colon\; \La \to \La,
+\end{equation}
+where $q = w = z_0 z_1 \cdots z_{T-1}$ and the
+$\qpochn{q}{q}{n_k} = \prod_{j=1}^{n_k}(1-q^j)$ are scalar
+factors that clear the denominators.
+\end{definition}
+
+\begin{remark}
+In the rank-3 case, one often restricts to multi-indices of the
+form $\mathbf{n} = (n_0, n_1, n_2) \in \N^3$ (one index per slice),
+and the product becomes $\prod_{k=0}^{2} \qpochn{q}{q}{n_k}$.
+\end{remark}
+
+\subsection{Trace gives the multivariate $Q$-polynomial}
+
+\begin{equation}\label{eq:Q-trace}
+  Q_{\mathbf{n},c}
+  = \tr(\hat{Q}_{c,\mathbf{n}})
+  = \prod_{k} \qpochn{q}{q}{n_k} \cdot g_{\mathbf{n},c}.
+\end{equation}
+
+In terms of Schur basis matrix elements:
+\begin{equation}\label{eq:Q-schur-sum}
+  Q_{\mathbf{n},c}
+  = \sum_\mu
+    \langle s_\mu,\, \hat{Q}_{c,\mathbf{n}}\, s_\mu \rangle.
+\end{equation}
+
+
+%% ============================================================
+\section{The adjoint $Q$-operator}
+\label{sec:Q-adjoint}
+%% ============================================================
+
+\subsection{Definition}
+
+\begin{definition}[Adjoint $Q$-operator]
+\label{def:Q-hat-adj}
+The adjoint is defined by:
+\begin{equation}\label{eq:Q-adj-def}
+  \langle \hat{Q}_{c,\mathbf{n}}^*\, f,\; g \rangle
+  = \langle f,\; \hat{Q}_{c,\mathbf{n}}\, g \rangle
+  \qquad \text{for all } f, g \in \La.
+\end{equation}
+\end{definition}
+
+Since the $(q)$-Pochhammer factors are scalars:
+\begin{equation}\label{eq:Q-adj-decomp}
+  \hat{Q}_{c,\mathbf{n}}^*
+  = \prod_{k} \qpochn{q}{q}{n_k} \cdot \hat{G}_{c,\mathbf{n}}^*.
+\end{equation}
+
+The nontrivial content is in $\hat{G}_{c,\mathbf{n}}^*$, which
+inherits from $\hat{O}_c^*$ the profile transformation: the adjoint
+corresponds to the \textbf{reversed-complementary profile}
+$\bar\pi^{\mathrm{rev}}$ with reversed parameters.
+
+\subsection{Matrix elements: the transpose relation}
+
+In the Schur basis:
+\begin{equation}\label{eq:Q-adj-matrix}
+  \langle s_\lambda,\, \hat{Q}_{c,\mathbf{n}}^*\, s_\mu \rangle
+  = \langle s_\mu,\, \hat{Q}_{c,\mathbf{n}}\, s_\lambda \rangle.
+\end{equation}
+The matrix of $\hat{Q}_{c,\mathbf{n}}^*$ is the \emph{transpose}
+of the matrix of $\hat{Q}_{c,\mathbf{n}}$.
+
+\subsection{Trace invariance}
+
+\begin{proposition}
+\label{prop:Q-trace-invariance}
+$\tr(\hat{Q}_{c,\mathbf{n}}^*) = \tr(\hat{Q}_{c,\mathbf{n}})
+= Q_{\mathbf{n},c}$.
+\end{proposition}
+
+\begin{proof}
+\[
+  \tr(\hat{Q}_{c,\mathbf{n}}^*)
+  = \prod_k \qpochn{q}{q}{n_k} \cdot \tr(\hat{G}_{c,\mathbf{n}}^*)
+  = \prod_k \qpochn{q}{q}{n_k} \cdot \tr(\hat{G}_{c,\mathbf{n}})
+  = Q_{\mathbf{n},c},
+\]
+using Proposition~\ref{prop:trace-invariance} and the fact that
+scalar factors commute with the adjoint.
+\end{proof}
+
+\begin{remark}[The adjoint is invisible at the polynomial level]
+The adjoint $\hat{Q}^*_{c,\mathbf{n}}$ produces the same
+cylindric Kostka polynomial as $\hat{Q}_{c,\mathbf{n}}$.
+Its content is visible only at the level of individual matrix
+elements (the kernel).
+\end{remark}
+
+
+%% ============================================================
+\section{The kernel and the positivity conjecture}
+\label{sec:kernel}
+%% ============================================================
+
+\subsection{The $Q$-kernel}
+
+\begin{definition}
+The \emph{$Q$-kernel} is:
+\begin{equation}\label{eq:kernel}
+  K_{c,\mathbf{n}}(\lambda, \mu)
+  := \langle s_\lambda,\, \hat{Q}_{c,\mathbf{n}}\, s_\mu \rangle
+  \;\colon\; \IP \times \IP \to \Q[q].
+\end{equation}
+\end{definition}
+
+The adjoint kernel is the transpose:
+$K_{c,\mathbf{n}}^*(\lambda, \mu) = K_{c,\mathbf{n}}(\mu, \lambda)$.
+The diagonal is unchanged: $K^*(\mu,\mu) = K(\mu,\mu)$.
+
+\subsection{The positivity conjecture}
+
+\begin{conjecture}[Multivariate positivity, operator form]
+\label{conj:positivity}
+For all $\mathbf{n} \in \N^T$ and all profiles $c$ with
+$d \not\equiv 0 \pmod{3}$:
+\begin{equation}\label{eq:positivity}
+  \tr(\hat{Q}_{c,\mathbf{n}})
+  = \sum_\mu K_{c,\mathbf{n}}(\mu, \mu)
+  \in \Z_{\geq 0}[q].
+\end{equation}
+\end{conjecture}
+
+This is a statement about the \textbf{sum of diagonal matrix
+elements}.  The conjecture does not require:
+\begin{enumerate}
+  \item individual diagonal elements
+    $K_{c,\mathbf{n}}(\mu, \mu)$ to be nonneg,
+  \item off-diagonal elements
+    $K_{c,\mathbf{n}}(\lambda, \mu)$ to have any sign, or
+  \item self-adjointness ($\hat{Q} = \hat{Q}^*$).
+\end{enumerate}
+
+\subsection{The symmetrised operator}
+
+The \emph{symmetrised} $Q$-operator
+\begin{equation}\label{eq:symmetrised}
+  \hat{Q}_{c,\mathbf{n}}^{\mathrm{sym}}
+  := \tfrac{1}{2}(\hat{Q}_{c,\mathbf{n}}
+     + \hat{Q}_{c,\mathbf{n}}^*)
+\end{equation}
+is self-adjoint by construction, with the same trace:
+$\tr(\hat{Q}^{\mathrm{sym}}) = Q_{\mathbf{n},c}$.
+
+Its kernel is symmetric:
+$K^{\mathrm{sym}}(\lambda, \mu)
+= \tfrac{1}{2}(K(\lambda,\mu) + K(\mu,\lambda))$.
+When restricted to a finite-dimensional subspace of $\La$, the
+eigenvalues of $\hat{Q}^{\mathrm{sym}}$ are real, and their sum
+equals $Q_{\mathbf{n},c}$.
+
+\begin{remark}[Positive semi-definiteness]
+If $\hat{Q}^{\mathrm{sym}}$ were positive semi-definite (all
+eigenvalues $\geq 0$), then $Q_{\mathbf{n},c} \geq 0$.  This is
+strictly stronger than the conjecture (it implies each diagonal
+element is nonneg, not just their sum).
+\end{remark}
+
+
+%% ============================================================
+\section{The commutation relations at Level~3}
+\label{sec:commutation-L3}
+%% ============================================================
+
+\subsection{Vertex operator commutation}
+
+The fundamental commutation relation (Schur case) is:
+\begin{equation}\label{eq:comm}
+  \Omega^*[Xu]\;\Omega[Xv]
+  = \frac{1}{1 - uv}\;\Omega[Xv]\;\Omega^*[Xu].
+\end{equation}
+Each commutation produces a scalar factor $1/(1-uv)
+= \sum_{m \geq 0}(uv)^m$, generating the face labels of the
+growth diagram.
+
+\subsection{Degree operator commutation}
+
+\begin{align}
+  D_w\, \Omega[Xu] &= \Omega[Xuw]\, D_w,
+    \label{eq:Dw-comm-up} \\
+  D_w\, \Omega^*[Xu] &= \Omega^*[Xu/w]\, D_w.
+    \label{eq:Dw-comm-down}
+\end{align}
+
+These are used in the proof of the Borodin product formula:
+commuting all $\Omega^*$ past all $\Omega$ produces scalar
+factors, and iterating the $D_w$ shift produces the infinite
+product.
+
+\subsection{Self-commutation}
+
+Since $(\Omega[Xv])^* = \Omega^*[Xv]$, the fundamental relation
+can be read as:
+\begin{equation}\label{eq:self-comm}
+  (\Omega[Xv])^*\;\Omega[Xv]
+  = \frac{1}{1 - v^2}\;\Omega[Xv]\;(\Omega[Xv])^*.
+\end{equation}
+The scalar factor $1/(1-v^2)$ measures the non-commutativity of
+$\Omega[Xv]$ with its own adjoint.
+
+
+%% ============================================================
+\section{From multivariate to bivariate}
+\label{sec:multi-to-bi}
+%% ============================================================
+
+The bivariate generating function $\GK_c(z,q) = \sum_\mathfrak{c}
+z^{\max(\mathfrak{c})} q^{|\mathfrak{c}|}$ is obtained from the
+multivariate one by the non-linear \emph{max extraction}:
+\[
+  z_0^{|\mu^0|}\, z_1^{|\mu^1|}\, z_2^{|\mu^2|}
+  \;\longmapsto\;
+  z^{\max_k \mu^k_1}\, q^{|\mathfrak{c}|}.
+\]
+
+This does not correspond to a specialisation of the $z_k$, so it
+does not lift to the operator level.  The bivariate $Q_{n,c}(q)$
+cannot be obtained from $\hat{Q}_{c,\mathbf{n}}$ by a simple
+specialisation.  The chain of implications is:
+\[
+  \text{Conjecture~\ref{conj:positivity}
+  (multivariate)}
+  \;\;\underset{\text{max projection}}{\Longrightarrow}\;\;
+  \text{Bivariate positivity (Warnaar, Conj.~2.7)}.
+\]
+
+
+%% ============================================================
+\section{Summary of Part~I}
+\label{sec:summary-I}
+%% ============================================================
+
+\begin{center}
+\begin{tabular}{l|l|l}
+\textbf{Object} & \textbf{Definition} & \textbf{Role} \\ \hline
+$\hat{O}_c$ &
+  $\prod_k G^{\pi_k}(u_k)\, D_w$ &
+  Level~3 operator on $\La$ \\[4pt]
+$\hat{O}_c^*$ &
+  $D_w \prod_k G^{\bar\pi_{T-1-k}}(u_{T-1-k})$ &
+  Reversed-complementary profile \\[4pt]
+$\hat{G}_c(\mathbf{z})$ &
+  $(w;w)_\infty \cdot \hat{O}_c(\mathbf{z})$ &
+  Corrected operator ($E$--$H$) \\[4pt]
+$\hat{G}_{c,\mathbf{n}}$ &
+  $[\mathbf{z}^\mathbf{n}]\,\hat{G}_c(\mathbf{z})$ &
+  Multi-index coefficient operator \\[4pt]
+$\hat{Q}_{c,\mathbf{n}}$ &
+  $\prod_k (q;q)_{n_k} \cdot \hat{G}_{c,\mathbf{n}}$ &
+  $Q$-operator (denominators cleared) \\[4pt]
+$\hat{Q}_{c,\mathbf{n}}^*$ &
+  $\prod_k (q;q)_{n_k} \cdot \hat{G}_{c,\mathbf{n}}^*$ &
+  Adjoint $Q$-operator \\[4pt]
+$K_{c,\mathbf{n}}(\lambda,\mu)$ &
+  $\langle s_\lambda, \hat{Q}_{c,\mathbf{n}}\, s_\mu \rangle$ &
+  $Q$-kernel \\[4pt]
+$Q_{\mathbf{n},c}$ &
+  $\sum_\mu K_{c,\mathbf{n}}(\mu,\mu) = \tr(\hat{Q}_{c,\mathbf{n}})$ &
+  Multivariate cylindric Kostka poly.
+\end{tabular}
+\end{center}
+
+\medskip
+Key structural facts:
+\begin{enumerate}
+  \item $\hat{O}_c^*$ corresponds to the reversed-complementary
+    profile $\bar\pi^{\mathrm{rev}}$.
+  \item $\tr(\hat{Q}^*) = \tr(\hat{Q}) = Q_{\mathbf{n},c}$: the
+    adjoint is invisible at the polynomial level.
+  \item The positivity conjecture is a statement about the trace
+    (sum of diagonal matrix elements).
+  \item $\hat{Q}^{\mathrm{sym}}
+    = \frac{1}{2}(\hat{Q} + \hat{Q}^*)$ is self-adjoint with the
+    same trace; positive semi-definiteness would imply the
+    conjecture but is strictly stronger.
+  \item The max extraction producing the bivariate $Q_{n,c}(q)$
+    does not lift to the operator level.
+\end{enumerate}
+
+
+%% ============================================================
+%% PART II: THE BIVARIATE Q-OPERATOR AND CASCADE COMMUTATORS
+%% ============================================================
+
+\part{The Bivariate $Q$-Operator and Cascade Commutators}
+
+
+%% ============================================================
+\section{The operators $P_m$ and $T_n$}
+\label{sec:PT}
+%% ============================================================
+
+We use the following mode operators on $\La$:
+\begin{itemize}
+  \item $P_m = h_m \cdot{}$: multiplication by the complete
+    homogeneous symmetric function $h_m$.  In generating function
+    form, $P(z) = \sum_{m \geq 0} P_m z^m = \Omega[Xz]$.
+  \item $T_n = P_n^* = \partial_{h_n}$: the adjoint of $P_n$ with
+    respect to the Hall inner product.  In generating function form,
+    $T(z) = \sum_{n \geq 0} T_n z^n$.
+\end{itemize}
+
+These satisfy the fundamental commutation relation
+(cf.~\cite{langer-masters}, \cite{COMMUTATION}):
+\begin{equation}\label{eq:fund-comm}
+  T(v)\, P(w) = \frac{1}{1 - vw}\; P(w)\, T(v).
+\end{equation}
+
+
+%% ============================================================
+\section{The bivariate $\mathbf{Q}(z)$ and $\mathbf{Q}^*(w)$}
+\label{sec:Q-bivariate}
+%% ============================================================
+
+\begin{definition}\label{def:Q-bi}
+The \emph{$Q$-operator} (bivariate version) for profile $c$ is the
+formal power series in $z$ with operator coefficients:
+\begin{equation}\label{eq:Q-bi}
+  \mathbf{Q}(z)
+  = \sum_{m \geq 0} Q_{m,c}(q)\, z^m\, P_m
+  = \sum_{m \geq 0} Q_{m,c}(q)\, z^m\, h_m \cdot{},
+\end{equation}
+where $Q_{0,c}(q) = 1$.
+
+The \emph{adjoint $Q$-operator} is:
+\begin{equation}\label{eq:Qstar-bi}
+  \mathbf{Q}^*(w)
+  = \sum_{n \geq 0} Q_{n,c}(q)\, w^n\, T_n
+  = \sum_{n \geq 0} Q_{n,c}(q)\, w^n\, \partial_{h_n}.
+\end{equation}
+\end{definition}
+
+\begin{remark}
+This is a fundamentally different construction from
+Part~I.  In Part~I, the $Q$-operator $\hat{Q}_{c,\mathbf{n}}$
+is a single operator whose \emph{trace} gives the polynomial
+$Q_{\mathbf{n},c}$.  Here, the polynomials $Q_m(q)$ appear as
+\emph{coefficients} multiplying the Pieri operators $P_m$ and their
+adjoints $T_n$.
+\end{remark}
+
+
+%% ============================================================
+\section{Commutation relations in the $h$-basis}
+\label{sec:h-comm}
+%% ============================================================
+
+\subsection{Mode-level commutation}
+
+Extracting the coefficient of $v^n w^m$ from~\eqref{eq:fund-comm}:
+
+\begin{proposition}\label{prop:TnPm}
+\begin{equation}\label{eq:TnPm}
+  T_n\, P_m = \sum_{k=0}^{\min(n,m)} P_{m-k}\, T_{n-k}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+From $T(v)\, P(w) = \frac{1}{1-vw}\, P(w)\, T(v)$, the right-hand
+side is
+\[
+  \Bigl(\sum_{k \geq 0} (vw)^k\Bigr)
+  \Bigl(\sum_a P_a\, w^a\Bigr)
+  \Bigl(\sum_b T_b\, v^b\Bigr)
+  = \sum_{k,a,b} P_a\, T_b\, v^{k+b}\, w^{k+a}.
+\]
+Setting $n = k + b$ and $m = k + a$ gives $k$ ranging from $0$
+to $\min(n,m)$, with $a = m - k$ and $b = n - k$.
+\end{proof}
+
+\begin{corollary}\label{cor:commutator}
+The commutator is:
+\begin{equation}\label{eq:comm-TnPm}
+  [T_n, P_m] = \sum_{k=1}^{\min(n,m)} P_{m-k}\, T_{n-k}.
+\end{equation}
+In particular:
+\begin{align}
+  [T_1, P_1] &= \mathrm{id},  \label{eq:T1P1} \\
+  [T_n, P_n] &= P_{n-1} T_{n-1} + P_{n-2} T_{n-2}
+    + \cdots + \mathrm{id}.  \label{eq:TnPn}
+\end{align}
+\end{corollary}
+
+\begin{remark}[Comparison with power sum basis]
+In the power sum basis, $[\frac{1}{n}\partial_{p_n},\, p_m \cdot]
+= \delta_{n,m}$ (the Heisenberg algebra).  The $h$-basis introduces
+\emph{cascade terms} $P_{m-k} T_{n-k}$ for intermediate values
+of~$k$.  These cross-level terms are the key structural feature.
+\end{remark}
+
+
+\subsection{Lowering applied to $h_m$}
+
+\begin{lemma}\label{lem:Tn-hm}
+\begin{equation}\label{eq:Tn-hm}
+  T_n(h_m) =
+  \begin{cases}
+    h_{m-n} & \text{if } m \geq n, \\
+    0 & \text{if } m < n.
+  \end{cases}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+$T_n(h_m) = T_n P_m(1) = \sum_{k=0}^{\min(n,m)} P_{m-k} T_{n-k}(1)$.
+Since $T_j(1) = 0$ for $j \geq 1$, only $k = n$ survives
+(when $n \leq m$), giving $P_{m-n}(1) = h_{m-n}$.
+\end{proof}
+
+
+%% ============================================================
+\section{Operator products applied to the vacuum}
+\label{sec:products}
+%% ============================================================
+
+\subsection{The product $\mathbf{Q}^*(w)\,\mathbf{Q}(z)$}
+
+\begin{proposition}\label{prop:QstarQ}
+\begin{equation}\label{eq:QstarQ-vacuum}
+  \mathbf{Q}^*(w)\,\mathbf{Q}(z)\,[1]
+  = \sum_{a \geq 0} C_a(zw)\, z^a\, h_a,
+\end{equation}
+where $C_a(t) := \sum_{n \geq 0} Q_{a+n}(q)\, Q_n(q)\, t^n$ is
+the cross-correlation function.
+\end{proposition}
+
+\begin{proof}
+By~\eqref{eq:Q-bi},
+$\mathbf{Q}(z)[1] = \sum_m Q_m z^m h_m$.  Applying $\mathbf{Q}^*(w)$:
+\begin{align*}
+  \mathbf{Q}^*(w)\bigl[\sum_m Q_m z^m h_m\bigr]
+  &= \sum_{m,n} Q_m Q_n\, z^m w^n\, T_n(h_m) \\
+  &= \sum_{\substack{m,n \\ n \leq m}} Q_m Q_n\, z^m w^n\, h_{m-n}
+    \qquad\text{(by Lemma~\ref{lem:Tn-hm})} \\
+  &= \sum_{a \geq 0} h_a\, z^a \sum_{n \geq 0}
+    Q_{a+n}\, Q_n\, (zw)^n,
+\end{align*}
+substituting $a = m - n$.
+\end{proof}
+
+
+\subsection{The product $\mathbf{Q}(z)\,\mathbf{Q}^*(w)$}
+
+Since $T_n(1) = 0$ for $n \geq 1$:
+\begin{equation}\label{eq:QQstar-vacuum}
+  \mathbf{Q}(z)\,\mathbf{Q}^*(w)\,[1]
+  = \mathbf{Q}(z)\,[1]
+  = \sum_{m \geq 0} Q_m\, z^m\, h_m.
+\end{equation}
+
+
+\subsection{The commutator on the vacuum}
+
+\begin{theorem}\label{thm:commutator-vacuum}
+\begin{equation}\label{eq:comm-vacuum}
+  [\mathbf{Q}(z),\, \mathbf{Q}^*(w)]\,[1]
+  = -\sum_{a \geq 0} z^a\, h_a
+    \sum_{n \geq 1} Q_{a+n}\, Q_n\, (zw)^n.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Subtracting~\eqref{eq:QstarQ-vacuum}
+from~\eqref{eq:QQstar-vacuum}:
+\begin{align*}
+  [\mathbf{Q}(z), \mathbf{Q}^*(w)][1]
+  &= \sum_a Q_a z^a h_a
+    - \sum_a z^a h_a \sum_{n \geq 0} Q_{a+n} Q_n (zw)^n \\
+  &= \sum_a z^a h_a \bigl(Q_a - Q_a Q_0
+    - \textstyle\sum_{n \geq 1} Q_{a+n} Q_n (zw)^n\bigr).
+\end{align*}
+Since $Q_0 = 1$, the first two terms cancel.
+\end{proof}
+
+
+%% ============================================================
+\section{The vacuum expectation value}
+\label{sec:vev}
+%% ============================================================
+
+Taking the Hall inner product of~\eqref{eq:QstarQ-vacuum} with $1$
+(extracting the $h_0$ coefficient):
+
+\begin{corollary}\label{cor:vev}
+\begin{equation}\label{eq:vev}
+  \langle 1 \mid \mathbf{Q}^*(w)\,\mathbf{Q}(z) \mid 1 \rangle
+  = C_0(zw) = \sum_{n \geq 0} Q_n(q)^2\, (zw)^n.
+\end{equation}
+\end{corollary}
+
+\begin{remark}
+If each $Q_n(q) \in \N[q]$ (the positivity conjecture), then
+$Q_n(q)^2 \in \N[q]$ and the vacuum expectation value is manifestly
+$q$-positive.  The converse does not hold: $Q_n^2 \in \N[q]$ does
+not imply $Q_n \in \N[q]$.
+\end{remark}
+
+
+%% ============================================================
+\section{The cross-correlation functions}
+\label{sec:cross-corr}
+%% ============================================================
+
+\begin{definition}\label{def:Ca}
+The \emph{cross-correlation functions} are:
+\begin{equation}\label{eq:Ca}
+  C_a(t) = \sum_{n \geq 0} Q_{a+n}(q)\, Q_n(q)\, t^n
+  \qquad (a \geq 0).
+\end{equation}
+\end{definition}
+
+\subsection{$d = 2$ (Rogers--Ramanujan)}
+
+For $c = (1,1,0)$, $Q_n = q^{n^2}$, so:
+\begin{equation}\label{eq:Ca-RR}
+  C_a(t) = q^{a^2} \sum_{n \geq 0} q^{2n^2 + 2an}\, t^n.
+\end{equation}
+The vacuum expectation is the theta-like sum
+$C_0(t) = \sum_{n \geq 0} q^{2n^2}\, t^n$.
+
+
+\subsection{$d = 4$}
+
+For $c = (2,2,0)$, the first few polynomials are:
+\begin{align*}
+  Q_0 &= 1, \\
+  Q_1 &= q^2 + q^3 + q^4 + q^5.
+\end{align*}
+The vacuum expectation begins:
+$C_0(t) = 1 + (q^4 + 2q^5 + 3q^6 + 4q^7 + 3q^8
++ 2q^9 + q^{10})\, t + \cdots$
+
+
+%% ============================================================
+\section{The full commutator on $\La$}
+\label{sec:full-comm}
+%% ============================================================
+
+The full commutator of the $Q$-operators acting on a general
+symmetric function $f \in \La$ takes the form:
+
+\begin{theorem}\label{thm:full-comm}
+\begin{equation}\label{eq:full-comm}
+  [\mathbf{Q}(z), \mathbf{Q}^*(w)]
+  = -\sum_{a,b \geq 0} P_a\, T_b
+    \sum_{k \geq 1} Q_{a+k}\, Q_{b+k}\, z^{a+k}\, w^{b+k}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Using the commutation $T_n P_m = \sum_{j=0}^{\min(n,m)} P_{m-j}
+T_{n-j}$ from Proposition~\ref{prop:TnPm}:
+\begin{align*}
+  \mathbf{Q}^*(w)\, \mathbf{Q}(z)
+  &= \sum_{m,n} Q_m Q_n\, z^m w^n\, T_n P_m \\
+  &= \sum_{m,n} Q_m Q_n\, z^m w^n
+    \sum_{j=0}^{\min(n,m)} P_{m-j}\, T_{n-j}.
+\end{align*}
+Setting $a = m - j$, $b = n - j$, $k = j$:
+\[
+  \mathbf{Q}^*(w)\, \mathbf{Q}(z)
+  = \sum_{a,b \geq 0} P_a\, T_b\; z^a w^b
+    \sum_{k \geq 0} Q_{a+k}\, Q_{b+k}\, (zw)^k.
+\]
+The $\mathbf{Q}(z)\, \mathbf{Q}^*(w)$ product has only the
+$k = 0$ term (since $P_a$ and $T_b$ act independently):
+\[
+  \mathbf{Q}(z)\, \mathbf{Q}^*(w)
+  = \sum_{a,b \geq 0} Q_a\, Q_b\; z^a w^b\; P_a\, T_b.
+\]
+Subtracting gives the commutator with the $k = 0$ terms cancelling.
+\end{proof}
+
+\begin{remark}[Cascade structure]
+The coefficient of $P_a T_b$ in the commutator is
+\[
+  -z^a w^b \sum_{k \geq 1} Q_{a+k}(q)\, Q_{b+k}(q)\, (zw)^k,
+\]
+involving \emph{shifted} cross-correlations.  The presence of terms
+with $a \neq b$ is the key difference from the power sum basis
+formulation, where the commutator is diagonal:
+$[\sum Q_m z^m p_m,\, \sum Q_n w^n \frac{1}{n}\partial_{p_n}]
+= \sum_{n \geq 1} Q_n^2 (zw)^n$.
+\end{remark}
+
+\begin{remark}[Cross-level coupling and the involution]
+The $P_a T_b$ terms with $a \neq b$ couple different depth levels of
+the cylindric partition.  In the involution framework
+(see~\cite{FIRST_ATTEMPT}), the involution must pair elements at
+level~$m$ with elements at level~$m'$.  The cascade terms provide
+the algebraic mechanism for such cross-level interactions.
+\end{remark}
+
+
+%% ============================================================
+%% PART III: THE GENERALIZED LOCAL RULE
+%% ============================================================
+
+\part{The Generalized Local Rule}
+
+
+%% ============================================================
+\section{The standard algebra--bijection correspondence}
+\label{sec:std-correspondence}
+%% ============================================================
+
+We begin by recalling the precise dictionary between the algebraic
+framework (commutation relations) and the bijective framework
+(growth diagram local rules).  This dictionary is the foundation on
+which the $Q$-enriched generalisation is built.
+
+\subsection{The Burge local rule as a commutation step}
+
+The fundamental commutation relation~\eqref{eq:fund-comm},
+\[
+  T(v)\, P(w) = \frac{1}{1 - vw}\; P(w)\, T(v),
+\]
+is \emph{equivalent} to the Burge local rule at the mode level.
+Extracting the coefficient of $v^n w^m$ from both sides gives the
+cascade relation (Proposition~\ref{prop:TnPm}):
+\begin{equation}\label{eq:cascade-recap}
+  T_n\, P_m = \sum_{k=0}^{\min(n,m)} P_{m-k}\, T_{n-k}.
+\end{equation}
+Each term in the sum corresponds to one possible output of the
+local rule: given an input diamond $(\nu;\, \alpha, \beta)$ where
+$|\alpha| - |\nu| = m$ and $|\beta| - |\nu| = n$, the cascade
+parameter $k$ determines the output
+$\lambda = \mathfrak{U}_{\alpha,\beta}(k,\nu)$ with
+$|\lambda| = |\alpha| + |\beta| - |\nu| + k$.
+
+\begin{remark}[The dictionary]
+\label{rem:dictionary}
+The correspondence between the algebraic proof and the bijective
+proof is summarised as follows
+(cf.~\cite{COMMUTATION}, Remark~8):
+\begin{center}
+\begin{tabular}{l|l}
+\textbf{Algebraic operation} & \textbf{Bijective operation} \\
+\hline
+Commuting $T(v)$ past $P(w)$ &
+  Applying the local rule $\mathfrak{U}_{\alpha,\beta}$ \\[3pt]
+Scalar factor $\frac{1}{1-vw} = \sum_k (vw)^k$ &
+  Face label $k \in \Z_{\geq 0}$ \\[3pt]
+Cascade parameter $k$ &
+  Overlap $|A \cap B|$ in conjugate coordinates \\[3pt]
+Cyclic invariance of trace &
+  Rotation of the cylinder \\[3pt]
+Commuting all $T$'s past all $P$'s &
+  Full growth diagram computation \\[3pt]
+$D_w$ shift: $D_w P(u) = P(uw) D_w$ &
+  Depth increment (adding base partition)
+\end{tabular}
+\end{center}
+\end{remark}
+
+\subsection{Face labels and the generating function}
+
+In the standard growth diagram for profile~$c$, the face labels
+are non-negative integers $k \in \Z_{\geq 0}$, each contributing
+weight~$1$ regardless of the value of~$k$.  The face-label
+generating function for a single diamond is therefore:
+\begin{equation}\label{eq:face-gf-std}
+  \sum_{k \geq 0} t^k = \frac{1}{1-t},
+\end{equation}
+which is precisely the scalar factor arising from commuting $T(v)$
+past $P(w)$ with $t = vw$.  This is \emph{universal}: it depends
+neither on the profile~$c$ nor on the polynomials~$Q_n(q)$.
+
+
+%% ============================================================
+\section{The $Q$-kernel}
+\label{sec:Q-kernel}
+%% ============================================================
+
+\subsection{Derivation from the cascade commutator}
+
+The cascade commutator (Theorem~\ref{thm:full-comm}) showed that
+the product $\mathbf{Q}^*(w)\, \mathbf{Q}(z)$ takes the form:
+\begin{equation}\label{eq:QstarQ-full}
+  \mathbf{Q}^*(w)\, \mathbf{Q}(z)
+  = \sum_{a,b \geq 0} P_a\, T_b\; z^a w^b
+    \sum_{k \geq 0} Q_{a+k}\, Q_{b+k}\, (zw)^k.
+\end{equation}
+This motivates extracting the inner sum as an independent object.
+
+\begin{definition}[$Q$-kernel]
+\label{def:Phi}
+The \emph{$Q$-kernel} is the bivariate function:
+\begin{equation}\label{eq:Phi}
+  \Phi_{a,b}(t)
+  := \sum_{k \geq 0} Q_{a+k}(q)\, Q_{b+k}(q)\, t^k
+  \qquad (a, b \geq 0),
+\end{equation}
+where $Q_n = Q_{n,c}(q)$ are the cylindric Kostka polynomials for
+profile~$c$.
+\end{definition}
+
+With this notation, the cascade product becomes:
+\begin{equation}\label{eq:QstarQ-Phi}
+  \mathbf{Q}^*(w)\, \mathbf{Q}(z)
+  = \sum_{a,b \geq 0} P_a\, T_b\; z^a w^b\; \Phi_{a,b}(zw),
+\end{equation}
+and the commutator (Theorem~\ref{thm:full-comm}) isolates the
+$k \geq 1$ terms:
+\begin{equation}\label{eq:comm-Phi}
+  [\mathbf{Q}(z),\, \mathbf{Q}^*(w)]
+  = -\sum_{a,b \geq 0} P_a\, T_b\; z^a w^b\;
+    \bigl(\Phi_{a,b}(zw) - Q_a Q_b\bigr).
+\end{equation}
+
+\subsection{Relation to the cross-correlations}
+
+The $Q$-kernel unifies the cross-correlation functions from
+Section~\ref{sec:cross-corr}:
+
+\begin{proposition}\label{prop:Phi-Ca}
+\begin{equation}\label{eq:Phi-Ca}
+  \Phi_{a,0}(t) = C_a(t) = \sum_{n \geq 0} Q_{a+n}\, Q_n\, t^n
+  \qquad (a \geq 0).
+\end{equation}
+In particular, $\Phi_{0,0}(t) = C_0(t) = \sum_{n \geq 0}
+Q_n^2\, t^n$ is the vacuum expectation value.
+\end{proposition}
+
+\begin{proof}
+Set $b = 0$ in~\eqref{eq:Phi} and use $Q_0 = 1$.
+\end{proof}
+
+\subsection{Properties of the $Q$-kernel}
+
+\begin{proposition}\label{prop:Phi-properties}
+The $Q$-kernel satisfies:
+\begin{enumerate}
+  \item \emph{Initial value.}\;
+    $\Phi_{a,b}(0) = Q_a\, Q_b$.
+  \item \emph{Symmetry.}\;
+    $\Phi_{a,b}(t) = \Phi_{b,a}(t)$.
+  \item \emph{Vacuum.}\;
+    $\Phi_{0,0}(t) = C_0(t)$.
+  \item \emph{Cross-correlation.}\;
+    $\Phi_{a,0}(t) = C_a(t)$.
+  \item \emph{Shifted factorisation.}\;
+    $\Phi_{a,b}(t) = Q_a Q_b + t\, \Phi_{a+1,b+1}(t)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Properties (1)--(4) follow directly from the definition.
+For~(5), separate the $k = 0$ term:
+\[
+  \Phi_{a,b}(t)
+  = Q_a Q_b + \sum_{k \geq 1} Q_{a+k} Q_{b+k}\, t^k
+  = Q_a Q_b + t \sum_{k \geq 0} Q_{a+1+k} Q_{b+1+k}\, t^k
+  = Q_a Q_b + t\, \Phi_{a+1,b+1}(t). \qedhere
+\]
+\end{proof}
+
+\begin{remark}[The $Q$-kernel as a deformation of $1/(1-t)$]
+\label{rem:deformation}
+When $Q_n = 1$ for all~$n$ (the $d = 1$ case),
+$\Phi_{a,b}(t) = \sum_{k \geq 0} t^k = 1/(1-t)$, independent
+of~$a$ and~$b$.  For general profiles, $\Phi_{a,b}(t)$ is a
+\emph{profile-dependent} deformation of this universal kernel.
+The shifted factorisation in property~(5) can be iterated:
+\[
+  \Phi_{a,b}(t)
+  = \sum_{j=0}^{N-1} Q_{a+j}\, Q_{b+j}\, t^j
+    + t^N \Phi_{a+N, b+N}(t),
+\]
+so the $Q$-kernel is determined by the sequence
+$(Q_{a+k} Q_{b+k})_{k \geq 0}$ in the same way that $1/(1-t)$ is
+determined by the constant sequence $(1, 1, 1, \ldots)$.
+\end{remark}
+
+
+%% ============================================================
+\section{The generalised local rule}
+\label{sec:gen-local-rule}
+%% ============================================================
+
+\subsection{Definition}
+
+The standard Burge local rule assigns to each input diamond
+$(\nu;\, \alpha, \beta)$ and cascade parameter $k \geq 0$ an
+output partition $\lambda = \mathfrak{U}_{\alpha,\beta}(k,\nu)$
+with weight $|\lambda| = |\alpha| + |\beta| - |\nu| + k$.
+In the growth diagram, the cascade parameter becomes the face
+label, and each label carries uniform weight~$1$.
+
+The $Q$-enriched local rule uses the \emph{same} partition
+geometry but assigns \emph{non-uniform} weights to the cascade
+parameter.
+
+\begin{definition}[$Q$-enriched local rule]
+\label{def:Q-local-rule}
+Given an input diamond $(\nu;\, \alpha, \beta)$ with
+$|\alpha| - |\nu| = a$ and $|\beta| - |\nu| = b$, the
+\emph{$Q$-enriched local rule} assigns to the cascade
+parameter~$k$ the weight:
+\begin{equation}\label{eq:Q-face-weight}
+  \mathrm{wt}(k;\, a, b) = Q_{a+k}(q) \cdot Q_{b+k}(q).
+\end{equation}
+The output partition is the same as in the standard rule:
+$\lambda = \mathfrak{U}_{\alpha,\beta}(k,\nu)$, with
+$|\lambda| = |\alpha| + |\beta| - |\nu| + k$.
+\end{definition}
+
+The face-label generating function for the $Q$-enriched rule is
+therefore:
+\begin{equation}\label{eq:face-gf-Q}
+  \sum_{k \geq 0} \mathrm{wt}(k;\, a, b)\, t^k
+  = \sum_{k \geq 0} Q_{a+k}\, Q_{b+k}\, t^k
+  = \Phi_{a,b}(t).
+\end{equation}
+This replaces the universal $1/(1-t)$ of the standard rule with
+the profile-dependent $Q$-kernel.
+
+\begin{remark}[Weight depends on context]
+\label{rem:context-weight}
+In the standard rule, the face-label generating function $1/(1-t)$
+is the same for every diamond, regardless of the strip sizes $a$
+and~$b$.  In the $Q$-enriched rule, the generating function
+$\Phi_{a,b}(t)$ depends on the strip sizes.  This means the
+$Q$-enriched rule is \emph{context-sensitive}: the weight assigned
+to a face label depends on the horizontal and vertical strips
+entering the diamond.
+\end{remark}
+
+\subsection{Weight preservation}
+
+The $Q$-enriched rule preserves the weight
+condition~\eqref{eq:cascade-recap} of the standard rule.
+
+\begin{proposition}\label{prop:weight-preservation}
+Let $(\nu;\, \alpha, \beta)$ be an input diamond with
+$|\alpha| - |\nu| = a$ and $|\beta| - |\nu| = b$.  For each
+cascade parameter $k \geq 0$, the output
+$\lambda = \mathfrak{U}_{\alpha,\beta}(k,\nu)$ satisfies:
+\begin{equation}\label{eq:weight-balance}
+  |\lambda| = |\alpha| + |\beta| - |\nu| + k = a + b + |\nu| + k.
+\end{equation}
+This is a property of the Burge local rule itself and is
+independent of the weight assignment.
+\end{proposition}
+
+\subsection{Invertibility}
+
+\begin{proposition}\label{prop:Q-invertible}
+The $Q$-enriched local rule is invertible: given
+$(\lambda;\, \alpha, \beta)$, the cascade parameter $k$ is
+uniquely determined by
+$k = |\lambda| - |\alpha| - |\beta| + |\nu|$, and the inner
+partition $\nu$ is recovered by the inverse Burge rule
+$\nu = \mathfrak{U}_{\alpha,\beta}^{-1}(k, \lambda)$.
+\end{proposition}
+
+\begin{proof}
+Invertibility is a property of the underlying Burge local rule
+(see~\cite{UNDERLYING_SET}, Proposition~2.20): the map
+$(\nu, k) \mapsto \lambda$ is a bijection from
+$\{(\nu, k) : \nu \in D(\alpha) \cap D(\beta),\; k \geq 0\}$
+to $U(\alpha) \cap U(\beta)$.  The $Q$-enriched rule uses the
+same bijection; only the weight assignment changes.
+\end{proof}
+
+
+%% ============================================================
+\section{The $Q$-enriched growth diagram}
+\label{sec:Q-growth-diagram}
+%% ============================================================
+
+\subsection{Standard growth diagrams and ALCDs}
+
+In the standard growth diagram for profile~$c$, one fills a
+cylindric grid with partitions using the Burge local rule at each
+face.  The face labels are non-negative integers, and the
+collection of all face labels forms an Arbitrarily Labelled
+Cylindric Diagram ($\ALCD$).  The key theorem
+(cf.~\cite{UNDERLYING_SET}, Theorem~2.21) is that this gives a
+weight-preserving bijection:
+\begin{equation}\label{eq:bijection-std}
+  \psi_c \colon (\IP,\, \ALCD(c))
+  \;\xrightarrow{\;\sim\;}\;
+  \CPP(c),
+\end{equation}
+where $\IP$ denotes the set of all integer partitions (the base
+partition $\gamma$).  The multivariate generating function is:
+\begin{equation}\label{eq:GK-std}
+  \GK_c(\mathbf{z})
+  = \frac{1}{(w;\,w)_\infty} \cdot
+    \sum_{\mathfrak{d} \in \ALCD(c)}
+    \prod_{k=0}^{T-1} z_k^{|\mathrm{diag}(k)|_\mathfrak{d}}.
+\end{equation}
+
+\subsection{The $Q$-enriched growth diagram}
+
+\begin{definition}[$Q$-ALCD]
+\label{def:Q-ALCD}
+A \emph{$Q$-weighted Arbitrarily Labelled Cylindric Diagram}
+($Q$-$\ALCD$) is an $\ALCD$ $\mathfrak{d}$ together with the
+weight assignment:
+\begin{equation}\label{eq:Q-ALCD-weight}
+  \mathrm{wt}_Q(\mathfrak{d})
+  := \prod_{\text{faces } f}
+     Q_{a_f + \mathfrak{d}(f)}(q) \cdot Q_{b_f + \mathfrak{d}(f)}(q),
+\end{equation}
+where for each face $f$, the values $a_f$ and $b_f$ are the
+horizontal and vertical strip sizes entering that face.
+\end{definition}
+
+The $Q$-enriched growth diagram uses the same partition geometry as
+the standard one---the same Burge local rule, the same set of
+valid $\ALCD$s---but assigns the $Q$-dependent weight to each
+face rather than the uniform weight~$1$.
+
+\begin{remark}[Two levels of growth diagram]
+\label{rem:two-levels}
+This gives a natural hierarchy:
+\begin{center}
+\begin{tabular}{lll}
+\textbf{Level} & \textbf{Face weight} &
+  \textbf{Generating function} \\[2pt]
+\hline
+Standard & $1$ (uniform) &
+  Borodin product $\GK_c$ \\[3pt]
+$Q$-enriched & $Q_{a+k} \cdot Q_{b+k}$ &
+  Cross-correlations $\Phi_{a,b}$
+\end{tabular}
+\end{center}
+The standard growth diagram produces the Borodin product formula
+for $\GK_c$ (summing uniformly over all ALCDs), while the
+$Q$-enriched growth diagram produces the cascade product
+$\mathbf{Q}^*(w)\, \mathbf{Q}(z)$, whose coefficients are the
+$Q$-kernels $\Phi_{a,b}(zw)$.
+\end{remark}
+
+\subsection{The commutator as obstruction}
+
+The commutator $[\mathbf{Q}(z),\, \mathbf{Q}^*(w)]$
+from~\eqref{eq:comm-Phi} measures the extent to which the
+$Q$-enriched creation ($\mathbf{Q}$) and annihilation
+($\mathbf{Q}^*$) fail to commute:
+\begin{equation}\label{eq:comm-obstruction}
+  [\mathbf{Q}(z),\, \mathbf{Q}^*(w)]
+  = -\sum_{a,b \geq 0} P_a\, T_b\; z^a w^b\;
+    \bigl(\Phi_{a,b}(zw) - Q_a Q_b\bigr).
+\end{equation}
+The obstruction vanishes (the operators commute) if and only if
+$\Phi_{a,b}(t) = Q_a Q_b$ for all $a, b$, which happens precisely
+when $Q_n = 0$ for all $n \geq 1$.  In the bijective framework,
+the commutator terms with $k \geq 1$ correspond to face labels
+that create ``cross-level interactions'' between different depths
+of the cylindric partition.
+
+
+%% ============================================================
+\section{Special cases and examples}
+\label{sec:special-cases}
+%% ============================================================
+
+
+\subsection{$d = 1$: recovery of the standard rule}
+
+For $d = 1$ (profiles $(1,0,0)$ and $(0,1,0)$), $Q_n(q) = 1$
+for all~$n$.  The $Q$-kernel becomes:
+\begin{equation}\label{eq:Phi-d1}
+  \Phi_{a,b}(t) = \sum_{k \geq 0} 1 \cdot 1 \cdot t^k
+  = \frac{1}{1-t}.
+\end{equation}
+This is independent of $a$ and $b$: every face carries the same
+generating function.  The $Q$-enriched local rule reduces to the
+standard Burge local rule, confirming internal consistency.
+
+
+\subsection{$d = 2$ (Rogers--Ramanujan)}
+
+For $c = (1,1,0)$, $Q_n = q^{n^2}$ (the first Rogers--Ramanujan
+profile).  The face weight for cascade parameter~$k$ is:
+\begin{equation}\label{eq:face-weight-RR}
+  \mathrm{wt}(k;\, a, b) = q^{(a+k)^2 + (b+k)^2}.
+\end{equation}
+The $Q$-kernel is:
+\begin{equation}\label{eq:Phi-RR}
+  \Phi_{a,b}(t)
+  = \sum_{k \geq 0} q^{(a+k)^2 + (b+k)^2}\, t^k
+  = q^{a^2 + b^2} \sum_{k \geq 0}
+    q^{2k^2 + 2k(a+b)}\, t^k.
+\end{equation}
+
+\begin{example}[$\Phi_{0,0}$ and $\Phi_{1,0}$ for $d = 2$]
+\label{ex:Phi-d2}
+\begin{align}
+  \Phi_{0,0}(t)
+  &= \sum_{k \geq 0} q^{2k^2}\, t^k
+  = 1 + q^2\, t + q^8\, t^2 + q^{18}\, t^3 + \cdots,
+    \label{eq:Phi00-d2} \\
+  \Phi_{1,0}(t)
+  &= q\, \sum_{k \geq 0} q^{2k^2 + 2k}\, t^k
+  = q + q^5\, t + q^{13}\, t^2 + \cdots.
+    \label{eq:Phi10-d2}
+\end{align}
+The exponents $2k^2$ in $\Phi_{0,0}$ and $1 + 2k^2 + 2k
+= (2k+1)^2/2 + 1/2$ in $\Phi_{1,0}$ reflect the
+\emph{quadratic form} structure underlying the Rogers--Ramanujan
+identities.
+\end{example}
+
+For the second profile $c = (2,0,0)$, $Q_n = q^{n(n+1)}$, and
+the face weight is $q^{(a+k)(a+k+1) + (b+k)(b+k+1)}$.  The same
+quadratic structure appears.
+
+\subsection{$d = 4$, $c = (2,2,0)$}
+
+Here $Q_0 = 1$, $Q_1 = q^2 + q^3 + q^4 + q^5$, and the
+$Q$-kernel is no longer a monomial product.
+
+\begin{example}[$\Phi_{1,0}$ and $\Phi_{1,1}$ for $c = (2,2,0)$]
+\label{ex:Phi-d4}
+\begin{align}
+  \Phi_{1,0}(t) &= C_1(t)
+  = Q_1 + Q_2\, Q_1\, t + Q_3\, Q_2\, t^2 + \cdots
+    \notag \\
+  &= (q^2 + q^3 + q^4 + q^5)
+    + Q_2(q^2 + q^3 + q^4 + q^5)\, t + \cdots,
+    \label{eq:Phi10-d4} \\[6pt]
+  \Phi_{1,1}(t)
+  &= Q_1^2 + Q_2^2\, t + Q_3^2\, t^2 + \cdots
+    \notag \\
+  &= (q^4 + 2q^5 + 3q^6 + 4q^7 + 3q^8 + 2q^9 + q^{10})
+    + Q_2^2\, t + \cdots.
+    \label{eq:Phi11-d4}
+\end{align}
+Note that $Q_1^2 = (q^2 + q^3 + q^4 + q^5)^2$ is itself a
+polynomial with positive coefficients---this is a consequence of
+$Q_1 \in \Z_{\geq 0}[q]$ (confirmed by computation for this
+profile).
+\end{example}
+
+
+%% ============================================================
+\section{Connection to the involution}
+\label{sec:connection-involution}
+%% ============================================================
+
+\subsection{The peel/glue mechanism with $Q$-weights}
+
+The generalised local rule provides a concrete mechanism for the
+sign-reversing involution approach to proving positivity.  Recall
+from~\cite{UNDERLYING_SET} that the ground set
+$\mathcal{G}_{n,c}$ for the involution consists of pairs
+$(S, \mathfrak{d})$ where $S \subseteq \{1, \ldots, n\}$ with
+$|S| = j$ and $\mathfrak{d} \in \ALCD_{n-j}(c)$, with sign
+$(-1)^j$ and weight $q^{\sigma(S) + |\mathfrak{d}|}$.
+
+In the $Q$-enriched framework, the face labels of $\mathfrak{d}$
+carry the additional weight $\prod_f Q_{a_f + \mathfrak{d}(f)}
+\cdot Q_{b_f + \mathfrak{d}(f)}$.  The involution must pair
+elements with opposite signs, and the unpaired elements (fixed
+points with $j = 0$) should contribute exactly $Q_{n,c}(q)$.
+
+\subsection{The $Q$-kernel as coupling constant}
+
+The $Q$-kernel $\Phi_{a,b}(t)$ quantifies the coupling between
+different depth levels.  The $k = 0$ term $Q_a Q_b$ represents
+the ``uncoupled'' contribution (the product of independent
+$Q$-weights), while the terms with $k \geq 1$ represent
+\emph{cross-level interactions}.
+
+From~\eqref{eq:comm-Phi}, the commutator isolates precisely these
+cross-level terms:
+\[
+  \Phi_{a,b}(t) - Q_a Q_b
+  = t\, \Phi_{a+1, b+1}(t)
+  = \sum_{k \geq 1} Q_{a+k}\, Q_{b+k}\, t^k.
+\]
+In the language of the involution: the terms with $k \geq 1$ are
+the contributions that the sign-reversing involution must cancel.
+The commutator provides the algebraic bookkeeping for these
+cancellations.
+
+\subsection{Non-negativity and the conjecture}
+
+\begin{proposition}\label{prop:Phi-nonneg}
+If $Q_n(q) \in \Z_{\geq 0}[q]$ for all $n$ (Warnaar's
+Conjecture~2.7), then for all $a, b, k$:
+\[
+  Q_{a+k}(q) \cdot Q_{b+k}(q) \in \Z_{\geq 0}[q],
+\]
+and consequently every coefficient of $\Phi_{a,b}(t)$ lies in
+$\Z_{\geq 0}[q]$.  All face labels in the $Q$-enriched growth
+diagram carry non-negative $q$-weights.
+\end{proposition}
+
+This is immediate from the closure of $\Z_{\geq 0}[q]$ under
+multiplication, but it highlights an important structural point:
+the positivity conjecture ensures that the $Q$-enriched growth
+diagram has a combinatorial interpretation (all weights are
+non-negative).  Conversely, if any $Q_n$ has a negative
+coefficient, the corresponding face weights in the $Q$-enriched
+diagram become signed, and the combinatorial interpretation
+breaks down.
+
+\subsection{Open questions}
+
+\begin{enumerate}
+  \item \textbf{Connecting the two frameworks.}
+    Part~I defines $\hat{Q}_{c,\mathbf{n}}$ (an operator whose
+    \emph{trace} gives $Q_{\mathbf{n},c}$), while Part~II defines
+    $\mathbf{Q}(z)$ (an operator whose \emph{coefficients} are the
+    $Q_{n,c}$).  Is there a natural relationship between
+    $\hat{Q}_{c,\mathbf{n}}$ and the mode operators $Q_m P_m$?
+
+  \item \textbf{Positive semi-definiteness.}
+    Can the positivity of $Q_{n,c}(q)$ be deduced from
+    positive semi-definiteness of $\hat{Q}^{\mathrm{sym}}$ or
+    from positive-definiteness of
+    $\mathbf{Q}^*(w)\mathbf{Q}(z)$?
+
+  \item \textbf{Closed forms for $\Phi_{a,b}(t)$.}
+    The $Q$-kernel $\Phi_{a,b}(t) = \sum Q_{a+k} Q_{b+k}\, t^k$
+    involves shifted products of $Q$-polynomials.  For $d = 2$, it
+    reduces to a theta-like sum~\eqref{eq:Phi-RR}.  Does
+    $\Phi_{a,b}(t)$ have a closed-form expression in terms of the
+    Borodin product or other known $q$-series for general
+    profiles?
+
+  \item \textbf{Matrix elements and the involution.}
+    The matrix elements
+    $\langle s_\lambda \mid P_a T_b \mid s_\mu \rangle$ count
+    pairs of horizontal strips with common inner shape.  Can these
+    be used to construct the sign-reversing involution, using the
+    $Q$-kernel as the coupling constant?
+
+  \item \textbf{The $(r,t)$-extension.}
+    Both frameworks should extend to the Macdonald setting
+    (replacing Schur by Macdonald polynomials, Pieri coefficients
+    by $\varphi_{\lambda/\mu}(r,t)$ and
+    $\psi_{\lambda/\mu}(r,t)$).
+    Does the $Q$-kernel acquire additional structure in the
+    $(r,t)$-deformed case?
+
+  \item \textbf{Explicit $Q$-enriched bijections.}
+    Can the $Q$-enriched growth diagram be used to construct
+    explicit bijections between sets of cylindric partitions
+    weighted by $Q$-polynomials?  In particular, does the
+    bijection $\psi_c$ from~\eqref{eq:bijection-std} extend to a
+    $Q$-weighted version that directly produces the
+    cross-correlations $\Phi_{a,b}$?
+
+  \item \textbf{The $Q$-kernel for $d \equiv 0 \pmod{3}$.}
+    For $d$ divisible by~$3$, the polynomials $Q_n$ are defined
+    using $(q^\ell;\, q^\ell)_n$ with $\ell = 3$.  The
+    $Q$-kernel $\Phi_{a,b}(t)$ still makes sense formally, but the
+    cyclic descent injection (see~\cite{FIRST_ATTEMPT}) fails.
+    Does the $Q$-kernel reveal why $d \equiv 0$ is special?
+\end{enumerate}
+
+
+\begin{thebibliography}{99}
+\bibitem{Borodin}
+  A.~Borodin,
+  \emph{Periodic Schur process and cylindric partitions},
+  Duke Math.~J.\ \textbf{140} (2007), 391--468.
+
+\bibitem{COMMUTATION}
+  R.~Langer,
+  \emph{From Commutation Relations to Growth Diagrams:
+  A Summary of the Operator--Bijection Correspondence},
+  companion note.
+
+\bibitem{CONJECTURE}
+  R.~Langer,
+  \emph{The Positivity Conjecture for $Q_{n,c}(q)$},
+  companion note.
+
+\bibitem{FIRST_ATTEMPT}
+  R.~Langer,
+  \emph{Towards an Involution Proof of Positivity for $Q_{n,c}(q)$},
+  companion note.
+
+\bibitem{UNDERLYING_SET}
+  R.~Langer,
+  \emph{The Underlying Set: Cylindric Plane Partitions, ALCDs,
+  and the Ground Set for the Involution},
+  companion note.
+
+\bibitem{langer-masters}
+  R.~Langer,
+  \emph{Symmetric Functions and Macdonald Polynomials},
+  Master's thesis, University of Melbourne, 2008.
+  arXiv:0907.3950.
+
+\bibitem{langer-cpp1}
+  R.~Langer,
+  \emph{Enumeration of Cylindric Plane Partitions -- Part~I},
+  2012. arXiv:1204.4583.
+
+\bibitem{langer-thesis}
+  R.~Langer,
+  \emph{Cylindric Partitions and Bijective Proofs},
+  PhD thesis, University of Melbourne.
+
+\bibitem{Macdonald}
+  I.~G.~Macdonald,
+  \emph{Symmetric Functions and Hall Polynomials},
+  2nd ed., Oxford University Press, 1995.
+
+\bibitem{Welsh}
+  T.~A.~Welsh,
+  \emph{Unpublished notes on cylindric partition polynomiality}.
+\end{thebibliography}
+
+\end{document}

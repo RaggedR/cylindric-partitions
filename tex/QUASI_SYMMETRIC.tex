@@ -1,0 +1,836 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{observation}[theorem]{Observation}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\CPP}{\operatorname{CPP}}
+\newcommand{\GK}{\operatorname{GK}}
+
+% q-series notation
+\newcommand{\qpoch}[2]{(#1;#2)_\infty}
+\newcommand{\qpochn}[3]{(#1;#2)_{#3}}
+\newcommand{\qbin}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+
+% QSym notation
+\newcommand{\QSym}{\operatorname{QSym}}
+\newcommand{\Sym}{\operatorname{Sym}}
+
+\title{Quasi-symmetric refinement of the cylindric partition\\
+generating function}
+\author{Robin Langer}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We show that the generating function for rank-3 cylindric plane
+partitions, refined by value frequencies, is a quasi-symmetric
+function. Specifically, for a profile $c = (c_0, c_1, c_2)$,
+the power series
+$\widetilde{\GK}_c(\mathbf{z}) = \sum_{\pi \in \CPP(c)}
+z_1^{\#_1(\pi)} z_2^{\#_2(\pi)} \cdots$
+(where $\#_k(\pi)$ counts the number of parts equal to~$k$ in~$\pi$)
+lies in the ring $\QSym$ of quasi-symmetric functions.
+This is verified computationally for all profiles with
+$d = |c| \leq 5$. Under the principal specialization
+$z_k \mapsto q^k$, this recovers
+$\GK_c(1, q) = \sum_n g_n(q)$.
+Moreover, the expansion in Gessel's fundamental basis
+$\{L_\alpha\}$ has nonneg coefficients ($L$-positivity),
+a strictly stronger property than $M$-positivity.
+However, the quasi-symmetry applies only to the
+\emph{unconstrained} generating function (all CPPs, no
+bound on the maximum entry). Since Warnaar's
+$Q_{n,c}(q)$ polynomials are extracted from the
+$\max = n$ piece, the QSym structure does not directly
+bear on the positivity conjecture.
+\end{abstract}
+
+%% ========================================================================
+\section{Setup}
+\label{sec:setup}
+%% ========================================================================
+
+A \emph{rank-3 cylindric plane partition} with profile
+$c = (c_0, c_1, c_2)$ is a triple of partitions
+$\pi = (\nu^{(1)}, \nu^{(2)}, \nu^{(3)})$ satisfying the
+shifted dominance (interlacing) conditions:
+\begin{equation}\label{eq:interlacing}
+  \nu^{(1)}_j \geq \nu^{(2)}_{j+c_1}, \qquad
+  \nu^{(2)}_j \geq \nu^{(3)}_{j+c_2}, \qquad
+  \nu^{(3)}_j \geq \nu^{(1)}_{j+c_0},
+\end{equation}
+for all $j \geq 0$, where $\nu^{(i)}_j = 0$ for
+$j \geq \ell(\nu^{(i)})$.
+
+The two-variable generating function is
+\[
+  \GK_c(z, q)
+  = \sum_{\pi \in \CPP(c)} z^{n(\pi)}\, q^{|\pi|}
+  = \sum_{n \geq 0} g_n(q)\, z^n,
+\]
+where $n(\pi) = \max\{\nu^{(i)}_j : i, j\}$ is the maximum entry
+(equivalently, the number of paths in the NILP model) and
+$|\pi| = |\nu^{(1)}| + |\nu^{(2)}| + |\nu^{(3)}|$ is the total weight.
+
+\medskip
+
+Warnaar's Conjecture~2.7 asserts that the polynomials
+\[
+  Q_{n,c}(q)
+  = \qpochn{q}{q}{n} \cdot [z^n]\bigl(\qpoch{zq}{q} \cdot \GK_c(z,q)\bigr)
+\]
+have nonneg integer coefficients for all $n \geq 0$ and all profiles~$c$
+with $d = |c| \not\equiv 0 \pmod{3}$.
+
+%% ========================================================================
+\section{The frequency refinement}
+\label{sec:frequency}
+%% ========================================================================
+
+For a cylindric partition $\pi = (\nu^{(1)}, \nu^{(2)}, \nu^{(3)})$,
+define the \emph{value frequency} of~$k$ as
+\[
+  \#_k(\pi) = \bigl|\{(i,j) : \nu^{(i)}_j = k\}\bigr|,
+\]
+the total number of parts equal to~$k$ across all three partitions.
+The weight decomposes as $|\pi| = \sum_{k \geq 1} k \cdot \#_k(\pi)$.
+
+\begin{definition}[Frequency generating function]
+For a profile $c$, define
+\begin{equation}\label{eq:GKtilde}
+  \widetilde{\GK}_c(\mathbf{z})
+  = \sum_{\pi \in \CPP(c)}
+    z_1^{\#_1(\pi)}\, z_2^{\#_2(\pi)} \cdots z_n^{\#_n(\pi)} \cdots
+  \;\in\; \Z[[z_1, z_2, \ldots]],
+\end{equation}
+where the sum is over all cylindric partitions with profile~$c$
+(of any maximum entry).
+\end{definition}
+
+\begin{remark}
+Under the specialization $z_k \mapsto q^k$, we recover
+\[
+  \widetilde{\GK}_c(q, q^2, q^3, \ldots)
+  = \sum_{\pi} q^{|\pi|}
+  = \GK_c(1, q).
+\]
+The maximum entry $n(\pi) = \max\{k : \#_k(\pi) > 0\}$ is
+recoverable from the frequency data but is not a linear
+statistic, so $z^{n(\pi)}$ is not a monomial specialization
+of the~$z_k$.
+\end{remark}
+
+%% ========================================================================
+\section{Quasi-symmetry}
+\label{sec:qsym}
+%% ========================================================================
+
+Recall that a formal power series $f \in \Z[[z_1, z_2, \ldots]]$ is
+\emph{quasi-symmetric} if for every composition
+$\alpha = (\alpha_1, \ldots, \alpha_k)$ with $\alpha_i > 0$,
+the coefficient of $z_{i_1}^{\alpha_1} \cdots z_{i_k}^{\alpha_k}$
+is the same for all choices of indices $1 \leq i_1 < i_2 < \cdots < i_k$.
+
+The ring $\QSym$ of quasi-symmetric functions sits between
+the ring $\Sym = \Lambda$ of symmetric functions and the full power
+series ring:
+\[
+  \Sym \;\subset\; \QSym \;\subset\; \Z[[z_1, z_2, \ldots]].
+\]
+The standard monomial basis of $\QSym$ is
+$\{M_\alpha\}_{\alpha}$, indexed by compositions, where
+\[
+  M_\alpha
+  = \sum_{i_1 < i_2 < \cdots < i_k}
+    z_{i_1}^{\alpha_1} z_{i_2}^{\alpha_2} \cdots z_{i_k}^{\alpha_k}.
+\]
+
+\begin{observation}[Computational]\label{obs:qsym}
+For every rank-3 profile $c$ with $d = |c| \leq 5$ (55 profiles total),
+$\widetilde{\GK}_c(\mathbf{z})$ is quasi-symmetric. That is,
+\begin{equation}\label{eq:qsym-expansion}
+  \widetilde{\GK}_c(\mathbf{z})
+  = \sum_{\alpha} a_\alpha(c)\, M_\alpha,
+\end{equation}
+with all coefficients $a_\alpha(c) \in \Z_{\geq 0}$.
+\end{observation}
+
+The nonnegativity of the coefficients $a_\alpha(c)$ is automatic
+(they count cylindric partitions), so the content of the observation
+is the quasi-symmetry itself: the count depends only on the
+\emph{composition} of value frequencies, not on which values carry
+those frequencies.
+
+\begin{remark}
+$\widetilde{\GK}_c$ is \emph{not} symmetric. For example,
+with $c = (1,1,0)$, the coefficient of $M_{(2,1)}$ is~4
+while the coefficient of $M_{(1,2)}$ is~3. Since
+$(2,1)$ and $(1,2)$ are different compositions (related by
+rearrangement, hence giving the same partition), symmetry
+would require these to be equal.
+\end{remark}
+
+%% ========================================================================
+\section{Monomial QSym coefficients for small profiles}
+\label{sec:data}
+%% ========================================================================
+
+\subsection{Profile $c = (1,1,0)$, $d = 2$}
+
+The QSym coefficients $a_\alpha = a_\alpha(1,1,0)$ display a
+remarkable stabilization: once all parts of the composition~$\alpha$
+are $\geq 2$, the coefficient depends only on the length of~$\alpha$.
+
+\begin{center}
+\begin{tabular}{c|l}
+  \textbf{Composition $\alpha$} & \textbf{$a_\alpha$} \\
+  \hline
+  $()$ & $1$ \\
+  $(k)$, any $k \geq 1$ & $2$ \\
+  $(1, k)$, any $k \geq 1$ & $3$ \\
+  $(j, k)$, $j \geq 2$ & $4$ \\
+  $(1, 1, k)$, any $k \geq 1$ & $5$ \\
+  $(1, j, k)$, $j \geq 2$ & $6$ \\
+  $(j, 1, k)$, $j \geq 2$ & $6$ \\
+  $(j, k, 1)$, $j,k \geq 2$ & $8$ \\
+  $(j, k, l)$, $j,k \geq 2$, $l \geq 2$ & $8$ \\
+  $(1, 1, 1, k)$ & $8$ \\
+  $(1, 1, j, k)$, $j \geq 2$ & $10$ \\
+  $(1, j, 1, k)$, $j \geq 2$ & $9$ \\
+  $(j, 1, 1, k)$, $j \geq 2$ & $10$ \\
+  $(1, j, k, l)$, $j,k \geq 2$ & $12$ \\
+  $(j, 1, k, l)$, $j \geq 2$, $k \geq 2$ & $12$ \\
+  $(j, k, 1, l)$, $j,k \geq 2$ & $12$ \\
+  $(j, k, l, m)$, $j,k,l \geq 2$ & $16$
+\end{tabular}
+\end{center}
+
+The stabilized values (all parts $\geq 2$) by length $\ell$ are:
+$1, 2, 4, 8, 16, \ldots = 2^\ell$. This suggests a product
+structure in the stable regime.
+
+\subsection{Profile $c = (2,0,0)$, $d = 2$ (second Rogers--Ramanujan)}
+
+The stabilized coefficients again follow powers of 2:
+length $\ell$ gives $a_\alpha = 2^\ell$ when all parts of $\alpha$
+are sufficiently large.
+
+\subsection{Profile $c = (2,1,1)$, $d = 4$}
+
+The coefficients are richer: $a_{(k)} = 5$ for $k$ large;
+$a_{(j,k)} = 25$ for $j,k$ large;
+$a_{(j,k,l)} = 125$ for $j,k,l$ large.
+The stabilized values appear to be $5^\ell$, where $5$ is the
+number of $A_2$ cylindric partitions of the empty profile (i.e.,
+ordinary plane partitions of size~$\leq$~something related to~$d$).
+
+%% ========================================================================
+\section{Interpretation and structure}
+\label{sec:interpretation}
+%% ========================================================================
+
+\subsection{Why quasi-symmetric?}
+
+The quasi-symmetry has a natural explanation. Consider a CPP
+$\pi$ with frequency composition $\alpha = (a_1, \ldots, a_k)$
+at values $v_1 < v_2 < \cdots < v_k$. The interlacing
+conditions~\eqref{eq:interlacing} compare entries at the same
+positions: $\nu^{(i)}_j \geq \nu^{(i')}_j$ (with shifts).
+Whether a particular entry equals $v_s$ or $v_{s'}$ matters for
+the \emph{weight} but the combinatorial constraints depend only on
+the \emph{relative order} of entries, not on their absolute values.
+
+More precisely: the set of CPPs with value set $\{v_1, \ldots, v_k\}$
+and frequency vector $(a_1, \ldots, a_k)$ is in weight-preserving
+bijection with those using value set $\{w_1, \ldots, w_k\}$
+(any other increasing sequence) with the same frequency vector,
+via the substitution $v_s \mapsto w_s$ applied to every entry.
+This bijection preserves the interlacing conditions because they
+only depend on the ordering of entries.
+
+This is precisely the defining property of quasi-symmetry: the
+coefficient of $z_{v_1}^{a_1} \cdots z_{v_k}^{a_k}$ depends only
+on $\alpha = (a_1, \ldots, a_k)$, not on $v_1 < \cdots < v_k$.
+
+The argument is an instance of Stanley's $P$-partition
+theory~\cite{stanley-ordered, gessel-multipartite}:
+whenever a set of fillings is constrained by conditions
+that only compare the \emph{relative order} of values
+(weak and strict inequalities), the generating function
+tracking value frequencies is quasi-symmetric.
+The cylindric interlacing conditions~\eqref{eq:interlacing}
+are precisely of this form.
+
+Note that the individual
+$\tilde{g}_n = \sum_{\max(\pi) = n} z_1^{\#_1} \cdots$
+(fixed max entry~$= n$) is \emph{not} quasi-symmetric:
+the coefficient of $z_n^1$ (a single entry equal to~$n$)
+is positive, while $z_1^1$ (a single entry equal to~1, but
+$\max = n$) is zero for $n > 1$.
+Any constraint on the maximum entry, whether $\max = n$
+or $\max \leq m$, breaks quasi-symmetry by privileging
+certain values over others. Only the unconstrained
+sum~\eqref{eq:GKtilde} is quasi-symmetric.
+
+\begin{remark}
+The function is not symmetric because swapping the
+\emph{multiplicities} (e.g., having $a$ copies of value~1 and $b$
+copies of value~2, versus $b$ copies of value~1 and $a$ copies of
+value~2) changes the interlacing constraints: value~1 appears in
+inner positions of the interlacing, while value~2 must dominate
+value~1 entries. The relative \emph{positions} of the values in the
+interlacing chain distinguish compositions from partitions.
+\end{remark}
+
+\subsection{Disconnect from the positivity conjecture}
+
+The frequency generating function lives in $\QSym$, which is a
+$\Sym$-module (in fact a $\Sym$-algebra). Natural bases of $\QSym$
+include the monomial basis $\{M_\alpha\}$ (in which our
+expansion~\eqref{eq:qsym-expansion} has manifestly nonneg
+coefficients), the fundamental basis $\{L_\alpha\}$ of Gessel
+(see Section~\ref{sec:L-positivity}), and the dual basis to
+noncommutative symmetric functions.
+
+However, this QSym structure does \emph{not} help with
+Warnaar's Conjecture~2.7. The conjecture concerns the
+polynomials $Q_{n,c}(q)$, which are extracted from
+the coefficient of~$z^n$ in $\qpoch{zq}{q} \cdot \GK_c(z,q)$.
+This extraction involves:
+\begin{enumerate}
+  \item The max-entry statistic $n(\pi) = \max\{\nu^{(i)}_j\}$,
+    which is \emph{not} a monomial specialization of the~$z_k$
+    (cf.\ Remark after~\eqref{eq:GKtilde});
+  \item An alternating-sign sum (the $(zq;q)_\infty$ factor),
+    whose cancellation crosses between different frequency vectors
+    (see Section~\ref{sec:Qn-lift}).
+\end{enumerate}
+The quasi-symmetry of $\widetilde{\GK}_c$ is a property of the
+\emph{aggregate} over all max entries, but $Q_{n,c}$ lives at
+a \emph{fixed} max entry. The QSym framework cannot see this
+decomposition.
+
+In particular, the specialization $z_k \mapsto q^k$ sends
+$\widetilde{\GK}_c$ to $\GK_c(1,q) = \sum_n g_n(q)$, which is
+manifestly nonneg since each $g_n(q)$ counts objects. This tells
+us nothing about the positivity of $Q_{n,c}(q)$, which involves
+nontrivial cancellation among the~$g_n$.
+
+\subsection{Partial quasi-symmetry of $\tilde{g}_n$}
+\label{sec:partial-qsym}
+
+Although $\tilde{g}_n$ (CPPs with $\max = n$) is not
+quasi-symmetric in the variables $z_1, z_2, \ldots, z_n$
+(since the value~$n$ is distinguished), it retains a
+\emph{partial} quasi-symmetry: the value~$n$ is special,
+but the remaining values $\{1, \ldots, n-1\}$ can be
+freely relabelled.
+
+More precisely, write
+\[
+  \tilde{g}_n
+  = \sum_{m \geq 1} z_n^m \cdot f_{n,m}(z_1, \ldots, z_{n-1}),
+\]
+where $f_{n,m}$ collects those CPPs with exactly $m$ parts
+equal to~$n$.
+
+\begin{observation}[Computational]\label{obs:partial-qsym}
+For every rank-3 profile $c$ with $d = |c| \leq 5$ and
+$n = 1, 2, 3$: each slice $f_{n,m}$ is a quasi-symmetric
+polynomial in~$z_1, \ldots, z_{n-1}$. That is,
+\[
+  \tilde{g}_n \;\in\; z_n \cdot \QSym(z_1, \ldots, z_{n-1})[z_n].
+\]
+\end{observation}
+
+The argument is the same relabelling bijection as for the
+full~$\widetilde{\GK}_c$, but restricted to non-$n$ values.
+Given a CPP $\pi$ with $\max(\pi) = n$ and non-$n$ value
+set $\{v_1 < \cdots < v_k\} \subset \{1, \ldots, n-1\}$,
+replacing each $v_i$ by any other increasing sequence
+$\{w_1 < \cdots < w_k\} \subset \{1, \ldots, n-1\}$
+preserves the interlacing conditions: the non-$n$ entries
+interact with each other only through their relative order,
+and every non-$n$ entry~$v$ satisfies $v < n$, so the
+inequalities involving $n$-entries are automatically preserved.
+
+\begin{remark}[Failure of slice $L$-positivity]
+The individual slices $f_{n,m}$ are $M$-positive
+(the coefficients count CPPs) but are \emph{not} in general
+$L$-positive in $\QSym(z_1, \ldots, z_{n-1})$.
+Already for $c = (1,0,0)$, $n = 3$, $m = 1$
+(two variables $z_1, z_2$), the $M$-coefficients
+$a_{(k)} = 2$ and $a_{(j,k)} = 1$ yield
+$L_{(a,b)} = M_{(a,b)} - M_{(a+b)} = 1 - 2 = -1$
+for every two-part composition. This holds for all
+55 tested profiles.
+\end{remark}
+
+\begin{remark}[Variable-count mismatch]
+The E--H factorization $Q_n = \qpochn{q}{q}{n} \cdot g_n$
+couples two objects that live in different numbers of
+variables: the factor $\qpochn{q}{q}{n} = \prod_{k=1}^{n}(1-q^k)$
+lifts to the elementary symmetric functions $e_1, e_2, \ldots$
+in \emph{infinitely many} variables, while $\tilde{g}_n$
+is a polynomial in only $z_1, \ldots, z_n$. This mismatch
+is a structural obstacle to any multivariate lift of
+$Q_{n,c}$: the cancellation producing $Q_n$ from $g_n$
+necessarily involves objects living in incompatible
+numbers of variables.
+\end{remark}
+
+\subsection{Stabilization and product structure}
+
+For $c = (1,1,0)$, the stabilized QSym coefficients (all parts
+of $\alpha$ sufficiently large) satisfy
+$a_\alpha^{\mathrm{stab}} = 2^{\ell(\alpha)}$,
+suggesting a product formula
+\[
+  \widetilde{\GK}_c^{\mathrm{stab}}
+  = \prod_{k \geq 1} (1 + z_k)^?
+\]
+in some asymptotic sense. More generally, for $c = (2,1,1)$ with
+$d=4$, the stable value is $5^{\ell(\alpha)}$, consistent with
+the number of maximal cylindric configurations per value.
+Understanding this product structure is a direction for future work.
+
+%% ========================================================================
+\section{$L$-positivity}
+\label{sec:L-positivity}
+%% ========================================================================
+
+The \emph{fundamental quasi-symmetric functions} $L_\alpha$
+(also denoted $F_\alpha$ in the literature) form a second
+natural basis of $\QSym$, related to the monomial basis by
+\[
+  L_\alpha = \sum_{\beta \preceq \alpha} M_\beta,
+\]
+where $\beta \preceq \alpha$ means $\beta$ is a refinement
+of~$\alpha$ (obtained by splitting parts of~$\alpha$).
+Equivalently,
+\[
+  L_{(\alpha_1, \ldots, \alpha_k)}
+  = \sum_{\substack{i_1 \leq i_2 \leq \cdots \leq i_n \\
+    i_j < i_{j+1} \text{ if } j \in D(\alpha)}}
+  z_{i_1} z_{i_2} \cdots z_{i_n},
+\]
+where $n = |\alpha|$ and $D(\alpha) = \{\alpha_1, \alpha_1+\alpha_2,
+\ldots, \alpha_1+\cdots+\alpha_{k-1}\}$ is the descent set of~$\alpha$.
+
+The fundamental basis plays the role in $\QSym$ that Schur functions
+play in $\Sym$: $L$-positivity is the ``right'' notion of positivity
+in $\QSym$. Under the natural map $\QSym \to \Sym$ that sends
+$L_\alpha \mapsto s_{\operatorname{sort}(\alpha)}$,
+$L$-positivity implies Schur-positivity of the symmetrization.
+
+\begin{observation}[Computational]\label{obs:L-pos}
+For every rank-3 profile $c$ with $d = |c| \leq 5$ (55 profiles total),
+$\widetilde{\GK}_c(\mathbf{z})$ is $L$-positive:
+\begin{equation}\label{eq:L-expansion}
+  \widetilde{\GK}_c(\mathbf{z})
+  = \sum_{\alpha} b_\alpha(c)\, L_\alpha,
+  \qquad b_\alpha(c) \in \Z_{\geq 0}.
+\end{equation}
+\end{observation}
+
+Since $M$-positivity is automatic (the $M$-coefficients count
+CPPs), $L$-positivity is a strictly stronger assertion.
+The $M$-to-$L$ conversion uses M\"obius inversion on the
+refinement poset:
+\[
+  b_\alpha = \sum_{\beta \succeq \alpha}
+  (-1)^{\ell(\beta) - \ell(\alpha)}\, a_\beta,
+\]
+where $\beta \succeq \alpha$ means $\alpha$ is a refinement of~$\beta$
+(equivalently, $\beta$ is a coarsening of~$\alpha$).
+The nonnegativity of the~$b_\alpha$ after this alternating sum is
+nontrivial and requires cancellation.
+
+\subsection{$L$-coefficients for $c = (1,1,0)$, $d = 2$}
+
+\begin{center}
+\begin{tabular}{c|l}
+  \textbf{Composition $\alpha$} & \textbf{$b_\alpha$} \\
+  \hline
+  $()$ & $1$ \\
+  $(k)$, any $k \geq 1$ & $2$ \\
+  $(1, k)$, any $k \geq 1$ & $1$ \\
+  $(j, k)$, $j \geq 2$ & $2$ \\
+  $(1, 2, 1)$ & $1$ \\
+  $(1, j, k)$, $j \geq 2$, $k \geq 2$ & $1$ \\
+  $(j, 2, k)$, $j \geq 2$ & $2$ \\
+  $(j, k, l)$, $j,k \geq 2$, $l \geq 2$, $k \geq 3$ & $2$
+\end{tabular}
+\end{center}
+
+The $L$-coefficients are smaller than the $M$-coefficients and
+exhibit even cleaner stabilization.
+
+\subsection{Combinatorial interpretation}
+
+$L$-positivity has a well-known combinatorial meaning:
+a quasi-symmetric function is $L$-positive if and only if it
+can be written as $\sum_w L_{D(w)}$, a sum of fundamental
+quasi-symmetric functions indexed by descent sets, over some
+set of ``words'' or ``permutations.''
+
+Equivalently, by the work of Tewari and van
+Willigenburg~\cite{tewari-vanwilligenburg}, $L$-positivity
+of a quasi-symmetric function~$f$ is equivalent to~$f$
+being the quasi-symmetric characteristic of a module
+over the $0$-Hecke algebra $H_n(0)$.
+Thus Observation~\ref{obs:L-pos} implies the existence
+of a $0$-Hecke module whose character
+is~$\widetilde{\GK}_c$.
+
+\begin{remark}[The $0$-Hecke algebra]\label{rem:0hecke}
+The \emph{$0$-Hecke algebra} $H_n(0)$ is the quotient
+of the free algebra on generators $T_1, \ldots, T_{n-1}$
+by the Coxeter braid relations together with the
+\emph{idempotent} relations $T_i^2 = T_i$
+(in contrast to the symmetric group algebra, where
+$T_i^2 = 1$, or the Hecke algebra $H_n(q)$, where
+$T_i^2 = (q-1)T_i + q$). Equivalently, $H_n(0)$
+is obtained by specializing the Hecke algebra
+$H_n(q)$ at $q = 0$.
+
+The irreducible $H_n(0)$-modules are one-dimensional
+and are indexed by compositions of~$n$ (not by
+partitions, as for $\mathfrak{S}_n$). The
+quasi-symmetric characteristic
+$\operatorname{ch}(M) = \sum L_\alpha$, summed over
+composition indices of the irreducible constituents,
+provides the natural bridge between $H_n(0)$-modules
+and $L$-positive quasi-symmetric functions.
+\end{remark}
+
+A related phenomenon appears in the work of Shareshian and
+Wachs~\cite{shareshian-wachs}, who define a quasi-symmetric
+refinement of the chromatic symmetric function and prove its
+$L$-positivity (and even $e$-positivity) for certain classes
+of graphs. Their construction is motivated by the
+Stanley--Stembridge conjecture and is analogous in spirit:
+a combinatorial generating function, refined by a
+``descent-like'' statistic, turns out to be $L$-positive.
+
+\begin{conjecture}\label{conj:descent}
+There exists a natural descent-type statistic on cylindric
+partitions such that $\widetilde{\GK}_c = \sum_\pi L_{\alpha(\pi)}$,
+where $\alpha(\pi)$ is the descent composition of~$\pi$.
+\end{conjecture}
+
+Finding such a statistic would give a combinatorial proof of
+$L$-positivity and could shed light on the original positivity
+conjecture for~$Q_{n,c}$.
+
+\subsection{Failure of the E--H factorization in QSym}
+
+The Euler--Hamburger factorization $\GK_c = H \cdot F_c$,
+where $H = 1/\qpoch{zq}{q}$ and $F_c = \qpoch{zq}{q} \cdot \GK_c$,
+is the key identity connecting $\GK_c$ to the polynomials~$Q_{n,c}$.
+
+We tested two natural QSym analogs:
+\begin{enumerate}
+  \item \textbf{With max-entry variable.} Introduce a variable $t$
+    tracking the maximum entry and define
+    $\widetilde{\GK}_c(t, \mathbf{z}) = \sum_n t^n \tilde{g}_n$,
+    then compute $[t^n]\bigl(\prod_{k \geq 1}(1 - tz_k) \cdot
+    \widetilde{\GK}_c(t, \mathbf{z})\bigr)
+    = \sum_{j=0}^n (-1)^j e_j \cdot \tilde{g}_{n-j}$.
+    This is \emph{not} quasi-symmetric and has \emph{negative}
+    coefficients, because the individual
+    $\tilde{g}_n$ (CPPs with max entry~$n$) are not quasi-symmetric:
+    fixing the max entry privileges a particular value.
+
+  \item \textbf{Without max-entry variable.} Compute
+    $\prod_{k \geq 1}(1 - z_k) \cdot \widetilde{\GK}_c(\mathbf{z})$
+    directly in $\QSym$, which under $z_k \mapsto q^k$
+    specializes to $\qpochn{q}{q}{\infty} \cdot \GK_c(1,q)$.
+    This also has \emph{negative} coefficients
+    and is not quasi-symmetric.
+\end{enumerate}
+
+Both failures indicate that the E--H factorization is
+fundamentally tied to the max-entry variable~$z$, which does
+not sit naturally in the QSym framework.
+
+%% ========================================================================
+\section{Attempt to lift $Q_n$ to QSym: negative coefficients}
+\label{sec:Qn-lift}
+%% ========================================================================
+
+The positive results above concern the \emph{full} generating function
+$\widetilde{\GK}_c$, which sums over all cylindric partitions without
+constraint on the maximum entry. The central positivity problem,
+however, is about the \emph{polynomials} $Q_{n,c}(q)$, which are
+extracted by the alternating-sign formula
+\begin{equation}\label{eq:Q-ground-set}
+  Q_{n,c}(q) = \sum_{j=0}^{n}\;
+  \sum_{\substack{S \subseteq \{1,\ldots,n\} \\ |S|=j}}\;
+  \sum_{U \subseteq \{1,\ldots,n-j\}}\;
+  \sum_{\substack{\nu \in \CPP(c) \\ \max(\nu) = n-j}}
+  (-1)^{|S|+|U|}\, q^{\sigma(S)+\sigma(U)+|\nu|}.
+\end{equation}
+The natural question is: can the QSym machinery, which works so well for
+$\widetilde{\GK}_c$, be applied to $Q_{n,c}$?
+
+\subsection{The QSym $Q$-polynomial}
+
+Given a triple $(S, U, \nu)$ from the ground set
+$\widetilde{\mathcal{G}}_{n,c}$, write $m = n - |S|$ and define the
+\emph{combined frequency vector}:
+\[
+  \operatorname{freq}(S, U, \nu)_k
+  = |\{s \in S : s = k\}|
+  + |\{u \in U : u = k\}|
+  + |\{(i,j) : \nu^{(i)}_j = k\}|,
+\]
+counting how many times the value~$k$ appears across all three
+components. The total weight is
+$\sigma(S) + \sigma(U) + |\nu| = \sum_k k \cdot \operatorname{freq}(S,U,\nu)_k$,
+so replacing $q^k \mapsto z_k$ in each factor gives a
+quasi-symmetric refinement:
+\begin{equation}\label{eq:Q-qsym}
+  Q_n^{\QSym}
+  = \sum_{(S,U,\nu) \in \widetilde{\mathcal{G}}_{n,c}}
+    (-1)^{|S|+|U|}\; M_{\operatorname{freq}(S,U,\nu)}.
+\end{equation}
+Under the principal specialization $z_k \mapsto q^k$,
+$M_\alpha \mapsto \sum_{i_1 < \cdots < i_\ell} q^{\sum a_s i_s}$,
+and summing over all frequency vectors recovers $Q_{n,c}(q)$.
+
+\subsection{Failure: negative $M$-coefficients}
+
+\begin{observation}[Computational]\label{obs:Q-not-M-pos}
+For $n \geq 2$, the QSym polynomial $Q_n^{\QSym}$ has
+\emph{negative} coefficients in the monomial basis~$M_\alpha$.
+This holds for every tested profile with $d \leq 5$, including
+the simplest case $c = (1,0,0)$, $d = 1$.
+\end{observation}
+
+Concretely, for $c = (1,1,0)$, $n = 2$:
+\[
+  Q_2^{\QSym}
+  = M_{(1,1)} - 2\,M_{(2)} + M_{(1,1,1)} - M_{(2,1)} + \cdots
+\]
+The coefficient $a_{(2)} = -2$ is negative. Since $M$-positivity
+fails, $L$-positivity fails \emph{a fortiori}: the $L$-basis
+expansion also contains negative terms.
+
+\begin{remark}
+For $n = 1$, $Q_1^{\QSym}$ is $M$-positive and in fact equal to
+$h_1^{\QSym}$, where $h_m$ is the ``corrected'' generating function
+$h_m = \qpochn{q}{q}{m} \cdot g_m$ (cf.\ Section~\ref{sec:L-positivity}).
+The failure begins precisely at $n = 2$, where the alternating
+$q$-binomial sum introduces cancellation between different
+frequency vectors.
+\end{remark}
+
+\subsection{Anatomy of the failure}
+
+The key issue is \emph{cross-cancellation}: different frequency
+vectors can map to the same $q$-weight under specialization,
+so cancellation in $Q_n(q)$ \emph{must} cross QSym monomials.
+
+More precisely, for a given $q$-weight~$w$, define:
+\begin{itemize}
+  \item The \emph{internal cancellation} at frequency $\alpha$:
+    positive and negative triples with $\operatorname{freq} = \alpha$
+    and total weight~$w$ that cancel within the same QSym class.
+  \item The \emph{cross-cancellation}: excess positive contributions
+    from one frequency $\alpha$ cancelling excess negative from
+    another frequency $\beta$, where both have $|\alpha| = |\beta| = w$
+    (same total weight, different composition).
+\end{itemize}
+
+Computationally, approximately 94--97\% of cancellation is internal
+(same frequency vector, handled by the $U$-toggle involution).
+But the remaining 0.3--3\% is cross-cancellation, which is
+\emph{essential}: the net coefficient at some individual frequency
+vectors is negative, and only the aggregation across all
+compositions of the same weight yields the positive $Q_n$ coefficient.
+
+\begin{example}
+For $c = (1,1,0)$, $n = 2$, at $q$-weight~$4$:
+the frequency vector $(0,2)$ (two copies of value~2)
+has net coefficient $-1$, while $(1,0,1)$
+(one copy of value~1 and one of value~3) has net $+2$.
+Under $z_k \mapsto q^k$, both map to $q^4$,
+and their contributions $-1 + 2 = 1$ yield $[q^4]\,Q_2 = 1 \geq 0$.
+\end{example}
+
+\subsection{The ``$\nu$-only'' variant}
+
+One might hope that tracking only the CPP parts~$\nu$ in the
+frequency vector (keeping $S$ and $U$ as scalar $q$-factors)
+would avoid the problem:
+\begin{equation}\label{eq:Q-nu-only}
+  Q_n^{\nu\text{-only}}
+  = \sum_{(S,U,\nu)}
+    (-1)^{|S|+|U|}\, q^{\sigma(S)+\sigma(U)}
+    \cdot M_{\operatorname{freq}(\nu)}.
+\end{equation}
+This is a hybrid object: a formal power series in~$q$ with
+coefficients in $\QSym$.
+
+\begin{observation}[Computational]\label{obs:nu-only-fails}
+The $\nu$-only variant~\eqref{eq:Q-nu-only} also has negative
+coefficients, and in fact fails \emph{worse} than the combined
+version~\eqref{eq:Q-qsym}: it is negative already at $n = 1$,
+for every profile tested.
+\end{observation}
+
+The failure at $n = 1$ is structural. When $n = 1$, the ground
+set includes $(S = \{1\}, U = \emptyset, \nu = \emptyset)$
+with sign $-1$ and $q$-scalar $q^1$, contributing
+$-q \cdot M_{()}$ to $Q_1^{\nu\text{-only}}$. Meanwhile the
+positive contributions from $(S = \emptyset, U, \nu)$ are spread
+across many frequency vectors $M_\alpha$ with $\alpha \neq ()$.
+There is no way for these to cancel the $-q \cdot M_{()}$ term,
+since it lives in a different QSym component.
+
+By contrast, the combined version~\eqref{eq:Q-qsym} works at
+$n = 1$ precisely because $S = \{1\}$ contributes to
+$M_{(1)}$ (the same QSym monomial as a CPP part equal to~1),
+enabling internal cancellation.
+
+\subsection{Diagnosis}
+
+The QSym framework succeeds brilliantly for the \emph{unconstrained}
+generating function $\widetilde{\GK}_c$, where every coefficient
+is manifestly nonneg (it counts CPPs). The difficulty arises when
+we try to \emph{extract} $Q_n$, which requires:
+\begin{enumerate}
+  \item The max-entry constraint $\max(\nu) = m$ (privileges a
+    particular value, breaking the quasi-symmetric relabelling argument);
+  \item The alternating sign $(-1)^{|S|+|U|}$ (introduces cancellation
+    that crosses between different frequency vectors).
+\end{enumerate}
+
+The $q$-specialization $z_k \mapsto q^k$ ``forgets'' the
+composition structure and allows cross-frequency cancellation to
+produce the positive polynomial $Q_n(q)$. This forgetting is
+essential and cannot be avoided within $\QSym$.
+
+In summary: $\widetilde{\GK}_c \in \QSym$ with $L$-positivity
+is a genuine structural property of cylindric partitions, but
+it does not extend to the $Q$-polynomials. The positivity of
+$Q_{n,c}(q)$ appears to be an \emph{intrinsically one-variable}
+phenomenon.
+
+%% ========================================================================
+\section{Computational verification}
+\label{sec:computation}
+%% ========================================================================
+
+The quasi-symmetry was verified as follows. For each profile~$c$
+with $d \leq 5$:
+
+\begin{enumerate}
+  \item Enumerate all CPPs with maximum entry $\leq n_{\max}$ and
+    total weight $\leq w_{\max}$, using the shifted dominance
+    conditions~\eqref{eq:interlacing}.
+  \item For each CPP, compute the frequency vector
+    $(\#_1, \#_2, \ldots, \#_{n_{\max}})$ and extract the
+    composition $\alpha$ (ordered nonzero entries).
+  \item Group CPP counts by composition and verify that
+    all placements of the same composition at different
+    value positions give the same count (restricting to
+    compositions whose weight does not exceed $w_{\max}$ at
+    any placement, to avoid truncation artifacts).
+\end{enumerate}
+
+\begin{center}
+\begin{tabular}{c|c|c|c}
+  $d = |c|$ & Profiles tested & QSym failures & $L$-negative terms \\
+  \hline
+  1 & 3 & 0 & 0 \\
+  2 & 6 & 0 & 0 \\
+  3 & 10 & 0 & 0 \\
+  4 & 15 & 0 & 0 \\
+  5 & 21 & 0 & 0 \\
+  \hline
+  \textbf{Total} & \textbf{55} & \textbf{0} & \textbf{0}
+\end{tabular}
+\end{center}
+
+Parameters used: $n_{\max} = 3$, $w_{\max} = 12$,
+with 24 non-truncated quasi-symmetry checks per profile.
+The $L$-basis conversion uses M\"obius inversion on the
+refinement poset of compositions.
+
+\medskip
+
+The partial quasi-symmetry of
+$\tilde{g}_n$ (Observation~\ref{obs:partial-qsym})
+was verified separately by fixing the max entry~$n$
+and checking that each $z_n^m$ slice is quasi-symmetric
+in $z_1, \ldots, z_{n-1}$:
+
+\begin{center}
+\begin{tabular}{c|c|c|c}
+  $d = |c|$ & Profiles tested & Partial QSym failures
+  & Slice $L$-positive \\
+  \hline
+  1 & 3 & 0 & No \\
+  2 & 6 & 0 & No \\
+  3 & 10 & 0 & No \\
+  4 & 15 & 0 & No \\
+  5 & 21 & 0 & No \\
+  \hline
+  \textbf{Total} & \textbf{55} & \textbf{0} & \textbf{---}
+\end{tabular}
+\end{center}
+
+Parameters: $n = 1, 2, 3$, $w_{\max} = 18$.
+Partial quasi-symmetry holds for all 165 test cases
+(55 profiles $\times$ 3 values of~$n$).
+Slice $L$-positivity fails at $n = 3$ for every profile
+(the slices $f_{n,m}$ have $M$-coefficients that decrease
+with composition length, forcing negative $L$-coefficients).
+
+%% ========================================================================
+%% References
+%% ========================================================================
+
+\begin{thebibliography}{99}
+
+\bibitem{gessel-multipartite}
+I.~M.~Gessel,
+Multipartite $P$-partitions and inner products of skew Schur functions,
+in: \emph{Combinatorics and algebra (Boulder, Colo., 1983)},
+Contemp.\ Math.\ \textbf{34}, Amer.\ Math.\ Soc., 1984, pp.~289--317.
+
+\bibitem{shareshian-wachs}
+J.~Shareshian and M.~L.~Wachs,
+Chromatic quasisymmetric functions,
+\emph{Adv.\ Math.}\ \textbf{295} (2016), 497--551.
+arXiv:1405.4629.
+
+\bibitem{stanley-ordered}
+R.~P.~Stanley,
+Ordered structures and partitions,
+\emph{Mem.\ Amer.\ Math.\ Soc.}\ \textbf{119}, 1972.
+
+\bibitem{tewari-vanwilligenburg}
+V.~V.~Tewari and S.~J.~van Willigenburg,
+Modules of the $0$-Hecke algebra and quasisymmetric Schur functions,
+\emph{Adv.\ Math.}\ \textbf{285} (2015), 1025--1065.
+arXiv:1403.1527.
+
+\end{thebibliography}
+
+\end{document}

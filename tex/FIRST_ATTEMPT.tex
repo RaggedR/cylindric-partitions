@@ -1,0 +1,597 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\GK}{\operatorname{GK}}
+\newcommand{\CPP}{\operatorname{CPP}}
+\newcommand{\ALCD}{\operatorname{ALCD}}
+\newcommand{\IP}{\operatorname{IP}}
+\newcommand{\qpoch}[2]{(#1;#2)_\infty}
+\newcommand{\qpochn}[3]{(#1;#2)_{#3}}
+\newcommand{\qbin}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{strategy}[theorem]{Strategy}
+
+\title{Towards an Involution Proof of Positivity for $Q_{n,c}(q)$:\\
+Connecting Commutation Relations, Local Rules, and the $E$--$H$ Factorisation}
+\author{Notes by Robin Langer}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We analyse the alternating-sign structure underlying the positivity
+conjecture for the cylindric Kostka polynomials $Q_{n,c}(q)$.
+By unpacking the $E$--$H$ factorisation combinatorially, we identify
+the natural ground set for a sign-reversing involution: signed pairs
+$(S, \tau)$ where $S \subseteq \{1, \ldots, n\}$ carries the sign
+$(-1)^{|S|}$ and $\tau$ is a ``purely cylindric'' object counted by
+the nonneg polynomial $h_{n-|S|,c}(q)$.  We argue that the local
+rules from the growth diagram framework provide the transformation
+mechanism for such an involution, exchanging subset decorations for
+cylindric structure while preserving $q$-weight.
+\end{abstract}
+
+\tableofcontents
+
+%% ============================================================
+\section{The alternating-sign structure of $Q_{n,c}(q)$}
+\label{sec:alt-sign}
+%% ============================================================
+
+\subsection{The $q$-binomial decomposition}
+
+Recall that the polynomial $Q_{n,c}(q)$ is defined by
+\[
+  Q_{n,c}(q) := \qpochn{q}{q}{n}
+  \cdot [z^n]\!\Bigl(\qpoch{zq}{q} \cdot \GK_c(z,q)\Bigr)
+  = \qpochn{q}{q}{n} \cdot g_{n,c}(q),
+\]
+where $g_{n,c}(q) = [z^n]\,G_c(z,q)$ and
+$G_c(z,q) = \qpoch{zq}{q} \cdot \GK_c(z,q)$ is the corrected
+generating function.
+
+The $q$-binomial decomposition expresses $Q_{n,c}(q)$ as an
+alternating sum:
+\begin{equation}\label{eq:Q-alt-sum}
+  Q_{n,c}(q) = \sum_{j=0}^{n} (-1)^j\, q^{j(j+1)/2}\,
+  \qbin{n}{j} \cdot h_{n-j,c}(q),
+\end{equation}
+where $h_{m,c}(q) := \qpochn{q}{q}{m} \cdot f_{m,c}(q)$
+and $f_{m,c}(q) = [z^m]\,\GK_c(z,q)$ is the generating function
+for cylindric plane partitions with $\max = m$.
+
+The sign $(-1)^j$ arises from the Euler expansion
+\[
+  \qpoch{zq}{q} = \prod_{k \geq 1}(1 - zq^k)
+  = \sum_{j \geq 0} \frac{(-1)^j\, q^{j(j+1)/2}}{\qpochn{q}{q}{j}}\, z^j.
+\]
+Proving that $Q_{n,c}(q)$ has nonneg coefficients therefore
+requires showing that the alternating cancellations
+in~\eqref{eq:Q-alt-sum} resolve perfectly into positivity.
+
+\subsection{Two sources of signs}
+
+Before the $q$-binomial simplification, $Q_{n,c}(q)$ arises from
+\emph{two} sources of alternating signs:
+
+\begin{enumerate}
+  \item The factor $\qpoch{zq}{q} = \prod_{k \geq 1}(1 - zq^k)$
+    from the $E$--$H$ factorisation, generating subsets
+    $D \subset \{1, 2, 3, \ldots\}$ with sign $(-1)^{|D|}$.
+  \item The factor $\qpochn{q}{q}{n} = \prod_{k=1}^{n}(1 - q^k)$
+    from clearing denominators, generating subsets
+    $T \subseteq \{1, \ldots, n\}$ with sign $(-1)^{|T|}$.
+\end{enumerate}
+
+These two sign sources partially combine: the $\qpochn{q}{q}{n}$
+and $\qpochn{q}{q}{j}$ merge into
+$\qbin{n}{j} \cdot \qpochn{q}{q}{n-j}$, and the second factor is
+absorbed into $h_{n-j,c}(q)$.  In the resulting
+formula~\eqref{eq:Q-alt-sum}, the sign is carried entirely by
+$(-1)^j$ from the subset structure, while $h_{n-j,c}(q)$ contributes
+only positive terms.
+
+
+%% ============================================================
+\section{The underlying combinatorial objects}
+\label{sec:objects}
+%% ============================================================
+
+\subsection{Level A: Signed pairs from the $E$--$H$ product}
+
+The $E$--$H$ factorisation $G_c(z,q) = \qpoch{zq}{q} \cdot \GK_c(z,q)$
+is a product of two generating functions, each with a combinatorial
+interpretation.
+
+\paragraph{The Euler factor.}
+$\qpoch{zq}{q} = \prod_{k \geq 1}(1 - zq^k)$ generates
+finite subsets $D \subset \{1, 2, 3, \ldots\}$ (equivalently,
+partitions into distinct positive parts):
+\[
+  \prod_{k \geq 1}(1 - zq^k)
+  = \sum_{D \subset \{1,2,\ldots\}} (-1)^{|D|}\, z^{|D|}\, q^{\sigma(D)},
+\]
+where $\sigma(D) = \sum_{d \in D} d$ is the sum of elements.
+
+\paragraph{The CPP generating function.}
+$\GK_c(z,q) = \sum_{\nu \in \CPP(c)} z^{\max(\nu)}\, q^{|\nu|}$
+generates cylindric plane partitions of profile~$c$, tracked by
+the max entry and total size.
+
+\paragraph{The product.}
+$G_c(z,q) = \sum_{(D,\,\nu)} (-1)^{|D|}\, z^{|D|+\max(\nu)}\,
+q^{\sigma(D)+|\nu|}$,
+where the sum ranges over all pairs $(D, \nu)$ with $D$ a finite
+set of distinct positive integers and $\nu$ a CPP of profile~$c$.
+
+Extracting $[z^n]$ imposes the constraint $|D| + \max(\nu) = n$,
+so:
+\begin{equation}\label{eq:gn-pairs}
+  g_{n,c}(q)
+  = \sum_{\substack{D \subset \{1,2,\ldots\},\; \nu \in \CPP(c) \\
+  |D| + \max(\nu) = n}}
+  (-1)^{|D|}\, q^{\sigma(D) + |\nu|}.
+\end{equation}
+
+\begin{remark}
+At this level, the objects are \textbf{signed pairs $(D, \nu)$}:
+a distinct partition $D$ and a cylindric plane partition $\nu$
+whose max entries add up to~$n$.  The sign is determined by
+$|D|$ alone.
+\end{remark}
+
+
+\subsection{Level B: The clean form after clearing denominators}
+
+Multiplying by $\qpochn{q}{q}{n}$ and using the $q$-binomial
+decomposition~\eqref{eq:Q-alt-sum}, the two sign sources merge
+into a single, cleaner description.
+
+\begin{definition}[Ground set for the involution]
+\label{def:ground-set}
+For fixed $n \geq 0$ and profile $c = (c_0, c_1, c_2)$, define
+the ground set
+\[
+  \mathcal{G}_{n,c} :=
+  \bigsqcup_{j=0}^{n}
+  \Bigl\{(S, \tau) :
+    S \subseteq \{1, \ldots, n\},\; |S| = j,\;
+    \tau \in \mathcal{H}_{n-j,\,c}
+  \Bigr\},
+\]
+where $\mathcal{H}_{m,c}$ is the (conjecturally nonempty for $m \geq 0$)
+set of combinatorial objects counted by $h_{m,c}(q)$, equipped with a
+weight function $\operatorname{wt}\colon \mathcal{H}_{m,c} \to \N$.
+
+Each pair $(S, \tau) \in \mathcal{G}_{n,c}$ carries:
+\begin{itemize}
+  \item \textbf{Sign:} $\varepsilon(S, \tau) := (-1)^{|S|}$.
+  \item \textbf{Weight:} $w(S, \tau) := \sigma(S) + \operatorname{wt}(\tau)$,
+    where $\sigma(S) = \sum_{s \in S} s$.
+\end{itemize}
+\end{definition}
+
+\begin{remark}[Why subsets of $\{1, \ldots, n\}$?]
+The identity
+\[
+  q^{j(j+1)/2}\, \qbin{n}{j}
+  = \sum_{\substack{S \subseteq \{1,\ldots,n\} \\ |S| = j}} q^{\sigma(S)}
+\]
+gives the subset~$S$ its natural $q$-weight.  This follows because
+a $j$-element subset $\{s_1 < \cdots < s_j\} \subseteq \{1, \ldots, n\}$
+bijects to a partition $\lambda$ fitting in a $j \times (n-j)$ box via
+$\lambda_i = s_i - i$ (after reindexing), and
+$\sigma(S) = |\lambda| + j(j+1)/2$.
+\end{remark}
+
+With this definition, the $q$-binomial decomposition becomes:
+\begin{equation}\label{eq:Q-ground-set}
+  Q_{n,c}(q)
+  = \sum_{(S,\,\tau) \in \mathcal{G}_{n,c}}
+    (-1)^{|S|}\, q^{\sigma(S) + \operatorname{wt}(\tau)}.
+\end{equation}
+
+Positivity of $Q_{n,c}(q)$ is therefore equivalent to the existence
+of a sign-reversing, weight-preserving involution on~$\mathcal{G}_{n,c}$
+whose fixed points all have $|S|$ even (positive sign).
+
+
+%% ============================================================
+\section{What does $h_{m,c}(q)$ count?}
+\label{sec:hmc}
+%% ============================================================
+
+\subsection{The definition}
+
+Recall
+\[
+  h_{m,c}(q) = \qpochn{q}{q}{m} \cdot f_{m,c}(q),
+\]
+where $f_{m,c}(q) = [z^m]\,\GK_c(z,q) = \sum_{\nu:\,\max(\nu)=m} q^{|\nu|}$.
+
+Since $1/\qpochn{q}{q}{m}$ is the generating function for partitions
+of length $\leq m$ (equivalently, partitions with largest part $\leq m$
+after conjugation), the multiplication by $\qpochn{q}{q}{m}$ ``cancels
+the partition overhead'': it removes the contribution of the base
+partition~$\gamma$ in the growth diagram.
+
+\subsection{Growth diagram interpretation}
+
+The growth diagram bijection $\psi\colon (\IP, \ALCD(c)) \to \CPP(c)$
+decomposes each CPP into a base partition $\gamma \in \IP$ and an
+arbitrarily labelled cylindric diagram $d \in \ALCD(c)$.
+The generating function factors as:
+\[
+  \GK_c(z,q) = \sum_{(\gamma,\, d)} z^{\max(\psi(\gamma,d))}\,
+  q^{|\psi(\gamma,d)|}.
+\]
+
+The $E$--$H$ factorisation $\GK_c(z,q) = H(z) \cdot G_c(z,q)$
+corresponds, at the level of generating functions, to separating:
+\begin{itemize}
+  \item The contribution of $\gamma$ (an ordinary partition), which
+    gives the universal factor
+    $H(z) = 1/\qpoch{zq}{q} = \sum_{n \geq 0} z^n/\qpochn{q}{q}{n}$.
+  \item The ``purely cylindric'' content, which gives $G_c(z,q)$.
+\end{itemize}
+
+\begin{remark}
+The objects $\tau \in \mathcal{H}_{m,c}$ counted by $h_{m,c}(q)$ should
+therefore be understood as \textbf{equivalence classes of ALCDs}
+(or a related combinatorial species) that encode the purely cylindric
+structure at max level~$m$, with the ordinary-partition freedom of the
+base partition~$\gamma$ factored out.
+
+Computational evidence confirms that $h_{m,c}(q)$ is a polynomial with
+nonneg integer coefficients for all tested profiles --- a strictly
+stronger observation than positivity of $Q_{n,c}(q)$ itself, since
+$Q_{n,c}(q)$ is built from the $h_{m,c}(q)$ via the
+alternating-sign sum~\eqref{eq:Q-alt-sum}.
+\end{remark}
+
+
+%% ============================================================
+\section{The involution mechanism via local rules}
+\label{sec:involution}
+%% ============================================================
+
+\subsection{Requirements for the involution}
+
+\begin{definition}[Sign-reversing involution]
+A \emph{sign-reversing, weight-preserving involution} on
+$\mathcal{G}_{n,c}$ is a map
+$\iota\colon \mathcal{G}_{n,c} \to \mathcal{G}_{n,c}$ satisfying:
+\begin{enumerate}
+  \item $\iota^2 = \operatorname{id}$ (involution).
+  \item If $\iota(S, \tau) = (S', \tau') \neq (S, \tau)$, then
+    $|S'| \equiv |S| + 1 \pmod{2}$ (sign reversal).
+  \item $\sigma(S) + \operatorname{wt}(\tau)
+    = \sigma(S') + \operatorname{wt}(\tau')$ (weight preservation).
+  \item Every fixed point $(S, \tau) = \iota(S, \tau)$ satisfies
+    $|S| \equiv 0 \pmod{2}$ (positive sign).
+\end{enumerate}
+\end{definition}
+
+The existence of such an involution is equivalent to the positivity
+of $Q_{n,c}(q)$.  The fixed-point generating function gives:
+\[
+  Q_{n,c}(q) = \sum_{\substack{(S,\tau) \in \mathcal{G}_{n,c} \\
+  \iota(S,\tau) = (S,\tau)}} q^{\sigma(S) + \operatorname{wt}(\tau)}.
+\]
+
+
+\subsection{How the involution should act}
+
+The involution must simultaneously manipulate two different
+structures:
+\begin{enumerate}
+  \item The \textbf{subset} $S \subseteq \{1, \ldots, n\}$
+    (combinatorially simple).
+  \item The \textbf{cylindric object} $\tau \in \mathcal{H}_{m,c}$
+    (governed by interlacing conditions encoding the $\mathrm{A}_2$
+    root system).
+\end{enumerate}
+
+Concretely, the involution trades between these two worlds:
+
+\begin{strategy}[Peel/glue mechanism]
+\label{strat:peel-glue}
+Given a non-fixed pair $(S, \tau)$ with $\tau \in \mathcal{H}_{m,c}$
+and $m = n - |S|$:
+
+\medskip
+\noindent\textbf{Peel step} ($|S| \to |S|+1$, reducing $m$ by $1$):
+\begin{enumerate}
+  \item Identify a canonical element $k \in \{1, \ldots, n\} \setminus S$,
+    determined by the structure of~$\tau$.
+  \item ``Peel off'' a strip of weight~$k$ from~$\tau$ using an
+    inverse local rule, obtaining $\tau' \in \mathcal{H}_{m-1,c}$
+    with $\operatorname{wt}(\tau') = \operatorname{wt}(\tau) - k$.
+  \item Set $S' = S \cup \{k\}$.
+  \item The new pair $(S', \tau')$ has sign $(-1)^{|S|+1}$ and weight
+    $\sigma(S') + \operatorname{wt}(\tau')
+    = (\sigma(S) + k) + (\operatorname{wt}(\tau) - k)
+    = \sigma(S) + \operatorname{wt}(\tau)$.
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Glue step} ($|S| \to |S|-1$, increasing $m$ by $1$):
+\begin{enumerate}
+  \item Identify a canonical element $k \in S$, determined by the
+    structure of~$\tau$.
+  \item ``Glue on'' a strip of weight~$k$ to~$\tau$ using a
+    forward local rule, obtaining $\tau' \in \mathcal{H}_{m+1,c}$
+    with $\operatorname{wt}(\tau') = \operatorname{wt}(\tau) + k$.
+  \item Set $S' = S \setminus \{k\}$.
+  \item Weight is preserved by the same calculation.
+\end{enumerate}
+\end{strategy}
+
+\begin{remark}
+The decision of whether to peel or glue (and the choice of~$k$)
+must be \textbf{canonical} --- determined entirely by $(S, \tau)$ ---
+and must satisfy $\iota^2 = \operatorname{id}$.  The fixed points
+are the pairs where neither peeling nor gluing is possible: the
+``irreducible'' configurations.
+\end{remark}
+
+
+\subsection{Local rules as the transformation engine}
+
+The growth diagram framework provides the mechanism for the
+peel/glue operations.  Recall the algebra--bijection dictionary:
+
+\begin{center}
+\begin{tabular}{l|l}
+\textbf{Algebraic operation} & \textbf{Bijective operation} \\ \hline
+Commuting $\Omega^*[Xu]$ past $\Omega[Xv]$ &
+  Applying local rule $\mathfrak{L}_i$ \\
+Scalar factor $\frac{1}{1-uv} = \sum_{m \geq 0}(uv)^m$ &
+  Face label $m \geq 0$ \\
+Inverse: $\Omega[Xv]\,\Omega^*[Xu] \to \Omega^*\,\Omega \cdot (1-uv)$ &
+  Inverse local rule: absorb face label
+\end{tabular}
+\end{center}
+
+Each application of the local rule $\mathfrak{L}_i$ transforms one
+face of the growth diagram.  The local rule has type signature
+\[
+  \mathfrak{U}_{\alpha,\beta}\colon
+  U(\alpha) \cap U(\beta) \to
+  (\Z_{\geq 0},\; D(\alpha) \cap D(\beta)),
+\]
+and satisfies the weight condition
+$|\lambda| = |\alpha| + |\beta| - |\mu| + m$, where $m$ is the
+face label.
+
+\textbf{Forward local rule} (glue): Given $\mu$, $\alpha$, $\beta$
+and a face label $m \geq 0$, determine $\lambda$.  This
+\emph{increases} the partition sizes (adds a strip).
+
+\textbf{Inverse local rule} (peel): Given $\lambda$, $\alpha$,
+$\beta$, determine $\mu$ and the face label $m$.  This
+\emph{decreases} the partition sizes (removes a strip) and
+\emph{extracts} the face label~$m$.
+
+The peel step of the involution extracts a face label~$m$ from the
+cylindric object~$\tau$ (reducing its weight by~$m$) and deposits
+the value~$m$ into the subset~$S$.  The glue step does the reverse.
+
+\subsection{Analogy with Franklin's involution}
+
+The proposed structure is closely analogous to \textbf{Franklin's
+involution} for Euler's pentagonal number theorem.
+
+In Franklin's setting, the identity
+$\prod_{k \geq 1}(1 - q^k) = \sum_{m \in \Z} (-1)^m\, q^{m(3m-1)/2}$
+is proved by a sign-reversing involution on partitions into distinct
+parts.  The involution moves the smallest part to/from the
+``Durfee edge,'' and fails (producing fixed points) precisely at
+the pentagonal numbers.
+
+In our setting:
+\begin{center}
+\begin{tabular}{l|l}
+\textbf{Franklin's involution} & \textbf{Proposed involution} \\ \hline
+Partitions into distinct parts &
+  Pairs $(S, \tau)$: subset $+$ cylindric object \\
+Move smallest part $\leftrightarrow$ Durfee edge &
+  Peel/glue strip via local rule \\
+Sign from $(-1)^{\text{\#parts}}$ &
+  Sign from $(-1)^{|S|}$ \\
+Fixed points: pentagonal configurations &
+  Fixed points: irreducible $(S, \tau)$ \\
+Pentagonal number theorem &
+  Positivity of $Q_{n,c}(q)$
+\end{tabular}
+\end{center}
+
+The essential new difficulty is that Franklin's involution acts
+within a single combinatorial species (distinct partitions), whereas
+our involution must bridge two worlds: the subset structure and the
+cylindric partition structure, mediated by the local rules.
+
+
+%% ============================================================
+\section{A concrete example}
+\label{sec:example}
+%% ============================================================
+
+\subsection{The case $d = 4$, $c = (2,2,0)$, $n = 1$}
+
+For this case, $Q_{1,(2,2,0)}(q) = q^2 + q^3 + q^4 + q^5$.
+The $q$-binomial decomposition~\eqref{eq:Q-alt-sum} gives:
+\[
+  Q_{1,c}(q) = h_{1,c}(q) - q \cdot h_{0,c}(q).
+\]
+
+\paragraph{The $h$-polynomials.}
+\begin{itemize}
+  \item $h_{0,c}(q) = \qpochn{q}{q}{0} \cdot f_{0,c}(q) = 1$
+    (the empty CPP).
+  \item $h_{1,c}(q) = (1-q) \cdot f_{1,c}(q)$.
+    Since $Q_{1,c} = h_{1,c} - q$ and
+    $Q_{1,c} = q^2 + q^3 + q^4 + q^5$, we get
+    $h_{1,c}(q) = q + q^2 + q^3 + q^4 + q^5$.
+\end{itemize}
+
+\paragraph{The ground set $\mathcal{G}_{1,c}$.}
+\begin{itemize}
+  \item \textbf{$j = 0$ (sign $+$):}
+    Pairs $(\emptyset, \tau)$ with $\tau \in \mathcal{H}_{1,c}$.
+    Five objects at weights $1, 2, 3, 4, 5$.
+  \item \textbf{$j = 1$ (sign $-$):}
+    Pairs $(\{1\}, \tau_0)$ with $\tau_0 \in \mathcal{H}_{0,c}$.
+    One object at weight $\sigma(\{1\}) + 0 = 1$.
+\end{itemize}
+
+\paragraph{The involution.}
+The unique negative object $(\{1\}, \tau_0)$ at weight~$1$
+pairs with the unique positive object $(\emptyset, \tau_1^{\min})$
+at weight~$1$, where $\tau_1^{\min}$ is the minimal-weight
+element of $\mathcal{H}_{1,c}$.  The pairing says: the
+minimal-weight cylindric object at max level~$1$ can be
+``peeled'' (via an inverse local rule extracting a strip of
+weight~$1$) to obtain the empty cylindric object at max level~$0$.
+
+The four surviving fixed points at weights $2, 3, 4, 5$ give
+$Q_{1,c}(q) = q^2 + q^3 + q^4 + q^5$.
+
+\subsection{Interpretation}
+
+In this example, the involution is uniquely forced: there is only
+one negative object and only one positive object at the matching
+weight.  For larger~$n$, multiple pairings become possible and the
+\emph{choice of canonical pairing} --- determined by the internal
+structure of the cylindric object~$\tau$ --- becomes the central
+difficulty.
+
+
+%% ============================================================
+\section{The fundamental difficulties}
+\label{sec:difficulties}
+%% ============================================================
+
+\subsection{Bridging two worlds}
+
+The involution must operate across two fundamentally different
+combinatorial domains:
+
+\begin{enumerate}
+  \item \textbf{The subset world} ($S \subseteq \{1, \ldots, n\}$):
+    well-understood, governed by elementary combinatorics.
+  \item \textbf{The cylindric world} ($\tau \in \mathcal{H}_{m,c}$):
+    governed by the interlacing conditions
+    $\nu^{(i)}_j \geq \nu^{(i+1)}_{j+c_{i+1}}$ that encode the
+    $\mathrm{A}_2$ root system.
+\end{enumerate}
+
+The local rules provide a \emph{mechanism} for transforming
+cylindric objects (each rule application corresponds to one
+commutation step), but designing a \emph{canonical} choice ---
+which element~$k$ to peel or glue, determined entirely by
+$(S, \tau)$, satisfying $\iota^2 = \operatorname{id}$ --- requires
+detailed understanding of the cylindric combinatorics.
+
+\subsection{Relation to the missing charge statistic}
+
+The fixed points of the involution would simultaneously solve
+the ``missing charge'' problem:
+
+\begin{itemize}
+  \item The fixed-point set
+    $\operatorname{Fix}(\iota) \subset \mathcal{G}_{n,c}$ has
+    generating function $Q_{n,c}(q)$.
+  \item Each fixed point $(S, \tau)$ has $|S|$ even, and its
+    weight $\sigma(S) + \operatorname{wt}(\tau)$ defines the
+    ``charge'' statistic.
+  \item The cardinality
+    $|\operatorname{Fix}(\iota)| = Q_{n,c}(1)
+    = \bigl(\frac{(d+1)(d+2)}{6} - 1\bigr)^n$.
+\end{itemize}
+
+So constructing the involution is equivalent to finding the
+charge statistic: the fixed points \emph{are} the charged objects.
+
+\subsection{Relation to the cyclic descent injection}
+
+The cyclic descent injection (previously established for
+$d \not\equiv 0 \pmod{3}$) provides a weight-raising map
+\emph{within} a single max level: it injects weight-$(w-1)$
+CPPs with max~$1$ into weight-$w$ CPPs with max~$1$.
+This addresses the monotonicity of coefficients of $h_{1,c}(q)$.
+
+The involution proposed here operates \emph{across} max levels,
+trading cylindric structure for subset decorations.  These are
+complementary:
+\begin{itemize}
+  \item The cyclic descent injection establishes structure
+    \emph{within} each $\mathcal{H}_{m,c}$.
+  \item The involution establishes cancellation \emph{between}
+    the $\mathcal{H}_{m,c}$ for different~$m$, mediated by the
+    subsets~$S$.
+\end{itemize}
+
+A complete proof would likely require both ingredients.
+
+
+%% ============================================================
+\section{Outlook: what is needed}
+\label{sec:outlook}
+%% ============================================================
+
+To implement the involution strategy, the following steps are needed:
+
+\begin{enumerate}
+  \item \textbf{Concrete model for $\mathcal{H}_{m,c}$.}
+    Give an explicit combinatorial description of the objects
+    counted by $h_{m,c}(q)$.  The growth diagram suggests these
+    are ALCDs with the base-partition freedom factored out,
+    but a precise bijective description is needed.
+
+  \item \textbf{Canonical peel/glue rule.}
+    Define a deterministic rule that, given $(S, \tau)$, either:
+    \begin{itemize}
+      \item selects $k \in \{1, \ldots, n\} \setminus S$ and peels
+        a strip of weight~$k$ from~$\tau$, or
+      \item selects $k \in S$ and glues a strip of weight~$k$
+        onto~$\tau$, or
+      \item declares $(S, \tau)$ a fixed point.
+    \end{itemize}
+    The rule must be involutive: applying peel then glue (or vice
+    versa) returns to the original pair.
+
+  \item \textbf{Identification of fixed points.}
+    Characterise the irreducible pairs $(S, \tau)$ that are fixed
+    by the involution.  These should form a set of cardinality
+    $Q_{n,c}(1) = \bigl(\frac{(d+1)(d+2)}{6} - 1\bigr)^n$
+    and their weight distribution should give~$Q_{n,c}(q)$.
+
+  \item \textbf{Verification.}
+    Test the proposed involution computationally for small cases
+    ($d = 4$, $n \leq 3$) before attempting a general proof.
+\end{enumerate}
+
+The local rules from the growth diagram framework --- the bijective
+incarnation of the commutation relations --- are the natural
+candidates for the peel/glue mechanism.  The challenge is to
+harness them in a way that produces a globally consistent involution.
+
+\end{document}

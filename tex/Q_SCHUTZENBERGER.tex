@@ -1,0 +1,1042 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\La}{\Lambda}
+\newcommand{\GK}{\operatorname{GK}}
+\newcommand{\CPP}{\operatorname{CPP}}
+\newcommand{\ALCD}{\operatorname{ALCD}}
+\newcommand{\IP}{\operatorname{IP}}
+\newcommand{\qpoch}[2]{(#1;#2)_\infty}
+\newcommand{\qpochn}[3]{(#1;#2)_{#3}}
+\newcommand{\qbin}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\wt}{wt}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Orb}{Orb}
+\DeclareMathOperator{\id}{id}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{The $Q$-Sch\"utzenberger Identity}
+\author{Robin Langer}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We define the $Q$-Sch\"utzenberger involution $\psi_Q$ on the
+pair set $\mathcal{P}_{a,b,k} = \mathcal{G}_{a+k,c} \times
+\mathcal{G}_{b+k,c}$ as the composition of Q-Burge$^{-1}$
+(Burge-glue on the first component) with Q-RSK (RSK-peel on
+the second component).  This is a sign-preserving,
+weight-preserving map that complements the sign-reversing
+involution~$\iota$ of~\cite{LOCAL_RULE}.  Together, $\iota$
+and~$\psi_Q$ generate a dihedral group action on the pair set,
+giving the \emph{$Q$-Sch\"utzenberger identity}: the
+fixed-point structure of the combined action constrains the
+positivity of the $Q$-kernel $\Phi_{a,b}(t)$.
+\end{abstract}
+
+\tableofcontents
+
+
+%% ============================================================
+\section{The classical Sch\"utzenberger involution}
+\label{sec:classical}
+%% ============================================================
+
+We briefly recall the standard theory to fix notation and
+motivate the $Q$-analogue.
+
+\subsection{Two bijections, one involution}
+
+Both the Burge and RSK local rules give bijections between
+cylindric plane partitions and pairs (interlacing partition,
+ALCD):
+\begin{align}
+  \psi_B &\colon \CPP(\pi) \;\xrightarrow{\;\sim\;}\;
+    \IP \times \ALCD(\pi),
+    \label{eq:psi-B} \\
+  \psi_R &\colon \CPP(\pi) \;\xrightarrow{\;\sim\;}\;
+    \IP \times \ALCD(\pi).
+    \label{eq:psi-R}
+\end{align}
+Both are weight-preserving.  They differ only in the cascade
+direction at each face: Burge cascades \textbf{up}, RSK
+cascades \textbf{down}.
+
+\begin{definition}[Classical Sch\"utzenberger involution]
+\label{def:classical-schutz}
+The \emph{Sch\"utzenberger involution} is the composition:
+\begin{equation}\label{eq:psi-classical}
+  \psi := \psi_R \circ \psi_B^{-1}
+  \colon \CPP(\pi) \to \CPP(\pi).
+\end{equation}
+\end{definition}
+
+\begin{proposition}[Classical properties]
+\label{prop:classical}
+The map $\psi$ satisfies:
+\begin{enumerate}
+  \item $\psi^2 = \mathrm{id}$ \textup{(involution)},
+  \item $\psi$ preserves total weight
+    \textup{(}$|\psi(c)| = |c|$\textup{)},
+  \item $\psi$ preserves the base partition~$\gamma$ and the
+    ALCD face labels~$\mathfrak{d}$,
+  \item the internal vertex partitions change:
+    $\psi(c) \neq c$ in general.
+\end{enumerate}
+\end{proposition}
+
+The involution $\psi$ is a non-trivial symmetry of
+$\CPP(\pi)$ that exists purely because there are two valid
+local rules for the same algebraic identity
+$T_n P_m = \sum_k P_{m-k} T_{n-k}$.
+
+
+%% ============================================================
+\section{The $Q$-Sch\"utzenberger on pairs}
+\label{sec:Q-schutz}
+%% ============================================================
+
+We now construct the $Q$-analogue on the pair set from
+\cite{LOCAL_RULE}, Section~10.
+
+\subsection{Ingredients}
+
+Recall from \cite{LOCAL_RULE}, Sections~12--13:
+\begin{itemize}
+  \item \textbf{Q-Burge} $\mathfrak{B}$: Burge-peel on the
+    first component.  Maps
+    $((S, \mathfrak{d}),\, (S', \mathfrak{d}')) \mapsto
+    ((S \cup \{\ell_B\}, \mathfrak{d}_B),\,
+    (S', \mathfrak{d}'))$.
+    Sign-reversing (changes $|S|$ by $+1$).
+  \item \textbf{Q-RSK} $\mathfrak{R}$: RSK-peel on the second
+    component.  Maps
+    $((S, \mathfrak{d}),\, (S', \mathfrak{d}')) \mapsto
+    ((S, \mathfrak{d}),\,
+    (S' \cup \{\ell_R\}, \mathfrak{d}'_R))$.
+    Sign-reversing (changes $|S'|$ by $+1$).
+  \item \textbf{Q-Burge$^{-1}$} $= \mathfrak{B}^{-1}$:
+    Burge-glue on the first component.  Given $i \in S$,
+    removes $i$ from $S$ and inserts into $\mathfrak{d}$ via
+    Burge forward (cascade \textbf{up}).
+    Sign-reversing (changes $|S|$ by $-1$).
+  \item \textbf{Q-RSK$^{-1}$} $= \mathfrak{R}^{-1}$:
+    RSK-glue on the second component.  Removes $i' \in S'$
+    and inserts into $\mathfrak{d}'$ via RSK forward (cascade
+    \textbf{down}).  Sign-reversing.
+\end{itemize}
+
+\subsection{The composition}
+
+\begin{definition}[$Q$-Sch\"utzenberger]
+\label{def:Q-schutz}
+The \emph{$Q$-Sch\"utzenberger map} is the composition:
+\begin{equation}\label{eq:psi-Q}
+  \boxed{\;
+  \psi_Q := \mathfrak{R} \circ \mathfrak{B}^{-1}
+  \colon \mathcal{P}_{a,b,k} \to \mathcal{P}_{a,b,k}.
+  \;}
+\end{equation}
+Concretely, given a pair
+$p = ((S, \mathfrak{d}),\, (S', \mathfrak{d}'))$ at cascade
+level~$k$:
+\begin{enumerate}
+  \item \textbf{Burge-glue the first component.}\;
+    Select the canonical element $i \in S$ (determined by the
+    Burge forward rule) and apply Burge-glue:
+    \[
+      (S, \mathfrak{d})
+      \;\xrightarrow{\;\mathfrak{B}^{-1}\;}
+      (S \setminus \{i\},\; \tilde{\mathfrak{d}}).
+    \]
+    The element~$i$ is absorbed into the ALCD via the Burge
+    cascade (\textbf{up}).
+
+  \item \textbf{RSK-peel the second component.}\;
+    Apply RSK-peel to the (unchanged) second component:
+    \[
+      (S', \mathfrak{d}')
+      \;\xrightarrow{\;\mathfrak{R}\;}
+      (S' \cup \{\ell_R\},\; \mathfrak{d}'_R).
+    \]
+    The element~$\ell_R$ is extracted from the ALCD via the
+    RSK cascade (\textbf{up}).
+\end{enumerate}
+The result is:
+\begin{equation}\label{eq:psi-Q-explicit}
+  \psi_Q(p) = \bigl(
+    (S \setminus \{i\},\, \tilde{\mathfrak{d}}),\;\,
+    (S' \cup \{\ell_R\},\, \mathfrak{d}'_R)
+  \bigr).
+\end{equation}
+\end{definition}
+
+\begin{remark}[Both steps cascade \textbf{up}]
+\label{rem:both-up}
+The Burge-glue uses Burge forward (cascade \textbf{up}) and
+the RSK-peel uses RSK inverse (cascade \textbf{up}).  Both
+steps push data in the same direction.  This is not a
+coincidence: it reflects the fact that
+$\mathfrak{B}^{-1}$ inverts the \textbf{down} cascade of
+Burge$^{-1}$ by going \textbf{up}, and $\mathfrak{R}$ inverts
+the \textbf{down} cascade of RSK forward by going \textbf{up}
+via RSK$^{-1}$.
+\end{remark}
+
+
+%% ============================================================
+\section{Properties of $\psi_Q$}
+\label{sec:properties}
+%% ============================================================
+
+\begin{proposition}[Sign and weight preservation]
+\label{prop:sign-weight-psi}
+The map $\psi_Q$ satisfies:
+\begin{enumerate}
+  \item \textbf{Sign-preserving:}\;
+    $(-1)^{|S(\psi_Q(p))| + |S'(\psi_Q(p))|}
+    = (-1)^{|S(p)| + |S'(p)|}$.
+  \item \textbf{Weight-preserving:}\;
+    $\wt(\psi_Q(p)) = \wt(p)$, where
+    $\wt(p) = \sigma(S) + |\mathfrak{d}| + \sigma(S')
+    + |\mathfrak{d}'|$.
+  \item \textbf{Cascade-preserving:}\;
+    $\psi_Q$ maps $\mathcal{P}_{a,b,k}$ to
+    $\mathcal{P}_{a,b,k}$ (both components remain at the
+    same ground-set level).
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1) The Burge-glue step changes $|S|$ by $-1$; the RSK-peel
+step changes $|S'|$ by $+1$.  Net change in $|S| + |S'|$:
+$-1 + 1 = 0$.
+
+(2) Burge-glue preserves the first-component weight
+($\sigma(S \setminus \{i\}) + |\tilde{\mathfrak{d}}|
+= \sigma(S) + |\mathfrak{d}|$), and RSK-peel preserves the
+second-component weight.
+
+(3) Burge-glue maps
+$(S, \mathfrak{d}) \in \mathcal{G}_{a+k,c}$ to
+$(S \setminus \{i\}, \tilde{\mathfrak{d}})
+\in \mathcal{G}_{a+k,c}$ (the ground-set level $a + k$ is
+unchanged: the subset shrinks by one element, the ALCD grows
+by one level, and $(a+k) - (|S|-1) = (a+k-|S|) + 1$).
+Similarly for the second component.
+\end{proof}
+
+
+\subsection{The involution conjecture}
+
+\begin{conjecture}[$Q$-Sch\"utzenberger involution]
+\label{conj:psi-involution}
+$\psi_Q^2 = \mathrm{id}$ on $\mathcal{P}_{a,b,k}$.
+\end{conjecture}
+
+In the classical case, $\psi^2 = \mathrm{id}$ follows from
+the Bender--Knuth involution relations: the transposition of
+two adjacent rows of the growth diagram, implemented via
+Burge and RSK, is self-inverse.  The $Q$-analogue requires
+that the composition
+\[
+  (\mathfrak{R} \circ \mathfrak{B}^{-1})
+  \circ
+  (\mathfrak{R} \circ \mathfrak{B}^{-1})
+  = \mathrm{id},
+\]
+i.e., that Burge-glue followed by RSK-peel, applied twice,
+returns to the original pair.  This amounts to a compatibility
+condition between the Burge and RSK cascade directions at the
+ground-set level.
+
+\begin{remark}[Sufficient condition]
+\label{rem:sufficient}
+A sufficient condition for $\psi_Q^2 = \mathrm{id}$ is that
+the element~$i$ glued by $\mathfrak{B}^{-1}$ and the
+element~$\ell_R$ peeled by $\mathfrak{R}$ satisfy a
+``round-trip'' property: applying $\psi_Q$ twice returns
+$i$ to~$S$ and removes $\ell_R$ from~$S'$.  In the classical
+case, this is guaranteed because the growth-diagram row
+transposition is self-inverse.  At the pair level, the
+round-trip property needs verification for each profile~$c$.
+\end{remark}
+
+\begin{remark}[The $d = 1$ case]
+\label{rem:d1}
+When $d = 1$, $Q_n = 1$ for all~$n$, the ground set
+$\mathcal{G}_{n,c}$ reduces to the standard ALCD set (with
+$S = \emptyset$ for the only non-trivial contribution), and
+$\psi_Q$ reduces to the classical Sch\"utzenberger involution.
+In this case, $\psi_Q^2 = \mathrm{id}$ is the classical
+theorem.
+\end{remark}
+
+
+%% ============================================================
+\section{The sign problem: why $\psi_Q$ does not prove positivity}
+\label{sec:sign-problem}
+%% ============================================================
+
+\subsection{The fundamental distinction}
+
+Proving that $Q_{n,c}(q) \in \Z_{\geq 0}[q]$ requires a
+\textbf{sign-reversing} involution
+$\iota\colon \mathcal{G}_{n,c} \to \mathcal{G}_{n,c}$ that pairs
+elements of opposite sign
+($|S'| \equiv |S| + 1 \pmod{2}$) while preserving weight.  The
+$Q$-Sch\"utzenberger map $\psi_Q$ is \textbf{sign-preserving}
+(Proposition~\ref{prop:sign-weight-psi}): it fixes the total
+$|S| + |S'|$, and therefore cannot perform the cancellations
+that establish positivity.
+
+\begin{center}
+\begin{tabular}{l|c|c|c}
+\textbf{Map} & \textbf{Sign} & \textbf{Direction} &
+  \textbf{Proves positivity?} \\ \hline
+$\psi_Q$ ($Q$-Sch\"utzenberger)
+  & preserving & horizontal & No \\[3pt]
+$\iota$ (peel/glue involution)
+  & reversing & vertical & Yes (if canonical peel exists)
+\end{tabular}
+\end{center}
+
+The directions are:
+\begin{itemize}
+  \item \textbf{Horizontal} ($\psi_Q$): moves between the
+    Burge and RSK realisations at the \emph{same} $|S| + |S'|$.
+    This is a change of coordinates---column cascade vs.\ row
+    cascade---that does not alter the subsets.
+  \item \textbf{Vertical} ($\iota$): moves between subset levels
+    $|S| + |S'|$ and $|S| + |S'| \pm 1$, trading subset elements
+    for cylindric structure.  This is the sign-changing operation
+    that drives cancellation.
+\end{itemize}
+
+
+\subsection{The missing ingredient: the canonical peel}
+
+The sign-reversing involution~$\iota$ requires the
+\textbf{canonical peel choice rule}: given
+$(S, \mathfrak{d})$, which element~$k$ to peel or glue, and
+whether to peel or glue (\cite{LOCAL_RULE}, Conjecture~8.1).
+The framework of Sections~\ref{sec:Q-schutz}--\ref{sec:properties}
+guarantees that the type signature and weight condition are
+satisfied for \emph{any} valid choice of~$k$.  But the choice
+must be deterministic, involutive, and must produce fixed points
+only at even $|S| + |S'|$.  The $Q$-Sch\"utzenberger
+map~$\psi_Q$ does not address this choice.
+
+
+\subsection{Classical analogy}
+
+The situation mirrors the classical theory.
+
+\begin{center}
+\begin{tabular}{l|l}
+\textbf{Classical} & \textbf{$Q$-enriched} \\ \hline
+Sch\"utzenberger involution on SYT &
+  $Q$-Sch\"utzenberger $\psi_Q$ on pairs \\[3pt]
+Symmetry (transposes $P$- and $Q$-tableaux) &
+  Symmetry (swaps Burge/RSK coordinates) \\[3pt]
+Does not prove Littlewood--Richardson rule &
+  Does not prove $Q_{n,c} \geq 0$ \\[3pt]
+Jeu de taquin / crystal operators prove LR &
+  Canonical peel rule proves positivity \\[3pt]
+Franklin's sign-reversing involution &
+  Sign-reversing $\iota$ for positivity
+\end{tabular}
+\end{center}
+
+Just as the Sch\"utzenberger involution on standard Young
+tableaux is a deep symmetry that does not by itself establish
+the Littlewood--Richardson rule, the $Q$-Sch\"utzenberger is a
+structural result about the \emph{duality} of the pair-level
+framework, not a \emph{cancellation} result.
+
+
+\subsection{The coordinate-independence conjugacy}
+
+Despite not proving the conjecture, $\psi_Q$ constrains the
+search for the canonical peel.
+
+\begin{proposition}[Conjugacy constraint]
+\label{prop:conjugacy}
+If the canonical peel rule is \emph{coordinate-independent}---depending
+only on partition sizes and abstract structure, not on the
+column-vs-row resolution of overlaps---then the Burge and RSK
+peel/glue involutions are conjugate via~$\psi_Q$:
+\begin{equation}\label{eq:conjugacy}
+  \mathfrak{V}^R = \psi_Q \circ \mathfrak{V}^B \circ \psi_Q^{-1}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+If the canonical choice depends only on $(S, \mathfrak{d})$ at
+the abstract level (not on which coordinate system resolves
+overlaps), then $\mathfrak{V}^B$ and $\mathfrak{V}^R$ make the
+same peel/glue decisions.  They differ only in the face-level
+geometry (Burge vs.\ RSK cascade), which is exactly the
+transformation performed by~$\psi_Q$.
+\end{proof}
+
+\begin{corollary}\label{cor:half-work}
+Under the hypothesis of Proposition~\ref{prop:conjugacy}, finding
+the canonical peel for Burge automatically gives the RSK version.
+The conjugacy~\eqref{eq:conjugacy} also implies
+$\psi_Q\colon \Fix(\mathfrak{V}^B) \xrightarrow{\sim}
+\Fix(\mathfrak{V}^R)$: the two ``charge decompositions'' are
+equivalent.
+\end{corollary}
+
+
+%% ============================================================
+\section{The dihedral action}
+\label{sec:dihedral}
+%% ============================================================
+
+The pair set $\mathcal{P}_{a,b,k}$ now carries two
+distinguished maps:
+\begin{center}
+\begin{tabular}{l|l|l|l}
+\textbf{Map} & \textbf{Definition} & \textbf{Sign}
+  & \textbf{Order} \\ \hline
+$\iota$ & Q-Burge--RSK involution
+  (\cite{LOCAL_RULE}, Def.~13.1)
+  & reversing & $2$ \\
+$\psi_Q$ & $\mathfrak{R} \circ \mathfrak{B}^{-1}$
+  (Definition~\ref{def:Q-schutz})
+  & preserving & $2$ (conj.)
+\end{tabular}
+\end{center}
+
+\begin{proposition}[Group structure]
+\label{prop:dihedral}
+Assuming Conjecture~\ref{conj:psi-involution}, the group
+$\Gamma = \langle \iota, \psi_Q \rangle$ generated by the
+two involutions is a dihedral group:
+\[
+  \Gamma \cong D_m
+  \quad\text{for some } m \geq 1,
+\]
+where $m$ is the order of $\iota \circ \psi_Q$.  The group
+acts on $\mathcal{P}_{a,b,k}$ preserving weight and with the
+sign character:
+\[
+  \sgn(\gamma) = \begin{cases}
+    +1 & \text{if } \gamma \text{ is a product of an even
+      number of } \iota\text{'s}, \\
+    -1 & \text{if odd}.
+  \end{cases}
+\]
+\end{proposition}
+
+\begin{proof}
+The group generated by two involutions $\iota$ and $\psi_Q$
+is always dihedral (or cyclic if they commute).  Since $\iota$
+is sign-reversing and $\psi_Q$ is sign-preserving, the sign
+character distinguishes the two cosets of the rotation subgroup
+$\langle \iota \circ \psi_Q \rangle$ in~$\Gamma$.
+\end{proof}
+
+
+\subsection{Orbits and fixed points}
+
+The $\Gamma$-orbits on $\mathcal{P}_{a,b,k}$ decompose into
+three types:
+
+\begin{definition}[Orbit types]
+\label{def:orbit-types}
+Let $\mathcal{O}$ be a $\Gamma$-orbit in
+$\mathcal{P}_{a,b,k}$.
+\begin{enumerate}
+  \item \textbf{Type~I (cancelled).}\;
+    $\mathcal{O}$ contains elements of both signs.  These
+    contribute zero to $Q_{a+k} Q_{b+k}$ after signed
+    summation.
+  \item \textbf{Type~II (positive).}\;
+    $\mathcal{O}$ consists entirely of elements with sign
+    $+1$ (i.e., $|S| + |S'|$ even for all elements).  Every
+    element is a fixed point of~$\iota$ (since $\iota$ is
+    sign-reversing, it must fix elements that have no
+    opposite-sign partner in~$\mathcal{O}$).
+  \item \textbf{Type~III (negative).}\;
+    $\mathcal{O}$ consists entirely of elements with sign
+    $-1$.  Same reasoning: every element is a fixed point
+    of~$\iota$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}[Positivity criterion]
+\label{prop:positivity-criterion}
+$Q_{a+k} \cdot Q_{b+k} \in \Z_{\geq 0}[q]$ if and only if
+there are no Type~III orbits at cascade level~$k$.
+Equivalently: every fixed point of~$\iota$ in
+$\mathcal{P}_{a,b,k}$ has sign $+1$.
+\end{proposition}
+
+\begin{proof}
+The signed generating function is:
+\begin{align*}
+  Q_{a+k} \cdot Q_{b+k}
+  &= \sum_{p \in \mathcal{P}_{a,b,k}}
+    (-1)^{|S(p)| + |S'(p)|}\, q^{\wt(p)} \\
+  &= \sum_{\substack{p \in \Fix(\iota)}}
+    (-1)^{|S(p)| + |S'(p)|}\, q^{\wt(p)},
+\end{align*}
+since the non-fixed-point pairs cancel in opposite-sign pairs
+under~$\iota$.  This is non-negative if and only if every
+fixed point has $|S(p)| + |S'(p)|$ even.
+\end{proof}
+
+
+\subsection{The role of $\psi_Q$}
+
+The $Q$-Sch\"utzenberger $\psi_Q$ acts \emph{within} the
+fixed-point set $\Fix(\iota)$ (since $\psi_Q$ preserves sign,
+it maps fixed points of $\iota$ to fixed points of $\iota$,
+provided $\iota$ and $\psi_Q$ commute on $\Fix(\iota)$).
+This gives additional structure:
+
+\begin{proposition}[Refinement of fixed points]
+\label{prop:refinement}
+If\/ $\psi_Q$ restricts to an involution on $\Fix(\iota)$,
+then the fixed-point contribution decomposes as:
+\[
+  \sum_{p \in \Fix(\iota)} (-1)^{|S|+|S'|}\, q^{\wt(p)}
+  \;=\;
+  \underbrace{
+    \sum_{p \in \Fix(\iota) \cap \Fix(\psi_Q)}
+    (-1)^{|S|+|S'|}\, q^{\wt(p)}
+  }_{\text{doubly fixed}}
+  \;+\;
+  \underbrace{
+    \sum_{\substack{p \in \Fix(\iota) \\ \psi_Q(p) \neq p}}
+    (-1)^{|S|+|S'|}\, q^{\wt(p)}
+  }_{\text{$\psi_Q$-paired, same sign}}.
+\]
+Since $\psi_Q$ is sign-preserving, the $\psi_Q$-paired terms
+on the right contribute \emph{positively} (they have the same
+sign and pair within the same sign class).  The doubly fixed
+points are the irreducible core.
+\end{proposition}
+
+
+%% ============================================================
+\section{The $Q$-Sch\"utzenberger identity}
+\label{sec:identity}
+%% ============================================================
+
+We now state the main identity.
+
+\begin{theorem}[$Q$-Sch\"utzenberger identity]
+\label{thm:Q-schutz-identity}
+Let $c = (c_0, c_1, c_2)$ be a rank-$3$ profile with
+$d = c_0 + c_1 + c_2$, and let $a, b, k \geq 0$.
+The $Q$-kernel coefficient $Q_{a+k}(q) \cdot Q_{b+k}(q)$
+admits the decomposition:
+\begin{equation}\label{eq:Q-schutz-identity}
+  \boxed{\;
+  Q_{a+k}\, Q_{b+k}
+  = \sum_{p \in \Fix(\iota) \cap \Fix(\psi_Q)}
+    q^{\wt(p)}
+  \;+\;
+  2 \sum_{\substack{\{p, \psi_Q(p)\}
+    \subseteq \Fix(\iota) \\ \psi_Q(p) \neq p}}
+    q^{\wt(p)},
+  \;}
+\end{equation}
+where the second sum runs over unordered $\psi_Q$-orbits of
+size~$2$ within $\Fix(\iota)$, and both sums contribute
+non-negative coefficients (all terms have
+$|S(p)| + |S'(p)|$ even, hence sign~$+1$).
+\end{theorem}
+
+\begin{proof}
+By Proposition~\ref{prop:positivity-criterion}, the signed sum
+reduces to $\Fix(\iota)$.  By
+Proposition~\ref{prop:refinement}, this decomposes into
+doubly-fixed points and $\psi_Q$-pairs within $\Fix(\iota)$.
+Since $\psi_Q$ is weight-preserving and sign-preserving, each
+$\psi_Q$-pair $\{p, \psi_Q(p)\}$ contributes
+$2\, q^{\wt(p)}$ (both elements have the same weight and sign
+$+1$).  The doubly-fixed points contribute
+$1 \cdot q^{\wt(p)}$ each.
+\end{proof}
+
+\begin{remark}[Conditional on two conjectures]
+\label{rem:conditional}
+Theorem~\ref{thm:Q-schutz-identity} is conditional on:
+\begin{enumerate}
+  \item[(a)] The existence of the sign-reversing involution
+    $\iota$ with only positive fixed points (Warnaar's
+    Conjecture~2.7 at the pair level), and
+  \item[(b)] Conjecture~\ref{conj:psi-involution}
+    ($\psi_Q^2 = \mathrm{id}$).
+\end{enumerate}
+Point~(a) is the hard conjecture.  Point~(b) is a structural
+property of the Burge--RSK interaction at the ground-set level,
+which should follow from the classical Bender--Knuth theory
+adapted to the $Q$-enriched setting.
+\end{remark}
+
+
+\subsection{The identity at $b = 0$}
+
+Setting $b = 0$ in~\eqref{eq:Q-schutz-identity} gives a
+formula for $Q_a$ itself, since $Q_0 = 1$:
+\begin{equation}\label{eq:b0}
+  Q_{a+k}
+  = Q_{a+k} \cdot Q_k \big|_{b=0}
+  = Q_{a+k} \cdot 1.
+\end{equation}
+More precisely, the pair set at $b = 0$ is
+$\mathcal{G}_{a+k} \times \mathcal{G}_{k}$, and
+$\mathcal{G}_0 = \{(\emptyset, \mathfrak{d}_0)\}$ is a
+singleton.  The second component is trivially fixed by both
+$\iota$ and $\psi_Q$, so:
+\begin{equation}\label{eq:Q-from-Phi}
+  Q_a = [t^0]\, \Phi_{a,0}(t)
+  = \sum_{\substack{p \in \Fix(\iota) \cap \Fix(\psi_Q)
+    \\ p \in \mathcal{G}_a \times \mathcal{G}_0}}
+    q^{\wt(p)}
+  \;+\;
+  2 \sum_{\substack{\{p, \psi_Q(p)\}
+    \subseteq \Fix(\iota) \cap (\mathcal{G}_a \times
+    \mathcal{G}_0)}}
+    q^{\wt(p)}.
+\end{equation}
+Since the second component is the singleton
+$(\emptyset, \mathfrak{d}_0)$, the pair reduces to a single
+ground-set element $(S, \mathfrak{d}) \in \mathcal{G}_{a,c}$,
+and the $Q$-Sch\"utzenberger identity becomes a statement
+about the ground set alone:
+\begin{equation}\label{eq:Q-ground-set-identity}
+  Q_a = \sum_{(S, \mathfrak{d}) \in \Fix(\iota_a)}
+    (-1)^{|S|}\, q^{\sigma(S) + |\mathfrak{d}|}
+  \;\in\; \Z_{\geq 0}[q],
+\end{equation}
+where $\iota_a$ is the restriction of~$\iota$ to
+$\mathcal{G}_{a,c} \times \{(\emptyset, \mathfrak{d}_0)\}
+\cong \mathcal{G}_{a,c}$.
+
+
+%% ============================================================
+\section{Special cases}
+\label{sec:special}
+%% ============================================================
+
+\subsection{The case $d = 1$}
+
+When $d = 1$ (one box per period), $Q_n = 1$ for all $n$, the
+ground set $\mathcal{G}_{n,c}$ has a single element
+$(\emptyset, \mathfrak{d})$ for each ALCD~$\mathfrak{d}$ (the
+Euler-factor subsets $S \neq \emptyset$ contribute
+cancelling pairs that sum to zero).  The $Q$-Sch\"utzenberger
+$\psi_Q$ reduces to the classical Sch\"utzenberger involution,
+and the identity~\eqref{eq:Q-schutz-identity} becomes:
+\[
+  Q_{a+k} \cdot Q_{b+k} = 1
+  = |\ALCD_{a+k}(c) \times \ALCD_{b+k}(c)|\big|_{\text{signed}}.
+\]
+
+\subsection{The case $d = 2$ (Rogers--Ramanujan)}
+
+For $d = 2$ with profile $c = (2, 0, 0)$:
+$Q_n = q^{n^2}$ (first Rogers--Ramanujan identity).  The
+product is:
+\[
+  Q_{a+k} \cdot Q_{b+k} = q^{(a+k)^2 + (b+k)^2}.
+\]
+This is a single monomial, so the pair set at each cascade
+level has exactly one doubly-fixed point contributing
+$q^{(a+k)^2 + (b+k)^2}$, and all other elements cancel
+under~$\iota$.  The $Q$-Sch\"utzenberger acts trivially on the
+unique fixed point ($\psi_Q = \mathrm{id}$ on $\Fix(\iota)$).
+
+For $c = (1, 1, 0)$: $Q_n = q^{n(n+1)}$ (second
+Rogers--Ramanujan), and the same monomial structure holds:
+\[
+  Q_{a+k} \cdot Q_{b+k} = q^{(a+k)(a+k+1) + (b+k)(b+k+1)}.
+\]
+
+
+\subsection{The case $d = 4$, $c = (2,2,0)$}
+
+Here $Q_0 = 1$, $Q_1 = q^2 + q^3 + q^4 + q^5$.  The product
+$Q_1 \cdot Q_1 = (q^2 + q^3 + q^4 + q^5)^2$ has multiple
+terms, so the doubly-fixed points and $\psi_Q$-pairs of
+$\Fix(\iota)$ contribute a non-trivial decomposition.  The
+$\psi_Q$-orbits of size~$2$ within $\Fix(\iota)$ account for
+the ``extra factor of~$2$'' in the coefficients of
+$Q_1^2 = q^4 + 2q^5 + 3q^6 + 4q^7 + 3q^8 + 2q^9 + q^{10}$.
+
+
+%% ============================================================
+\section{Relation to the shifted factorisation}
+\label{sec:shifted}
+%% ============================================================
+
+The shifted factorisation (\cite{ADJOINT}, Part~III):
+\begin{equation}\label{eq:shifted}
+  \Phi_{a,b}(t) = Q_a\, Q_b + t\, \Phi_{a+1,b+1}(t)
+\end{equation}
+acquires a refined interpretation through the dihedral action.
+
+At cascade level $k = 0$, the pair set is
+$\mathcal{P}_{a,b,0} = \mathcal{G}_a \times \mathcal{G}_b$.
+The $\Gamma$-action decomposes it into orbits, and the
+fixed-point contribution is $Q_a \cdot Q_b$.
+
+At level $k = 1$, the pair set is
+$\mathcal{G}_{a+1} \times \mathcal{G}_{b+1}$, and the
+fixed-point contribution is $Q_{a+1} \cdot Q_{b+1}$.
+
+The shifted factorisation says: the $k = 0$ contribution and
+the $k \geq 1$ contributions assemble into $\Phi_{a,b}(t)$,
+with each level independently non-negative (assuming the
+conjecture).  The $Q$-Sch\"utzenberger provides an
+\emph{intra-level symmetry}: within each cascade level~$k$,
+the fixed points of $\iota$ are further organised by
+$\psi_Q$ into doubly-fixed points and $\psi_Q$-pairs.
+
+\begin{remark}[Inter-level vs.\ intra-level]
+\label{rem:inter-intra}
+The cascade-coupled involution~$\iota$ can pair elements at
+\emph{different} cascade levels (Definition~11.2 of
+\cite{LOCAL_RULE}).  The $Q$-Sch\"utzenberger~$\psi_Q$
+operates \emph{within} a single level.  Together they provide
+both inter-level cancellation (via $\iota$) and intra-level
+symmetry (via $\psi_Q$).
+\end{remark}
+
+
+%% ============================================================
+\section{The $Q$-Sch\"utzenberger identity: summary}
+\label{sec:summary}
+%% ============================================================
+
+We summarise the logical structure.
+
+\begin{center}
+\begin{tabular}{r|l|l}
+\textbf{Map} & \textbf{Type} & \textbf{Role} \\ \hline
+$\iota$ & sign-reversing involution &
+  cancels opposite-sign pairs \\
+$\psi_Q$ & sign-preserving involution (conj.) &
+  organises fixed points of $\iota$ \\
+$\Gamma = \langle \iota, \psi_Q \rangle$ &
+  dihedral group & full symmetry of pair set
+\end{tabular}
+\end{center}
+
+\medskip
+\noindent\textbf{The identity.}\;
+The $Q$-kernel coefficient decomposes as:
+\[
+  Q_{a+k}\, Q_{b+k}
+  \;=\;
+  \underbrace{|\Fix(\iota) \cap \Fix(\psi_Q)|_q}_{%
+    \text{doubly fixed}}
+  \;+\;
+  \underbrace{2\, |\text{$\psi_Q$-pairs in } \Fix(\iota)|_q}_{%
+    \text{Sch\"utzenberger pairs}},
+\]
+where $|\cdot|_q$ denotes the $q$-weighted count.  All terms
+are non-negative.
+
+\medskip
+\noindent\textbf{The programme.}
+\begin{enumerate}
+  \item Construct the sign-reversing involution~$\iota$
+    (the hard step --- Warnaar's conjecture).
+  \item Verify $\psi_Q^2 = \mathrm{id}$ (the
+    $Q$-Bender--Knuth relations).
+  \item Characterise the doubly-fixed points
+    $\Fix(\iota) \cap \Fix(\psi_Q)$ --- these are the
+    irreducible positivity core.
+  \item At $b = 0$: the identity reduces to a formula for
+    $Q_a$ in terms of the ground set $\mathcal{G}_{a,c}$
+    alone (equation~\eqref{eq:Q-ground-set-identity}).
+\end{enumerate}
+
+
+%% ============================================================
+\section{The orthogonal structure of the problem}
+\label{sec:orthogonal}
+%% ============================================================
+
+The analysis reveals that the positivity problem decomposes into
+two \emph{orthogonal} components.
+
+\begin{center}
+\begin{tabular}{l|l|l}
+& \textbf{Horizontal (symmetry)} &
+  \textbf{Vertical (cancellation)} \\ \hline
+\textbf{Map} &
+  $\psi_Q$ ($Q$-Sch\"utzenberger) &
+  $\iota$ (peel/glue) \\[3pt]
+\textbf{Action} &
+  Swaps Burge $\leftrightarrow$ RSK &
+  Trades $S \leftrightarrow \mathfrak{d}$ \\[3pt]
+\textbf{Subsets $S, S'$} &
+  Fixed &
+  Change by $\pm 1$ \\[3pt]
+\textbf{ALCDs $\mathfrak{d}, \mathfrak{d}'$} &
+  Change (coord.\ system) &
+  Change (peel/glue) \\[3pt]
+\textbf{Sign} &
+  Preserved &
+  Reversed \\[3pt]
+\textbf{Status} &
+  \textbf{Defined} (this note) &
+  \textbf{Conjectural} (\cite{LOCAL_RULE}) \\[3pt]
+\textbf{Role} &
+  Constrains the problem &
+  Solves the problem
+\end{tabular}
+\end{center}
+
+The horizontal component ($\psi_Q$) tells us the \emph{stage is
+well-built}: the pair-level framework supports a clean duality
+between two coordinate systems, confirming that this is the
+correct level of abstraction for the $Q$-enriched theory.
+
+The vertical component ($\iota$) is the \emph{actor}: it must
+perform the sign-reversing cancellation that establishes
+positivity.  Its construction requires the canonical peel rule,
+which remains open.
+
+The two components interact through the dihedral group
+$\Gamma = \langle \iota, \psi_Q \rangle$
+(Section~\ref{sec:dihedral}), and through the conjugacy
+$\mathfrak{V}^R = \psi_Q \circ \mathfrak{V}^B \circ \psi_Q^{-1}$
+(Proposition~\ref{prop:conjugacy}).  But they serve fundamentally
+different purposes.
+
+
+%% ============================================================
+\section{Status of the programme}
+\label{sec:status}
+%% ============================================================
+
+\subsection{What is established}
+
+\begin{enumerate}
+  \item \textbf{Ground set.}\;
+    $\mathcal{G}_{n,c}$ with signed generating function
+    $Q_{n,c}(q)$ (\cite{UNDERLYING_SET, FIRST_ATTEMPT}).
+
+  \item \textbf{Two local rules.}\;
+    Burge and RSK peel/glue on pairs, with shared type
+    signature, same face label, same weight condition
+    (\cite{Q_LOCAL}).
+
+  \item \textbf{$Q$-Sch\"utzenberger.}\;
+    $\psi_Q = \mathfrak{R} \circ \mathfrak{B}^{-1}$
+    well-defined, weight-preserving, sign-preserving
+    (this note).
+
+  \item \textbf{Locality principle.}\;
+    Effective operations in the $Q$-enriched setting must be
+    local---one face at a time---matching the shifted
+    factorisation $\Phi_{a,b}(t) = Q_a Q_b + t\,\Phi_{a+1,b+1}(t)$
+    (\cite{LOCAL_RULE}, Theorem~7.1).
+
+  \item \textbf{Propagation obstruction.}\;
+    The global Sch\"utzenberger involution fails in the
+    $Q$-enriched setting (\cite{LOCAL_RULE}, Section~4),
+    confirming that global approaches do not work.
+
+  \item \textbf{Cyclic descent injection.}\;
+    For $d \not\equiv 0 \pmod{3}$, the max-$1$ case has a valid
+    injection establishing monotonicity of $h_{1,c}(q)$
+    coefficients (\cite{NOTES}, Section~8).
+
+  \item \textbf{Computational verification.}\;
+    $Q_{n,c}(q) \in \Z_{\geq 0}[q]$ verified for
+    $d = 1, 2, 4, 5, 7$ (all tested profiles pass).
+\end{enumerate}
+
+
+\subsection{What remains open}
+
+\begin{enumerate}
+  \item \textbf{Canonical peel rule}
+    (\cite{LOCAL_RULE}, Conjecture~8.1).\;
+    The deterministic choice of which element~$k$ to peel or
+    glue, given $(S, \mathfrak{d})$.  This is the central open
+    problem.
+
+  \item \textbf{$Q$-Bender--Knuth relations.}\;
+    Conjecture~\ref{conj:psi-involution}: $\psi_Q^2 = \id$.
+    Structural property of Burge--RSK interaction at the
+    ground-set level.
+
+  \item \textbf{Fixed-point characterisation.}\;
+    Identify the ``irreducible'' pairs that are fixed by both
+    $\iota$ and $\psi_Q$.  Their cardinality at $b = 0$ must be
+    $Q_{n,c}(1) = \bigl(\frac{(d+1)(d+2)}{6} - 1\bigr)^n$.
+
+  \item \textbf{Charge statistic.}\;
+    The weight function on fixed points defines the ``missing
+    charge.''  Understanding its structure (analogue of
+    Lascoux--Sch\"utzenberger charge?) is a further goal.
+
+  \item \textbf{The $d \equiv 0 \pmod{3}$ case.}\;
+    The cyclic descent injection fails here (balanced slack has
+    no cyclic descent).  A different mechanism is needed, possibly
+    involving the pair-based framework at deeper ALCD levels.
+\end{enumerate}
+
+
+\subsection{Where to look for the canonical peel}
+
+The $Q$-Sch\"utzenberger, while not proving the conjecture,
+narrows the search in three ways.
+
+\paragraph{1.\ Coordinate independence.}
+By Proposition~\ref{prop:conjugacy}, a coordinate-independent
+peel rule for Burge automatically gives the RSK version.  This
+suggests looking for a rule based on \emph{abstract} properties:
+sizes of horizontal strips, face-label magnitudes, or diagonal
+weights---rather than specific column or row indices.
+
+\paragraph{2.\ The shifted factorisation as guide.}
+The recurrence
+$\Phi_{a,b}(t) = Q_a Q_b + t\,\Phi_{a+1,b+1}(t)$ peels one
+layer at a time (\cite{LOCAL_RULE}, Section~7.2).  The canonical
+peel should correspond to the $k = 1 \to k = 0$ reduction:
+peel the face whose removal corresponds to stripping the leading
+term from the $Q$-kernel.
+
+\paragraph{3.\ The cyclic descent as prototype.}
+For the max-$1$ case ($d \not\equiv 0 \pmod{3}$), the cyclic
+descent injection (\cite{NOTES}, Section~8) provides an explicit
+peel rule based on the slack vector.  This rule is
+coordinate-independent and produces an injection from
+weight-$(w-1)$ to weight-$w$ configurations.  Extending this to
+general ALCD depth is the key challenge.
+
+
+%% ============================================================
+\section{Open questions}
+\label{sec:open}
+%% ============================================================
+
+\begin{enumerate}
+  \item \textbf{$Q$-Bender--Knuth.}\;
+    Does $\psi_Q^2 = \mathrm{id}$?  Is there a
+    $Q$-analogue of the Bender--Knuth involution that
+    mediates between the Burge and RSK cascades at the
+    ground-set level?
+
+  \item \textbf{Order of $\iota \circ \psi_Q$.}\;
+    What is the order~$m$ of the dihedral group
+    $\Gamma = \langle \iota, \psi_Q \rangle$?  In the
+    classical case, $\psi$ has order~$2$ and
+    $\iota \circ \psi$ may have larger order.  Does the
+    $Q$-enrichment change the group structure?
+
+  \item \textbf{Doubly-fixed-point formula.}\;
+    Is there a closed form for the $q$-count of
+    $\Fix(\iota) \cap \Fix(\psi_Q)$?  In the $d = 2$ case,
+    this is a single monomial $q^{(a+k)^2 + (b+k)^2}$
+    (or $q^{(a+k)(a+k+1) + (b+k)(b+k+1)}$).  Is there a
+    quadratic-form structure for general~$d$?
+
+  \item \textbf{Crystal-base interpretation.}\;
+    The classical Sch\"utzenberger involution has an
+    interpretation via crystal bases for
+    $\widehat{\mathfrak{sl}}_r$
+    (cf.~\cite{COMMUTATION}).  Does the
+    $Q$-Sch\"utzenberger correspond to a crystal operator
+    on the $Q$-enriched pair set?
+
+  \item \textbf{Computational verification.}\;
+    For small $d$ and $n$, enumerate $\mathcal{P}_{a,b,k}$,
+    construct $\iota$ and $\psi_Q$ explicitly, verify the
+    identity~\eqref{eq:Q-schutz-identity}, and tabulate the
+    doubly-fixed-point counts.
+\end{enumerate}
+
+
+\begin{thebibliography}{99}
+\bibitem{ADJOINT}
+  R.~Langer,
+  \emph{The $Q$-Operator and its Adjoint: From Level~3 Operator
+  Traces to Cascade Commutators},
+  companion note, 2026.
+
+\bibitem{Borodin}
+  A.~Borodin,
+  \emph{Periodic Schur process and cylindric partitions},
+  Duke Math.~J.\ \textbf{140} (2007), 391--468.
+
+\bibitem{COMMUTATION}
+  R.~Langer,
+  \emph{From Commutation Relations to Growth Diagrams:
+  A Summary of the Operator--Bijection Correspondence},
+  companion note.
+
+\bibitem{FIRST_ATTEMPT}
+  R.~Langer,
+  \emph{Towards an Involution Proof of Positivity for
+  $Q_{n,c}(q)$},
+  companion note.
+
+\bibitem{LOCAL_RULE}
+  R.~Langer,
+  \emph{The Generalized Local Rule and the Burge--RSK
+  Involution},
+  companion note, 2026.
+
+\bibitem{Q_LOCAL}
+  R.~Langer,
+  \emph{Two Equivalent Local Rules on Ground-Set Pairs},
+  companion note, 2026.
+
+\bibitem{NOTES}
+  R.~Langer,
+  \emph{Weighted Local Rules and the Cyclic Descent
+  Injection},
+  companion note.
+
+\bibitem{UNDERLYING_SET}
+  R.~Langer,
+  \emph{The Underlying Set: Cylindric Plane Partitions, ALCDs,
+  and the Ground Set for the Involution},
+  companion note.
+
+\bibitem{langer-thesis}
+  R.~Langer,
+  \emph{Cylindric Partitions and Bijective Proofs},
+  PhD thesis, University of Melbourne.
+
+\bibitem{vanLeeuwen}
+  M.~A.~A.~van~Leeuwen,
+  \emph{The Robinson--Schensted and Sch\"utzenberger
+  algorithms, an elementary approach},
+  Electron.~J.~Combin.\ \textbf{3} (1996), R15.
+\end{thebibliography}
+
+\end{document}

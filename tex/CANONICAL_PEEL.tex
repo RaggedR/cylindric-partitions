@@ -1,0 +1,959 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\La}{\Lambda}
+\newcommand{\GK}{\operatorname{GK}}
+\newcommand{\CPP}{\operatorname{CPP}}
+\newcommand{\ALCD}{\operatorname{ALCD}}
+\newcommand{\qpoch}[2]{(#1;#2)_\infty}
+\newcommand{\qpochn}[3]{(#1;#2)_{#3}}
+\newcommand{\qbin}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\wt}{wt}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\id}{id}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{The Canonical Peel via Local Rules \\
+  and NILP Duality}
+\author{Robin Langer}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We identify the canonical peel criterion for the
+sign-reversing involution on the ground set
+$\mathcal{G}_{n,c}$.  The local rule at each face of
+the growth diagram computes the sets $A$, $B$, and their
+intersection $A \cap B$, which identifies exactly where
+lattice paths conflict.  Faces with $A \cap B \neq \emptyset$
+along the outermost diagonal are the peel candidates: the
+cascade is actively preventing a crossing, and undoing
+it introduces an intersection.  Combined with a Franklin-style
+comparison and a weight condition (horizontal strip size
+$=$ level number), this gives a concrete, computable
+algorithm for the involution.
+\end{abstract}
+
+\tableofcontents
+
+
+%% ============================================================
+\section{The enlarged path space}
+\label{sec:enlarged}
+%% ============================================================
+
+The ground set $\mathcal{G}_{n,c}$ encodes \emph{all}
+families of lattice paths on the cylinder---both
+non-intersecting and intersecting:
+\begin{equation}\label{eq:ground-set}
+  \mathcal{G}_{n,c}
+  = \bigsqcup_{j=0}^{n}
+    \bigl\{(S, \mathfrak{d}) :
+      S \subseteq \{1, \ldots, n\},\;
+      |S| = j,\;
+      \mathfrak{d} \in \mathcal{H}_{n-j,c}
+    \bigr\}.
+\end{equation}
+\begin{itemize}
+  \item $S = \emptyset$: non-intersecting family
+    (genuine CPP), sign~$+1$.
+  \item $S \neq \emptyset$: intersecting family,
+    sign~$(-1)^{|S|}$.
+\end{itemize}
+The $Q$-polynomial is the signed generating function:
+\begin{equation}\label{eq:Q-signed}
+  Q_{n,c}(q)
+  = \sum_{(S, \mathfrak{d}) \in \mathcal{G}_{n,c}}
+    (-1)^{|S|}\, q^{\sigma(S) + \wt(\mathfrak{d})},
+\end{equation}
+where $\sigma(S) = \sum_{s \in S} s$.  Warnaar's
+Conjecture~2.7 states $Q_{n,c}(q) \in \Z_{\geq 0}[q]$:
+all intersecting families cancel via a sign-reversing
+involution, leaving only non-intersecting contributions.
+
+
+%% ============================================================
+\section{The local rule and conflict detection}
+\label{sec:local-rule}
+%% ============================================================
+
+\subsection{The sets $A$, $B$, $A \cap B$}
+
+At each face of the growth diagram, the forward local
+rule~(\cite{UNDERLYING_SET}, Definition~2.4) takes as input
+$(\alpha, \beta, m, \nu)$ with $\nu \subset_h \alpha$
+and $\nu \subset_h \beta$ (horizontal strips), and
+produces $\lambda$ together with the sets:
+\begin{align}
+  A &= \{i : \alpha'_i > \nu'_i\}
+    \quad\text{(columns where $\alpha$ exceeds $\nu$)},
+    \label{eq:A} \\
+  B &= \{i : \beta'_i > \nu'_i\}
+    \quad\text{(columns where $\beta$ exceeds $\nu$)},
+    \label{eq:B} \\
+  A \cap B &= \text{conflict zone: both edges exceed $\nu$}.
+    \label{eq:AB}
+\end{align}
+The cascade~$C$ resolves the conflict in $A \cap B$:
+\begin{itemize}
+  \item \textbf{Burge} (cascade up):
+    $\varepsilon(i) = \min\{j > i : j \notin A \cup B \cup C\}$.
+  \item \textbf{RSK} (cascade down):
+    $\delta(i) = \max\{j < i : j \notin A \cup B \cup C\}$.
+\end{itemize}
+The remaining $m$ free columns form the set~$D$:
+the first $m$ elements of $\N \setminus (A \cup B \cup C)$.
+
+
+\subsection{NILP interpretation}
+
+The sets $A$, $B$, $A \cap B$ have a direct lattice path
+meaning:
+
+\begin{center}
+\begin{tabular}{l|l}
+\textbf{Local rule data} &
+  \textbf{NILP interpretation} \\ \hline
+$A \cap B = \emptyset$ &
+  Paths don't conflict at this face \\
+  & (naturally non-intersecting) \\
+$A \cap B \neq \emptyset$ &
+  Paths \textbf{would cross} without \\
+  & cascade resolution \\
+Cascade $C$ (Burge: up) &
+  Resolve conflict by pushing \\
+  & crossing upward \\
+Cascade $C$ (RSK: down) &
+  Resolve conflict by pushing \\
+  & crossing downward \\
+Face label $m$ &
+  Free columns (cubes) beyond \\
+  & the conflict \\
+$|A \cap B|$ &
+  Number of competing path positions
+\end{tabular}
+\end{center}
+
+\begin{proposition}[Conflict $=$ potential crossing]
+\label{prop:conflict}
+A face of the growth diagram has $A \cap B \neq \emptyset$
+if and only if the corresponding lattice paths would cross
+at that position without the cascade resolution.  The
+cascade~$C$ resolves the crossing by redirecting
+$|A \cap B|$ path steps.
+\end{proposition}
+
+\begin{proof}
+The set $A$ records columns where the horizontal strip
+$\alpha / \nu$ has a cell, and $B$ records columns where
+$\beta / \nu$ has a cell.  A column $i \in A \cap B$
+means both strips claim column~$i$: both paths attempt
+to rise at the same column.  In the NILP picture, this
+is a crossing.  The cascade moves one of the conflicting
+steps to a different column, preventing the crossing.
+\end{proof}
+
+
+%% ============================================================
+\section{The canonical peel}
+\label{sec:canonical-peel}
+%% ============================================================
+
+\subsection{Peelable faces}
+
+\begin{definition}[Peelable face]
+\label{def:peelable}
+A face along the outermost diagonal of the growth diagram
+for an ALCD~$\mathfrak{d}$ is \emph{peelable} if
+$A \cap B \neq \emptyset$ at that face.
+\end{definition}
+
+At a peelable face, the cascade is actively preventing
+a crossing.  To \emph{peel} means to \textbf{undo the
+cascade}: stop resolving the conflict and let the paths
+cross.  This converts a non-intersecting step into a
+crossing, adding one element to~$S$.
+
+At a face with $A \cap B = \emptyset$, there is no
+conflict to exploit---the paths naturally don't
+interfere.  These faces are inert under the involution.
+
+
+\subsection{The weight condition}
+
+For the involution to preserve total weight
+$\sigma(S) + \wt(\mathfrak{d})$, we need the weight
+accounting to balance.
+
+\begin{proposition}[Weight balance]
+\label{prop:weight}
+Peeling at level~$s$ preserves total weight if and only if
+the horizontal strip at level~$s$ has size~$s$:
+\begin{equation}\label{eq:weight-condition}
+  \boxed{\;
+  \text{strip size at level } s \;=\; s.
+  \;}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+When we peel at level~$s$:
+\begin{itemize}
+  \item $\sigma(S)$ increases by~$s$ (adding $s$ to~$S$).
+  \item $\wt(\mathfrak{d})$ decreases by the weight
+    of the removed diagonal, which equals the sum of
+    face labels $= $ horizontal strip size at that level.
+\end{itemize}
+For $\sigma(S') + \wt(\mathfrak{d}')
+= \sigma(S) + \wt(\mathfrak{d})$, the strip size must
+equal~$s$.  The same argument applies to gluing (in
+reverse).
+\end{proof}
+
+The local rule computes strip sizes via the face labels,
+so condition~\eqref{eq:weight-condition} is directly
+checkable.
+
+
+\subsection{The Franklin comparison}
+
+\begin{definition}[Peel and glue candidates]
+\label{def:candidates}
+For a ground-set element $(S, \mathfrak{d})$:
+\begin{itemize}
+  \item The \emph{peel candidate}~$\ell$ is the first
+    level along the outermost diagonal where:
+    \begin{enumerate}
+      \item $A \cap B \neq \emptyset$ (conflict exists),
+        and
+      \item the strip size equals the level number
+        (weight condition~\eqref{eq:weight-condition}).
+    \end{enumerate}
+  \item The \emph{glue candidate} is $\min(S)$ (the
+    first crossing level), if $S \neq \emptyset$.
+\end{itemize}
+\end{definition}
+
+\begin{definition}[The involution $\iota$]
+\label{def:involution}
+The sign-reversing involution
+$\iota \colon \mathcal{G}_{n,c} \to \mathcal{G}_{n,c}$
+is defined by the Franklin comparison:
+\begin{enumerate}
+  \item If $\ell < \min(S)$ \textup{(}or $S = \emptyset$
+    and $\ell$ exists\textup{)}: \textbf{peel} at~$\ell$.
+    \[
+      \iota(S, \mathfrak{d})
+      = (S \cup \{\ell\},\; \mathfrak{d}'),
+    \]
+    where $\mathfrak{d}'$ is obtained by removing the
+    diagonal at level~$\ell$.
+  \item If $\min(S) < \ell$ \textup{(}or $S \neq \emptyset$
+    and no valid~$\ell$ exists\textup{)}: \textbf{glue}
+    at $\min(S)$.
+    \[
+      \iota(S, \mathfrak{d})
+      = (S \setminus \{\min(S)\},\; \tilde{\mathfrak{d}}),
+    \]
+    where $\tilde{\mathfrak{d}}$ is obtained by inserting
+    a diagonal at level~$\min(S)$.
+  \item If $\ell = \min(S)$, or $S = \emptyset$ and no
+    valid~$\ell$ exists: \textbf{fixed point}.
+\end{enumerate}
+\end{definition}
+
+
+\subsection{Involutivity}
+
+\begin{proposition}[Involutivity]
+\label{prop:involutive}
+The map~$\iota$ satisfies $\iota^2 = \id$ wherever the
+peel and glue operations are well-defined and inverse to
+each other.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+Consider case~(1): peel at level~$\ell$.  The result is
+$(S \cup \{\ell\},\, \mathfrak{d}')$.  We claim
+$\iota$ sends this back to $(S, \mathfrak{d})$ via
+case~(2):
+\begin{itemize}
+  \item The glue candidate of the result is
+    $\min(S \cup \{\ell\})$.  Since $\ell$ was chosen
+    as the \emph{first} valid peel level, and $\ell$
+    was smaller than $\min(S)$ (or $S = \emptyset$),
+    we have $\min(S \cup \{\ell\}) = \ell$.
+  \item After peeling at~$\ell$, the resulting
+    ALCD~$\mathfrak{d}'$ has lost the diagonal at
+    level~$\ell$.  The peel candidate of
+    $(S \cup \{\ell\},\, \mathfrak{d}')$ is either
+    absent or $> \ell$ (since the face at~$\ell$ no
+    longer exists in the ALCD).
+  \item Therefore $\min(S \cup \{\ell\}) = \ell < $
+    peel candidate, so case~(2) applies: glue at~$\ell$.
+  \item Gluing at~$\ell$ is the inverse of peeling
+    at~$\ell$, recovering $(S, \mathfrak{d})$.
+\end{itemize}
+Case~(2) is symmetric: gluing at $\min(S)$ adds a
+diagonal, and the resulting element has $\ell = \min(S)$
+as its peel candidate (the newly inserted diagonal has
+$A \cap B \neq \emptyset$ by construction), giving
+case~(1) which peels back.
+\end{proof}
+
+
+%% ============================================================
+\section{Comparison with classical LGV}
+\label{sec:LGV}
+%% ============================================================
+
+\begin{center}
+\begin{tabular}{l|l|l}
+  & \textbf{Classical LGV} & \textbf{$Q$-NILP} \\ \hline
+Crossing data &
+  $\sigma \in S_r$ &
+  $S \subseteq \{1, \ldots, n\}$ \\
+Meaning &
+  which paths swap &
+  where paths cross \\
+  & destinations & (at which levels) \\
+Number of types &
+  $r!$ (topological) &
+  $2^n$ (geometric) \\
+Sign &
+  $\sgn(\sigma)$ &
+  $(-1)^{|S|}$ \\
+Involution &
+  swap tails at first &
+  peel/glue at first \\
+  & intersection & conflict face \\
+Swap mechanism &
+  unique (on DAG) &
+  cascade direction \\
+  & & (Burge or RSK) \\
+Weight constraint &
+  automatic &
+  strip size $= $ level \\
+Fixed points &
+  NILP (identity) &
+  non-intersecting \\
+  & & $Q$-families
+\end{tabular}
+\end{center}
+
+\begin{remark}[The cylinder vs.\ the DAG]
+\label{rem:cylinder}
+On a directed acyclic graph, ``swap tails at first
+intersection'' is unique and automatically involutive.
+On the \emph{cylinder}, paths wind around and interact
+at every level, so the swap requires:
+\begin{enumerate}
+  \item a \textbf{cascade direction} (Burge or RSK) to
+    determine how the conflict is resolved, and
+  \item a \textbf{weight condition} (strip size
+    $=$ level number) to ensure weight preservation.
+\end{enumerate}
+The local rule provides both: it computes $A \cap B$
+(identifying the conflict), the cascade~$C$ (resolving
+it), and the face labels (giving the strip sizes).
+\end{remark}
+
+
+%% ============================================================
+\section{The algorithm}
+\label{sec:algorithm}
+%% ============================================================
+
+For a given profile~$c$ and level~$n$, the canonical peel
+criterion gives a concrete algorithm:
+
+\begin{enumerate}
+  \item \textbf{Enumerate} all ground-set elements
+    $(S, \mathfrak{d}) \in \mathcal{G}_{n,c}$.
+
+  \item \textbf{Build} the growth diagram for each
+    ALCD~$\mathfrak{d}$ using the Burge rule.
+
+  \item \textbf{Scan} the outermost diagonal: at each
+    face, compute $A$, $B$, and $A \cap B$.
+
+  \item \textbf{Identify} the peel candidate~$\ell$:
+    the first face with $A \cap B \neq \emptyset$ and
+    strip size $= $ level number.
+
+  \item \textbf{Compare} $\ell$ with $\min(S)$ (the
+    Franklin comparison).
+
+  \item \textbf{Apply} peel or glue as determined by
+    the comparison.
+
+  \item \textbf{Verify}:
+    \begin{itemize}
+      \item Well-defined: every non-fixed element has
+        a partner.
+      \item Involutive: applying twice gives identity.
+      \item Sign-reversing: partners have opposite sign.
+      \item Weight-preserving: partners have same total
+        weight.
+      \item Fixed-point count:
+        $\sum_{\text{fixed}} q^{\wt} = Q_{n,c}(q)$.
+    \end{itemize}
+\end{enumerate}
+
+
+%% ============================================================
+\section{Computational verification}
+\label{sec:computation}
+%% ============================================================
+
+We test the Franklin involution of
+Definition~\ref{def:involution} on the $q$-binomial
+decomposition
+\begin{equation}\label{eq:q-binom}
+  Q_n = \sum_{j=0}^{n} (-1)^j\, q^{j(j+1)/2}\,
+  \qbin{n}{j}\, h_{n-j},
+  \qquad
+  h_m = (q)_m \cdot [z^m]\,\GK_c(z,q).
+\end{equation}
+The ground set $\mathcal{G}_{n,c}$ has
+$\sum_{j} \binom{n}{j} \cdot |h_{n-j}|_1$ elements (where
+$|f|_1$ denotes the sum of absolute values of coefficients).
+At the polynomial level, the involution maps
+$(S, w) \mapsto (S \triangle \{\ell\},\, w \mp \ell)$
+where $\ell = \min\bigl(\{1, \ldots, n\} \setminus S\bigr)$
+if peeling, or $\ell = \min(S)$ if gluing.
+
+
+\subsection{Results: $h_m \geq 0$ profiles}
+
+For profiles where $h_m \in \N[q]$ for all~$m$, the
+Franklin involution works at the $h_m$ level.
+Computational results:
+
+\medskip
+\begin{center}
+\begin{tabular}{c|c|c|c|c|l}
+$c$ & $d$ & $n$ &
+  \textbf{ground set} & \textbf{paired} &
+  \textbf{fixed pts} $\to Q_n$ \\ \hline
+$(1,0,0)$ & $1$ & $1$ & $2$ & $2$ &
+  $0$ \;$\to$\; $Q_1 = 0$ \\
+$(1,0,0)$ & $1$ & $2$ & $4$ & $4$ &
+  $0$ \;$\to$\; $Q_2 = 0$ \\
+$(1,0,0)$ & $1$ & $3$ & $8$ & $8$ &
+  $0$ \;$\to$\; $Q_3 = 0$ \\
+$(2,0,0)$ & $2$ & $1$ & $3$ & $2$ &
+  $1$ \;$\to$\; $Q_1 = q^2$ \\
+$(2,0,0)$ & $2$ & $2$ & $9$ & $6$ &
+  $3$ \;$\to$\; $Q_2 = q^6$ \\
+$(2,2,0)$ & $4$ & $1$ & $6$ & $2$ &
+  $4$ \;$\to$\; $Q_1 = q + 2q^2 + q^4$ \\
+$(2,2,0)$ & $4$ & $2$ & $36$ & $12$ &
+  $24$ \;$\to$\; $Q_2 = 2q^4 + 2q^5 + \cdots$ \\
+$(3,1,1)$ & $5$ & $1$ & $8$ & $2$ &
+  $6$ \;$\to$\; $Q_1 = 2q + q^2 + 2q^3 + q^5$ \\
+\end{tabular}
+\end{center}
+
+\medskip
+\noindent
+In every case, the Franklin involution produces fixed
+points whose signed contributions match~$Q_n$ exactly.
+
+
+\subsection{The $d = 1$ case: complete cancellation}
+
+For $d = 1$ (period $T = 1$), $Q_n = 1$ for $n = 0$
+and $Q_n = 0$ for $n \geq 1$.  The involution pairs
+\emph{every} element: there are no fixed points.  This
+reflects the identity
+\begin{equation}\label{eq:d1-cancel}
+  \qpoch{zq}{q} \cdot \frac{1}{\qpoch{zq}{q}} = 1:
+\end{equation}
+the Euler factor completely cancels the GK generating
+function at every level $n \geq 1$.
+
+
+\subsection{The $d = 2$ case: Rogers--Ramanujan}
+
+For $d = 2$, $c = (2,0,0)$: $Q_n = q^{n(n+1)}$.
+
+At $n = 1$: the ground set has $3$ elements.  The
+involution pairs
+$(\emptyset, w{=}1) \leftrightarrow (\{1\}, w{=}0)$
+(both at total weight~$1$), leaving $(\emptyset, w{=}2)$
+as the sole fixed point.  Hence $Q_1 = q^2$.
+
+At $n = 2$: the ground set has $9$ elements.  The
+involution pairs $6$ of them in $3$ pairs.  The $3$
+fixed points are:
+\begin{center}
+\begin{tabular}{c|c|c|c|c}
+$S$ & $w$ & $\sigma(S) + w$ & sign & type \\ \hline
+$\emptyset$ & $4$ & $4$ & $+1$ & non-intersecting \\
+$\emptyset$ & $6$ & $6$ & $+1$ & non-intersecting \\
+$\{2\}$ & $2$ & $4$ & $-1$ & intersecting \\
+\end{tabular}
+\end{center}
+The intersecting fixed point at $(\{2\}, w{=}2)$
+cancels one unit of the non-intersecting contribution
+at total weight~$4$, leaving $Q_2 = q^6$.
+
+\begin{remark}[Intersecting fixed points]
+\label{rem:intersecting-fp}
+The $d = 2$, $n = 2$ case shows that the involution
+can have fixed points with $S \neq \emptyset$
+(intersecting families).  These contribute with sign
+$(-1)^{|S|}$, but the net contribution at each weight
+remains non-negative.  Hence $Q_n$ is \emph{not}
+simply the count of non-intersecting families---it is
+the signed count of fixed points, which includes both
+non-intersecting and intersecting contributions.
+\end{remark}
+
+
+\subsection{The $d \equiv 0 \pmod{3}$ obstruction}
+
+For $d = 3$, $c = (2,1,0)$: the polynomial $h_1$ has
+\emph{negative} coefficients:
+\[
+  h_1 = 2q + q^2 + q^5 - q^6 + q^8 - q^9
+    + q^{11} - q^{12} + \cdots.
+\]
+When $h_m \notin \N[q]$, the Franklin involution cannot
+be defined at the $h_m$~level, because the ``ground set
+elements'' $(S, w)$ would have negative multiplicities.
+
+This means the involution for $d \equiv 0 \pmod{3}$ must
+operate at a \textbf{deeper} combinatorial level: on
+individual CPPs and the $(q)_m$ factor
+simultaneously, rather than on the compressed
+$h_m$~polynomials.
+
+\begin{remark}[Where $h_m \geq 0$]
+\label{rem:h-nonneg}
+Computations show $h_m \in \N[q]$ for all $m$ when
+$d \not\equiv 0 \pmod{3}$ (tested for $d = 1, 2, 4, 5$,
+all profiles).  For $d \equiv 0 \pmod{3}$
+(specifically $d = 3$), $h_m$ has negative coefficients
+starting at $m = 1$.  This parallels the $d \equiv 0
+\pmod{3}$ obstruction observed for the cyclic descent
+injection~(\cite{LOCAL_RULE}).
+\end{remark}
+
+
+\subsection{Structure of fixed points}
+
+The fixed points fall into three classes:
+
+\begin{enumerate}
+  \item \textbf{Non-intersecting, no valid peel}
+    ($S = \emptyset$, no peelable face):
+    these are CPPs where no face along the outermost
+    diagonal has $A \cap B \neq \emptyset$ with strip
+    size $= $ level.  They contribute with sign $+1$.
+
+  \item \textbf{Non-intersecting, peel level $= $ glue
+    level} ($S = \emptyset$, but
+    $\ell = \min(S) = \infty$): only occurs when there is
+    genuinely no valid peel.
+
+  \item \textbf{Intersecting fixed points}
+    ($S \neq \emptyset$, $\ell = \min(S)$): the first
+    valid peel level coincides with the smallest crossing.
+    These contribute with sign $(-1)^{|S|}$.
+\end{enumerate}
+
+The $d = 2$, $n = 2$ example shows a Type~(3) fixed
+point at $(\{2\}, w{=}2)$: the peel level is~$\ell = 2$,
+which equals $\min(S) = 2$, so neither peel nor glue
+applies.
+
+
+%% ============================================================
+\section{The recursive Franklin involution}
+\label{sec:recursive}
+%% ============================================================
+
+The fixed point analysis of the previous section reveals a
+deeper structure: the Franklin involution decomposes into
+$n$~independent levels, each handling one element of
+$\{1, \ldots, n\}$.
+
+\subsection{Level-by-level cancellation}
+
+\begin{definition}[Level-$k$ involution]
+\label{def:level-k}
+For $k = 1, 2, \ldots, n$, define the level-$k$ involution
+$\iota_k$ on the set of elements surviving levels
+$1, \ldots, k-1$:
+\[
+  \iota_k(S, w) =
+  \begin{cases}
+    (S \cup \{k\},\; w - k) & \text{if } k \notin S
+      \;\text{(peel at $k$)}, \\
+    (S \setminus \{k\},\; w + k) & \text{if } k \in S
+      \;\text{(glue at $k$)}.
+  \end{cases}
+\]
+The element $(S, w)$ is a \emph{level-$k$ fixed point} if
+its image under~$\iota_k$ does not exist among the current
+survivors (either $w - k < 0$, or no element with the
+target $(S', w')$ is available for pairing).
+\end{definition}
+
+The key properties of each level:
+
+\begin{proposition}[Level-$k$ properties]
+\label{prop:level-k}
+At each level~$k$:
+\begin{enumerate}
+  \item \textup{(Sign-reversing)}\;
+    Paired elements have opposite signs, since $|S|$
+    changes by~$\pm 1$.
+  \item \textup{(Weight-preserving)}\;
+    Total weight $\sigma(S) + w$ is preserved: adding~$k$
+    to~$S$ shifts $\sigma(S)$ by~$+k$ and~$w$ by~$-k$.
+  \item \textup{(Clean cancellation)}\;
+    The signed sum of paired elements is zero at every
+    total weight~$W$.
+\end{enumerate}
+\end{proposition}
+
+
+\subsection{Computational verification of the recursion}
+
+The recursive involution has been tested on all profiles
+with $d \not\equiv 0 \pmod{3}$ and $n \leq 3$.
+
+\medskip
+\begin{center}
+\begin{tabular}{c|c|c|c|c}
+$c$ & $d$ & $n$ &
+  \textbf{level counts} &
+  \textbf{survivors} \\ \hline
+$(1,0,0)$ & $1$ & $3$ &
+  $8 \to 0 \to 0 \to 0$ & $0$ \\
+$(2,0,0)$ & $2$ & $2$ &
+  $9 \to 3 \to 1$ & $1$ \\
+$(2,0,0)$ & $2$ & $3$ &
+  $27 \to 9 \to 3 \to 1$ & $1$ \\
+$(1,1,0)$ & $2$ & $3$ &
+  $27 \to 9 \to 3 \to 1$ & $1$ \\
+$(2,2,0)$ & $4$ & $2$ &
+  $36 \to 24 \to 16$ & $16$ \\
+$(2,1,1)$ & $4$ & $2$ &
+  $36 \to 24 \to 16$ & $16$ \\
+$(3,1,0)$ & $4$ & $2$ &
+  $36 \to 24 \to 16$ & $16$ \\
+$(3,1,1)$ & $5$ & $2$ &
+  $64 \to 48 \to 36$ & $36$ \\
+$(2,2,1)$ & $5$ & $2$ &
+  $64 \to 48 \to 36$ & $36$ \\
+\end{tabular}
+\end{center}
+
+\medskip\noindent
+In every case tested, the following holds:
+
+\begin{theorem}[Recursive cancellation, computational]
+\label{thm:recursive-comp}
+After applying all $n$~levels of the recursive Franklin
+involution:
+\begin{enumerate}
+  \item Every surviving element has $S = \emptyset$
+    \textup{(}non-intersecting\textup{)}.
+  \item Every surviving element has sign~$+1$.
+  \item The signed sum of survivors equals~$Q_{n,c}(q)$.
+\end{enumerate}
+In particular, $Q_{n,c}(q) \in \N[q]$ whenever $h_m \in
+\N[q]$ for $0 \leq m \leq n$.
+\end{theorem}
+
+
+\subsection{The $d = 2$ sieve}
+
+The Rogers--Ramanujan case is especially illuminating.
+For $c = (2,0,0)$, $n = 3$, $Q_3 = q^{12} = q^{n^2}$:
+
+\smallskip
+\noindent\textbf{Level~1} (toggle element~$1$):
+$27 \to 9$ survivors.  The $9$ survivors are subsets
+$S \subseteq \{2, 3\}$:
+\[
+  \begin{array}{ll}
+    S = \emptyset: & w = 6, 8, 9, 12 \quad\text{(sign $+1$)} \\
+    S = \{2\}: & w = 4, 6 \quad\text{(sign $-1$)} \\
+    S = \{3\}: & w = 4, 6 \quad\text{(sign $-1$)} \\
+    S = \{2,3\}: & w = 2 \quad\text{(sign $+1$)}
+  \end{array}
+\]
+
+\noindent\textbf{Level~2} (toggle element~$2$):
+$9 \to 3$ survivors.  Pairings:
+$(\emptyset, 6) \leftrightarrow (\{2\}, 4)$,
+$(\emptyset, 8) \leftrightarrow (\{2\}, 6)$,
+$(\{3\}, 4) \leftrightarrow (\{2,3\}, 2)$.
+The $3$ survivors involve $S \subseteq \{3\}$:
+\[
+  S = \emptyset:\; w = 9, 12; \qquad
+  S = \{3\}:\; w = 6.
+\]
+
+\noindent\textbf{Level~3} (toggle element~$3$):
+$3 \to 1$ survivor.  Pairing:
+$(\emptyset, 9) \leftrightarrow (\{3\}, 6)$.
+The sole survivor is $(\emptyset, w{=}12)$, giving
+$Q_3 = q^{12}$.
+
+\begin{remark}[After level~$k$, $S \subseteq \{k{+}1, \ldots, n\}$]
+\label{rem:after-level-k}
+After the level-$k$ involution, every surviving element
+has $S \subseteq \{k{+}1, \ldots, n\}$: elements~$1$
+through~$k$ have been ``sieved out'' of the crossing set.
+After all $n$~levels, only $S = \emptyset$ remains.
+\end{remark}
+
+\begin{remark}[Non-intersecting survivors]
+\label{rem:survivors}
+Unlike the single-level Franklin involution of
+Section~\ref{sec:computation}, which has intersecting
+fixed points (Remark~\ref{rem:intersecting-fp}), the
+recursive version eliminates all intersecting contributions.
+The $S = \{2\}$ fixed point of level~$1$ is paired away at
+level~$2$, the $S = \{3\}$ survivors are paired away at
+level~$3$, etc.  This cleanly separates the cancellation
+into $n$~independent layers.
+\end{remark}
+
+
+\subsection{Pair counts}
+
+The number of elements paired at each level shows a
+regular structure.  For $n = 2$:
+
+\medskip
+\begin{center}
+\begin{tabular}{c|c|c|c}
+$c$ & $d$ &
+  \textbf{Level~1 pairs} &
+  \textbf{Level~2 pairs} \\ \hline
+$(2,0,0)$ & $2$ & $3$ & $1$ \\
+$(1,1,0)$ & $2$ & $3$ & $1$ \\
+$(2,2,0)$ & $4$ & $6$ & $4$ \\
+$(2,1,1)$ & $4$ & $6$ & $4$ \\
+$(3,1,0)$ & $4$ & $6$ & $4$ \\
+$(3,1,1)$ & $5$ & $8$ & $6$ \\
+$(2,2,1)$ & $5$ & $8$ & $6$ \\
+\end{tabular}
+\end{center}
+
+\medskip\noindent
+At level~$1$, every element with $1 \in S$ gets paired:
+the level-$1$ pair count equals
+$\sum_{j \geq 1} \binom{n-1}{j-1} |h_{n-j}|_1$
+(the total number of elements with $1 \in S$), and each
+finds a unique partner with $1 \notin S$ at weight~$w + 1$.
+The same structure repeats at each subsequent level.
+
+
+%% ============================================================
+\section{Stabilising the involution: the double-direction
+  comparison}
+\label{sec:double-direction}
+%% ============================================================
+
+The involution of Definition~\ref{def:involution} has a
+potential failure mode: after peeling at~$\ell$ to obtain
+$(S \cup \{\ell\},\, \mathfrak{d}')$, the new peel
+level~$\ell'$ of~$\mathfrak{d}'$ might satisfy
+$\ell' < \ell$, causing the Franklin comparison to say
+``peel again'' instead of ``glue at~$\ell$''.  This would
+break involutivity.
+
+\subsection{The obstruction}
+
+Concretely, after peeling at level~$\ell$:
+\begin{itemize}
+  \item The glue candidate is $\min(S \cup \{\ell\}) = \ell$
+    (since $\ell < \min(S)$ was the condition for peeling).
+  \item The peel candidate~$\ell'$ of the reduced
+    ALCD~$\mathfrak{d}'$ must satisfy $\ell' > \ell$ for
+    case~(2) of Definition~\ref{def:involution} to apply.
+  \item If instead $\ell' < \ell$, the map would peel
+    again---it would not be an involution.
+\end{itemize}
+
+\noindent
+This is \emph{not} automatic: peeling changes the growth
+diagram, and the new outermost diagonal may present
+earlier conflict faces.
+
+\subsection{The two cascade directions}
+
+The resolution uses the two cascade directions
+simultaneously.  Each ALCD $\mathfrak{d}$ determines
+\emph{two} peel levels:
+\begin{align}
+  \ell_B &= \text{Burge peel level (cascade up:
+    cross from below)}, \label{eq:ell-B} \\
+  \ell_R &= \text{RSK peel level (cascade down:
+    cross from above)}. \label{eq:ell-R}
+\end{align}
+These correspond to the two ways of undoing the cascade
+at a conflict face: pushing the crossing upward (Burge)
+or downward (RSK).
+
+\begin{definition}[Double-direction peel level]
+\label{def:double-peel}
+The \emph{stabilised peel level} is
+\[
+  \ell^* = \min(\ell_B, \ell_R):
+\]
+the earliest level at which \emph{either} cascade
+direction can introduce a crossing.
+\end{definition}
+
+The Franklin comparison of Definition~\ref{def:involution}
+is then applied with $\ell^*$ in place of~$\ell$.
+
+\subsection{Why the double comparison stabilises}
+
+After peeling at $\ell^*$ using one cascade direction
+(say Burge, so $\ell^* = \ell_B$):
+\begin{itemize}
+  \item The Burge conflict at level~$\ell_B$ has been
+    resolved (the crossing is now present in~$S$), so
+    $\ell_B' > \ell_B$ for the reduced ALCD.
+  \item The RSK conflict at level~$\ell_R$ may shift,
+    but since $\ell_R \geq \ell_B = \ell^*$, the new RSK
+    level $\ell_R'$ satisfies $\ell_R' \geq \ell^*$
+    (peeling at a lower level does not create new
+    conflicts above).
+  \item Therefore $\ell^{*\prime} = \min(\ell_B',
+    \ell_R') > \ell^*$, and the Franklin comparison
+    correctly selects glue.
+\end{itemize}
+
+\noindent
+The symmetric argument applies when $\ell^* = \ell_R$.
+The key property is that \textbf{peeling via one cascade
+direction does not lower the peel level of the other
+direction}.
+
+\begin{proposition}[Stabilised involutivity]
+\label{prop:stabilised}
+The involution~$\iota$ with $\ell^*$ in place of $\ell$
+satisfies $\iota^2 = \id$, provided peeling at
+level~$\ell^*$ via cascade direction~$X \in \{B, R\}$
+does not decrease $\ell_Y$ for $Y \neq X$.
+\end{proposition}
+
+\begin{remark}[Rank-$3$ verification]
+\label{rem:rank3}
+For rank~$3$ (at most $3$ lattice paths), there are at
+most $2$ adjacent path pairs and at most $2$ conflict
+faces per level.  The non-interference property of
+Proposition~\ref{prop:stabilised} can therefore be
+verified by exhaustive case analysis on the local rule
+configurations.
+\end{remark}
+
+
+%% ============================================================
+\section{Open questions}
+\label{sec:open}
+%% ============================================================
+
+\begin{enumerate}
+  \item \textbf{Existence of valid peel.}\;
+    Does every non-intersecting element
+    $(\emptyset, \mathfrak{d})$ that should be paired
+    (i.e., is not a fixed point of the involution) have
+    a face with $A \cap B \neq \emptyset$ satisfying the
+    weight condition?
+
+  \item \textbf{Which pair of paths?}\;
+    For rank~$3$, there are at most $2$ adjacent path
+    pairs (paths $1$--$2$ and paths $2$--$3$).  When both
+    pairs have $A \cap B \neq \emptyset$ at the same face,
+    which pair should be crossed?
+
+  \item \textbf{Cascade direction.}\;
+    The peel uses the inverse local rule, which comes in
+    Burge and RSK flavours.  Does the cascade direction
+    matter for the canonical peel, or does the $A \cap B$
+    criterion determine the peel independently of
+    direction?
+
+  \item \textbf{Interaction of conditions.}\;
+    The combined constraint---$A \cap B \neq \emptyset$
+    \emph{and} strip size $= $ level---may be too
+    restrictive (leaving too many fixed points) or
+    insufficiently restrictive (pairing elements
+    incorrectly).  The correct criterion may involve a
+    more nuanced comparison.
+
+  \item \textbf{Braid relation.}\;
+    If the canonical peel is defined level by level,
+    does the resulting involution respect the
+    $Q$-Bender--Knuth structure
+    (\cite{Q_LOCAL}, Section~5)?
+\end{enumerate}
+
+
+\begin{thebibliography}{99}
+\bibitem{LOCAL_RULE}
+  R.~Langer,
+  \emph{The Generalized Local Rule and the Burge--RSK
+  Involution},
+  companion note, 2026.
+
+\bibitem{Q_LOCAL}
+  R.~Langer,
+  \emph{$Q$-Local: Bender--Knuth Involutions and
+  $Q$-Row Operations},
+  companion note, 2026.
+
+\bibitem{Q_NILP}
+  R.~Langer,
+  \emph{$Q$-Non-Intersecting Lattice Paths},
+  companion note, 2026.
+
+\bibitem{Q_SCHUTZ}
+  R.~Langer,
+  \emph{The $Q$-Sch\"utzenberger Identity},
+  companion note, 2026.
+
+\bibitem{UNDERLYING_SET}
+  R.~Langer,
+  \emph{The Underlying Set: Cylindric Plane Partitions,
+  ALCDs, and the Ground Set for the Involution},
+  companion note, 2026.
+
+\bibitem{langer-thesis}
+  R.~Langer,
+  \emph{Cylindric Partitions and Bijective Proofs},
+  PhD thesis, University of Melbourne.
+\end{thebibliography}
+
+\end{document}

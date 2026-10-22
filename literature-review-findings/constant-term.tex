@@ -1,0 +1,525 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{question}[theorem]{Question}
+
+\newcommand{\CPP}{\operatorname{CPP}}
+\newcommand{\GK}{\operatorname{GK}}
+\newcommand{\CT}{\operatorname{CT}}
+\newcommand{\QSym}{\operatorname{QSym}}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\qpoch}[2]{(#1;#2)_\infty}
+\newcommand{\qpochn}[3]{(#1;#2)_{#3}}
+\newcommand{\sln}{\widehat{\mathfrak{sl}}_n}
+
+\title{Literature Review: Constant Term Identities\\
+and the $Q$-Polynomial Extraction}
+\author{Robin Langer}
+\date{February 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We survey the theory of constant term identities from Dyson
+through Macdonald and Cherednik, and propose reframing the
+extraction of Warnaar's $Q_{n,c}(q)$ polynomials as a constant
+term identity. The $Q$-polynomial is
+$Q_{n,c}(q) = (q;q)_n \cdot \CT_z[z^{-n}(zq;q)_\infty
+\cdot \GK_c(z,q)]$,
+which has the structural form of a Macdonald-type constant term
+with the Borodin product playing the role of the root-system
+kernel. The Karolyi--Lascoux--Warnaar (2015) extension of
+Macdonald's constant term identities with extra parameters is
+identified as the most promising point of contact.
+\end{abstract}
+
+%% ========================================================================
+\section{The constant term lineage}
+\label{sec:lineage}
+%% ========================================================================
+
+\subsection{Dyson's conjecture and the $q$-Dyson theorem}
+
+Dyson~\cite{dyson-1962} conjectured that the constant term of
+the Laurent polynomial
+\[
+  \prod_{1 \le i \ne j \le n}
+  \Bigl(1 - \frac{x_i}{x_j}\Bigr)^{a_i}
+\]
+equals the multinomial coefficient
+$(a_1 + \cdots + a_n)! / (a_1! \cdots a_n!)$.
+This was proved by Gunson and Wilson (1962), with a celebrated
+combinatorial proof by Zeilberger~\cite{zeilberger-1982}.
+
+Andrews formulated the $q$-analog: the constant term of
+\[
+  \prod_{1 \le i < j \le n}
+  (x_i/x_j)_{a_i}\, (q\, x_j/x_i)_{a_j}
+\]
+equals $(q)_{a_1 + \cdots + a_n} / \bigl((q)_{a_1} \cdots
+(q)_{a_n}\bigr)$. This was proved by Zeilberger and
+Bressoud~\cite{zeilberger-bressoud-1985}.
+
+\subsection{The Morris identity and the Selberg integral}
+
+The Selberg integral~\cite{selberg-1944} evaluates a
+multivariate beta integral with Vandermonde-squared weight.
+It is equivalent to the Morris constant term
+identity~\cite{morris-1982}, which extracts the constant term
+of a product of Laurent polynomials on the type-$A$ root system.
+
+The $q$-analog (the Habsieger--Kadell $q$-Morris identity) was
+proved independently by Habsieger~\cite{habsieger-1988} and
+Kadell~\cite{kadell-1988}. The chain of generalizations is:
+\[
+  \text{Selberg integral}
+  \;\iff\; \text{Morris CT}
+  \;\xrightarrow{q}
+  \text{Habsieger--Kadell}
+  \;\hookrightarrow\; \text{Macdonald CT (type $A_n$)}.
+\]
+
+\subsection{Macdonald's constant term conjecture}
+
+Macdonald~\cite{macdonald-1982} vastly generalised Dyson's
+conjecture to arbitrary reduced root systems~$R$. For each~$R$
+with Weyl group~$W$, the conjecture gives a closed-form
+evaluation of the constant term of a product over positive
+roots, involving parameters tied to the degrees of the
+fundamental invariants of~$W$.
+
+Case-by-case proofs were given for the classical types:
+\begin{itemize}
+  \item Type $A_n$: Zeilberger--Bressoud (the $q$-Dyson theorem).
+  \item Types $B_n$, $D_n$: Kadell.
+  \item Types $BC_n$, $C_n$: Gustafson.
+  \item Exceptional types $G_2$, $F_4$: Zeilberger, Habsieger,
+    Garvan--Gonnet.
+\end{itemize}
+
+The complete, classification-free proof for all root systems was
+achieved by Cherednik~\cite{cherednik-1995} using the theory of
+\textbf{double affine Hecke algebras} (DAHAs). Cherednik's proof
+bypassed case-by-case verification and provided a unified
+algebraic framework.
+
+\subsection{Karolyi--Lascoux--Warnaar (2015): extra parameters}
+
+Karolyi, Lascoux, and Warnaar~\cite{klw-2015} proved that
+Macdonald's constant term identities admit an
+\textbf{extra set of free parameters}, linking them to
+Poincar\'e polynomials of classical root systems. Their proof
+combined the Karasev--Petrov polynomial lemma (from the
+Combinatorial Nullstellensatz tradition), scalar products for
+Demazure characters, and properties of $(0,1)$-matrices.
+
+As an application, they also proved Sills' constant term
+conjecture and Kadell's orthogonality conjecture.
+
+\begin{remark}
+Note that \textbf{Warnaar} is a co-author on this paper.
+The same Warnaar whose Conjecture~2.7 we are studying.
+His expertise in extending Macdonald-type constant term
+identities with extra parameters makes this connection
+especially promising.
+\end{remark}
+
+%% ========================================================================
+\section{Constant term methods for positivity}
+\label{sec:positivity}
+%% ========================================================================
+
+The standard pattern for proving positivity via constant terms:
+
+\begin{enumerate}
+  \item Express the quantity as
+    $\CT[\text{kernel} \cdot \text{generating function}]$.
+  \item Show the product evaluates to a closed form
+    (via Macdonald/Cherednik/Selberg machinery).
+  \item Closed forms are products of $q$-Pochhammer symbols,
+    which are manifestly positive.
+\end{enumerate}
+
+This pattern succeeds in the following cases.
+
+\subsection{Zeilberger's KOH theorem}
+
+Zeilberger reformulated O'Hara's combinatorial proof of the
+unimodality of $q$-binomial coefficients as a constant term
+decomposition~\cite{zeilberger-koh}. The $q$-binomial
+$\binom{m+n}{n}_q$ is decomposed into a finite sum of
+symmetric, unimodal polynomials with non-negative coefficients.
+Pak and Panova later proved \emph{strict} unimodality using
+Kronecker coefficients.
+
+\subsection{Kronecker coefficients via constant terms}
+
+Rosas and Zabrocki~\cite{rosas-zabrocki} developed a framework
+for computing Kronecker coefficients via constant term extraction
+from symmetric functions. Since Kronecker coefficients are
+multiplicities (hence non-negative), this provides a bridge
+between constant term positivity and representation theory.
+
+\subsection{Warnaar's $q$-rious positivity conjecture}
+
+Warnaar and Zudilin~\cite{warnaar-zudilin-2011} posed a
+striking positivity conjecture for certain $q$-series involving
+$q$-binomials and factorial ratios. The conjecture asserts that
+a specific rational function of~$q$ is always a polynomial with
+non-negative integer coefficients. This remains \textbf{wide
+open} and has the same flavour as Conjecture~2.7: a $q$-series
+that ``should'' be positive but resists proof.
+
+%% ========================================================================
+\section{Cylindric partitions and constant terms}
+\label{sec:cpp}
+%% ========================================================================
+
+\subsection{Gessel--Krattenthaler: affine root system formulas}
+
+Gessel and Krattenthaler~\cite{gessel-krattenthaler-1997} showed
+that cylindric partition generating functions produce summation
+and transformation formulas for basic hypergeometric series
+associated to the \textbf{affine root system}
+$\widetilde{A}_r$---the same root system family as the
+Macdonald constant term identities of type~$A$.
+
+\subsection{Borodin's product formula}
+
+Borodin~\cite{borodin-2007} proved that the generating function
+for cylindric partitions of any profile~$c$ is an infinite
+product of $q$-Pochhammer symbols---a ``hook-product formula''
+on the cylinder. The key structural consequence:
+$\GK_c(z,q)$ is always ``nice'' (an infinite product).
+
+\subsection{Postnikov: cylindric Schur positivity}
+
+Postnikov~\cite{postnikov-2005} introduced toric (cylindric)
+Schur polynomials and proved that their coefficients in the
+Schur expansion are 3-point Gromov--Witten invariants of the
+Grassmannian. In particular, all toric Schur polynomials are
+\textbf{Schur-positive}. McNamara later extended this to
+cylindric skew Schur functions~\cite{mcnamara-2019}.
+
+%% ========================================================================
+\section{The $Q$-polynomial as a constant term}
+\label{sec:Q-CT}
+%% ========================================================================
+
+\subsection{The reframing}
+
+Recall that Warnaar's $Q$-polynomial is
+\begin{equation}\label{eq:Q-def}
+  Q_{n,c}(q)
+  = (q;q)_n \cdot [z^n]\bigl(\qpoch{zq}{q} \cdot \GK_c(z,q)\bigr).
+\end{equation}
+Rewriting the coefficient extraction as a constant term:
+\begin{equation}\label{eq:Q-CT}
+  \boxed{
+  Q_{n,c}(q)
+  = (q;q)_n \cdot
+    \CT_z\Bigl[z^{-n} \cdot \qpoch{zq}{q} \cdot \GK_c(z,q)\Bigr].
+  }
+\end{equation}
+
+\subsection{The analogy}
+
+The classical extraction from an exponential generating function
+is $a_n = n! \cdot [x^n] f(x) = \CT_x[x^{-n} \cdot n! \cdot
+f(x)]$, where the $n!$ and the $e^{-x}$ factor combine into a
+shift operator. The $q$-analogue is:
+\begin{center}
+\begin{tabular}{c|c}
+  \textbf{Classical} & \textbf{$q$-analogue} \\
+  \hline
+  $n!$ & $(q;q)_n$ \\
+  $e^{-x}$ (= $\sum (-x)^k/k!$) & $\qpoch{zq}{q}$
+    (= $\prod_{k \geq 1}(1 - zq^k)$) \\
+  $[x^n]$ & $\CT_z[z^{-n} \cdot]$ \\
+  $f(x)$ & $\GK_c(z,q)$
+\end{tabular}
+\end{center}
+
+In the symmetric function world:
+\begin{itemize}
+  \item $\qpoch{zq}{q}$ under the principal specialization
+    $x_i = q^i$ is the generating function
+    $E(-z) = \sum_k (-z)^k e_k$ for elementary symmetric
+    functions.
+  \item The fundamental relation $E(-z) \cdot H(z) = 1$
+    (where $H(z) = \sum h_n z^n$) ties the extraction to the
+    $\omega$-involution.
+  \item The alternating structure
+    $\sum (-1)^k e_k \cdot h_{n-k}^{\perp}$ is precisely a
+    \textbf{Bernstein vertex operator} $B_n$, which creates
+    rows of Schur functions: $B_n \cdot s_\lambda = s_{(n,\lambda)}$.
+\end{itemize}
+
+\subsection{Structure of the constant term}
+
+Substituting Borodin's product formula, the constant term
+becomes:
+\begin{equation}\label{eq:Q-CT-explicit}
+  Q_{n,c}(q)
+  = (q;q)_n \cdot
+    \CT_z\Bigl[
+      z^{-n} \cdot
+      \underbrace{\qpoch{zq}{q}}_{\text{elementary factor}}
+      \cdot
+      \underbrace{\text{Borodin product}}_{\sln[r] \text{ character}}
+    \Bigr].
+\end{equation}
+The integrand is:
+\begin{itemize}
+  \item $z^{-n}$: the extraction variable.
+  \item $\qpoch{zq}{q} = \prod_{k \geq 1}(1 - zq^k)$:
+    a type-$A$ $q$-Pochhammer in the extraction variable.
+  \item The Borodin product: a ratio of $q$-Pochhammer symbols
+    and theta functions with $\widetilde{A}_r$ structure.
+\end{itemize}
+This has the structural form of a \textbf{Macdonald-type
+constant term}: a product over a root system, with
+$z^{-n}$ playing the role of an extra parameter.
+
+%% ========================================================================
+\section{Why this might work}
+\label{sec:why}
+%% ========================================================================
+
+\subsection{The Gessel--Krattenthaler connection}
+
+Cylindric partition generating functions produce formulas
+for the affine root system $\widetilde{A}_r$, which is
+the natural home of the Macdonald constant term identities
+(type~$A$). The $Q$-extraction adds a parameter ($n$, the
+max entry) to this framework. If this parameter corresponds
+to one of the ``extra free parameters'' in the
+Karolyi--Lascoux--Warnaar extension, the constant term would
+evaluate to a product and positivity would follow.
+
+\subsection{The $q$-shift structure}
+
+The Corteel--Welsh functional equations are $q$-shift relations:
+\begin{equation}\label{eq:CW-shift}
+  G_c(y) = \sum_{\emptyset \subset J \subseteq I_c}
+  (-1)^{|J|-1}\,
+  (yq;q)_{|J|-1}\, G_{c(J)}(yq^{|J|}).
+\end{equation}
+In the constant term picture, the $q$-shift $y \mapsto yq^{|J|}$
+becomes multiplication by $z^{|J|}$ inside the $\CT$.
+The functional equations translate into
+\textbf{recurrences for the constant term} relating different
+profiles and different values of~$n$. If these recurrences
+preserve positivity, one could bootstrap from known base cases.
+
+\subsection{Multivariate promotion}
+
+The current formulation uses a single extraction variable~$z$.
+But the Borodin product has $\widetilde{A}_r$ structure
+(rank~3 in our case), with three rows of partitions
+$(\nu^{(1)}, \nu^{(2)}, \nu^{(3)})$. Promoting
+$z$ to $(z_1, z_2, z_3)$---one per row---and taking a
+\emph{multivariate} constant term might land squarely in the
+$q$-Morris / Macdonald world:
+\begin{equation}\label{eq:Q-multivariate}
+  Q_{n,c}(q)
+  \;\stackrel{?}{=}\;
+  (q;q)_n \cdot
+  \CT_{z_1, z_2, z_3}\Bigl[
+    \text{kernel}(z_1, z_2, z_3; q)
+    \cdot \text{Borodin}(z_1, z_2, z_3; q)
+  \Bigr].
+\end{equation}
+This multivariate constant term would be a natural candidate
+for evaluation via the Cherednik/DAHA machinery.
+
+\begin{question}
+Does the multivariate promotion~\eqref{eq:Q-multivariate}
+produce a constant term identity that falls into the
+Macdonald framework?
+\end{question}
+
+%% ========================================================================
+\section{Key references to follow up}
+\label{sec:refs}
+%% ========================================================================
+
+In order of priority:
+
+\begin{enumerate}
+  \item \textbf{Karolyi--Lascoux--Warnaar (2015)}~\cite{klw-2015}:
+    the extra-parameter extension of Macdonald's constant term
+    identities. This is the most likely point of contact.
+  \item \textbf{Warnaar--Zudilin (2011)}~\cite{warnaar-zudilin-2011}:
+    the ``$q$-rious positivity'' conjecture. Same flavour as
+    Conjecture~2.7; understanding why one is hard may illuminate
+    the other.
+  \item \textbf{Warnaar, ``$q$-Selberg integrals and Macdonald
+    polynomials''}~\cite{warnaar-qselberg}: connects $q$-Selberg
+    integrals to Macdonald polynomial theory. The $q$-Selberg
+    integral is the continuous analogue of the $q$-Morris
+    constant term.
+  \item \textbf{Gessel--Krattenthaler (1997)}~\cite{gessel-krattenthaler-1997}:
+    the original paper establishing the $\widetilde{A}_r$
+    structure of cylindric partition generating functions.
+  \item \textbf{Cherednik (1995)}~\cite{cherednik-1995}:
+    the DAHA proof of Macdonald's conjecture. The machinery
+    that would be needed if the multivariate promotion works.
+\end{enumerate}
+
+%% ========================================================================
+\section{Summary}
+\label{sec:summary}
+%% ========================================================================
+
+\begin{center}
+\begin{tabular}{l|l}
+  \textbf{Observation} & \textbf{Implication} \\
+  \hline
+  $Q_{n,c}$ is a constant term~\eqref{eq:Q-CT}
+    & Connects to Dyson--Macdonald--Cherednik lineage \\
+  Kernel is $z^{-n}(zq;q)_\infty$
+    & Type-$A$ $q$-Pochhammer $\times$ monomial \\
+  $\GK_c$ is a product (Borodin)
+    & Integrand is a product over $\widetilde{A}_r$ \\
+  Gessel--Krattenthaler: CPPs $\leftrightarrow$ $\widetilde{A}_r$
+    & Same root system as Macdonald CT \\
+  KLW (2015): extra parameters in Macdonald CT
+    & The max-entry $n$ could be such a parameter \\
+  Corteel--Welsh = $q$-shift relations
+    & Translate to CT recurrences (may preserve positivity) \\
+  Multivariate promotion $z \to (z_1, z_2, z_3)$
+    & Could land in $q$-Morris / DAHA territory
+\end{tabular}
+\end{center}
+
+\medskip
+
+The reframing of $Q_{n,c}$ as a constant term moves the
+positivity question from ``why are these coefficients positive''
+to ``why is this constant term positive''---a much
+better-studied question with powerful machinery
+(Cherednik algebras, $q$-Selberg integrals, the KLW
+extension) available. The most promising next step is to check
+whether the constant term~\eqref{eq:Q-CT-explicit}, with
+Borodin's product substituted explicitly, matches any known
+family of Macdonald-type evaluations.
+
+%% ========================================================================
+%% References
+%% ========================================================================
+
+\begin{thebibliography}{99}
+
+\bibitem{borodin-2007}
+A.~Borodin,
+Periodic Schur process and cylindric partitions,
+\emph{Duke Math.\ J.}\ \textbf{140}(3) (2007), 391--468.
+arXiv:math/0601019.
+
+\bibitem{cherednik-1995}
+I.~Cherednik,
+Double affine Hecke algebras and Macdonald's conjectures,
+\emph{Ann.\ of Math.}\ (2) \textbf{141}(1) (1995), 191--216.
+
+\bibitem{corteel-welsh-2019}
+S.~Corteel and T.~Welsh,
+The $A_2$ Rogers--Ramanujan identities revisited,
+arXiv:1905.08343, 2019.
+
+\bibitem{dyson-1962}
+F.~J.~Dyson,
+Statistical theory of the energy levels of complex systems.~I,
+\emph{J.\ Math.\ Phys.}\ \textbf{3} (1962), 140--156.
+
+\bibitem{gessel-krattenthaler-1997}
+I.~M.~Gessel and C.~Krattenthaler,
+Cylindric partitions,
+\emph{Trans.\ Amer.\ Math.\ Soc.}\ \textbf{349}(2) (1997),
+429--479.
+
+\bibitem{habsieger-1988}
+L.~Habsieger,
+Une $q$-int\'egrale de Selberg et Askey,
+\emph{SIAM J.\ Math.\ Anal.}\ \textbf{19}(6) (1988),
+1475--1489.
+
+\bibitem{kadell-1988}
+K.~W.~J.~Kadell,
+A proof of Askey's conjectured $q$-analogue of Selberg's integral
+and a conjecture of Morris,
+\emph{SIAM J.\ Math.\ Anal.}\ \textbf{19}(4) (1988), 969--986.
+
+\bibitem{klw-2015}
+G.~K\'arolyi, A.~Lascoux, and S.~O.~Warnaar,
+Constant term identities and Poincar\'e polynomials,
+\emph{Trans.\ Amer.\ Math.\ Soc.}\ \textbf{367}(10) (2015),
+6809--6836.
+arXiv:1209.0855.
+
+\bibitem{macdonald-1982}
+I.~G.~Macdonald,
+Some conjectures for root systems,
+\emph{SIAM J.\ Math.\ Anal.}\ \textbf{13}(6) (1982), 988--1007.
+
+\bibitem{mcnamara-2019}
+P.~McNamara,
+Positivity of cylindric skew Schur functions,
+\emph{J.\ Combin.\ Theory Ser.~A}\ \textbf{165} (2019), 53--78.
+
+\bibitem{morris-1982}
+W.~G.~Morris,
+\emph{Constant Term Identities for Finite and Affine Root Systems},
+Ph.D.\ thesis, University of Wisconsin--Madison, 1982.
+
+\bibitem{postnikov-2005}
+A.~Postnikov,
+Affine approach to quantum Schubert calculus,
+\emph{Duke Math.\ J.}\ \textbf{128}(3) (2005), 473--509.
+arXiv:math/0205165.
+
+\bibitem{rosas-zabrocki}
+M.~H.~Rosas and M.~Zabrocki,
+Symmetric functions and the Kronecker product,
+unpublished manuscript.
+
+\bibitem{selberg-1944}
+A.~Selberg,
+Remarks on a multiple integral,
+\emph{Norsk Mat.\ Tidsskr.}\ \textbf{26} (1944), 71--78.
+
+\bibitem{warnaar-qselberg}
+S.~O.~Warnaar,
+$q$-Selberg integrals and Macdonald polynomials,
+\emph{Ramanujan J.}\ \textbf{10}(2) (2005), 237--268.
+
+\bibitem{warnaar-zudilin-2011}
+S.~O.~Warnaar and W.~Zudilin,
+A $q$-rious positivity,
+\emph{Aequat.\ Math.}\ \textbf{81}(1--2) (2011), 177--183.
+
+\bibitem{zeilberger-1982}
+D.~Zeilberger,
+A combinatorial proof of Dyson's conjecture,
+\emph{Discrete Math.}\ \textbf{41}(3) (1982), 317--321.
+
+\bibitem{zeilberger-bressoud-1985}
+D.~Zeilberger and D.~M.~Bressoud,
+A proof of Andrews' $q$-Dyson conjecture,
+\emph{Discrete Math.}\ \textbf{54}(2) (1985), 201--224.
+
+\bibitem{zeilberger-koh}
+D.~Zeilberger,
+Kathy O'Hara's constructive proof of the unimodality of the
+Gaussian polynomials,
+\emph{Amer.\ Math.\ Monthly}\ \textbf{96}(7) (1989), 590--602.
+
+\end{thebibliography}
+
+\end{document}

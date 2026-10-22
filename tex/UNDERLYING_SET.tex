@@ -1,0 +1,901 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\GK}{\operatorname{GK}}
+\newcommand{\CPP}{\operatorname{CPP}}
+\newcommand{\IP}{\operatorname{IP}}
+\newcommand{\ALCD}{\operatorname{ALCD}}
+\newcommand{\qpoch}[2]{(#1;#2)_\infty}
+\newcommand{\qpochn}[3]{(#1;#2)_{#3}}
+\newcommand{\qbin}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{The Underlying Set: Cylindric Plane Partitions, Arbitrarily Labelled
+Cylindric Diagrams, and the Ground Set for the Involution}
+\author{Notes by Robin Langer}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We give a detailed account of the bijection between cylindric plane
+partitions and pairs consisting of an integer partition and an
+arbitrarily labelled cylindric diagram (ALCD).  This bijection,
+constructed via cylindric growth diagrams, is the combinatorial
+incarnation of the $E$--$H$ factorisation of the generating function
+$\GK_c(z,q)$.  We then use it to give a precise description of the
+underlying set $\mathcal{G}_{n,c}$ on which the sign-reversing
+involution for the positivity conjecture must act.
+\end{abstract}
+
+\tableofcontents
+
+%% ============================================================
+\section{The bijection}
+\label{sec:bijection}
+%% ============================================================
+
+\subsection{Statement}
+
+The main result of the PhD thesis (Chapter~3) is a weight-preserving
+bijection:
+\begin{equation}\label{eq:bijection}
+  \psi_\pi \colon (\IP,\; \ALCD(\pi)) \xrightarrow{\;\sim\;} \CPP(\pi),
+\end{equation}
+where:
+\begin{itemize}
+  \item $\IP$ is the set of all integer partitions (the \emph{base
+    partition} $\gamma$).
+  \item $\ALCD(\pi)$ is the set of arbitrarily labelled cylindric
+    diagrams of profile~$\pi$.
+  \item $\CPP(\pi)$ is the set of cylindric plane partitions of
+    profile~$\pi$.
+\end{itemize}
+
+The bijection decomposes each CPP into two independent pieces: an
+ordinary partition $\gamma$ (the ``universal'' piece, independent of
+the profile) and an ALCD $\mathfrak{d}$ (the ``purely cylindric'' piece,
+which carries all the information about the profile and the interlacing
+conditions).
+
+\subsection{Algebraic counterpart: the $E$--$H$ factorisation}
+
+At the level of generating functions, the bijection corresponds to the
+factorisation
+\begin{equation}\label{eq:EH}
+  \GK_c(z,q) = \frac{1}{\qpoch{zq}{q}} \cdot G_c(z,q),
+\end{equation}
+where $H(z) := 1/\qpoch{zq}{q} = \sum_{n \geq 0} q^n z^n/\qpochn{q}{q}{n}$
+is the generating function for ordinary partitions (with largest part
+$\leq n$, or equivalently with at most~$n$ parts, at $z$-degree~$n$;
+see Section~\ref{sec:why-z-max}), and
+$G_c(z,q) := \qpoch{zq}{q} \cdot \GK_c(z,q)$ is the corrected
+generating function encoding the purely cylindric content.
+
+\begin{center}
+\begin{tabular}{l|l}
+\textbf{Algebraic} & \textbf{Bijective} \\ \hline
+$\GK_c(z,q) = H(z) \cdot G_c(z,q)$ &
+  $\CPP(c) \xleftrightarrow{\;\psi\;} \IP \times \ALCD(c)$ \\[3pt]
+$H(z) = 1/\qpoch{zq}{q}$ &
+  The base partition $\gamma$ \\[3pt]
+$G_c(z,q)$ &
+  The ALCD $\mathfrak{d}$
+\end{tabular}
+\end{center}
+
+
+%% ============================================================
+\section{Why $z$ tracks the maximum entry}
+\label{sec:why-z-max}
+%% ============================================================
+
+The generating function $\GK_c(z,q) = \sum_{\mathfrak{c}} z^{\max(\mathfrak{c})}\,
+q^{|\mathfrak{c}|}$ uses $z$ to track the maximum entry
+$\max(\mathfrak{c}) = \max_k \mu^k_1$ (the largest first part among all
+slices).  Why is this the natural statistic?
+
+\subsection{The conjugation symmetry for partitions}
+
+For a single partition $\lambda$, the \emph{largest part} $\lambda_1$ and
+the \emph{number of parts} $\ell(\lambda)$ are exchanged by conjugation:
+$\lambda_1 = \ell(\lambda')$ and $\ell(\lambda) = \lambda'_1$.  Since
+conjugation is a size-preserving involution $|\lambda| = |\lambda'|$,
+the two statistics are \emph{equidistributed}:
+\begin{equation}\label{eq:conjugation-symmetry}
+  \sum_\lambda z^{\lambda_1}\, q^{|\lambda|}
+  = \sum_\lambda z^{\ell(\lambda)}\, q^{|\lambda|}
+  = \frac{1}{\qpoch{zq}{q}}.
+\end{equation}
+
+\begin{proof}
+For the second equality, expand the product:
+$\prod_{k \geq 1} 1/(1-zq^k)$.
+The factor $1/(1-zq^k) = \sum_{a \geq 0} z^a q^{ak}$ contributes
+multiplicity~$a$ for parts of size~$k$, with $z^a$ tracking the count.
+So $z$ tracks the total number of parts $\ell(\lambda) = \sum_k a_k$.
+
+For the first equality, substitute $\lambda \mapsto \lambda'$ in the
+left-hand sum: $\sum_\lambda z^{\lambda_1} q^{|\lambda|}
+= \sum_{\lambda'} z^{\ell(\lambda')} q^{|\lambda'|}
+= \sum_\mu z^{\ell(\mu)} q^{|\mu|}$.
+\end{proof}
+
+This means the universal factor $H(z) = 1/\qpoch{zq}{q}$ can be read
+in two equivalent ways:
+\begin{center}
+\begin{tabular}{l|l}
+\textbf{Reading} & \textbf{$z^n$ counts} \\ \hline
+$z$ = largest part ($\lambda_1 = n$)
+  & Partitions with largest part exactly~$n$ \\[2pt]
+$z$ = number of parts ($\ell(\lambda) = n$)
+  & Partitions with exactly~$n$ parts
+\end{tabular}
+\end{center}
+
+\subsection{The two geometric interpretations}
+
+In the growth diagram, these two readings correspond to two
+complementary geometric pictures:
+
+\paragraph{Height interpretation ($z = $ largest part).}
+The max entry $\max(\mathfrak{c})$ measures the \emph{height} of
+the tallest column in any slice of the CPP.  This is the statistic
+that appears in the definition of $\GK_c(z,q)$ and in the conjecture:
+extracting $[z^n]\,\GK_c(z,q)$ selects CPPs whose tallest column has
+height exactly~$n$.
+
+\paragraph{Depth interpretation ($z = $ number of parts).}
+The growth diagram has a natural \emph{depth} parameter: the number of
+peeling layers required to reduce the CPP to its base partition.  Each
+layer removes entries at one height level (from $m$ down to~$1$).  A CPP
+with max entry~$m$ requires exactly~$m$ peeling layers.  At each layer,
+the face labels of the ALCD record the data extracted.
+
+The conjugation symmetry~\eqref{eq:conjugation-symmetry} guarantees that
+these two pictures are consistent: a partition with largest part~$m$
+(height~$m$) produces, after conjugation, a partition with $m$~parts
+(depth~$m$).
+
+\subsection{The $E$--$H$ factorisation and the power of $z$}
+
+For the full CPP (not just the base partition), the $E$--$H$ factorisation
+\[
+  \GK_c(z,q) = \frac{1}{\qpoch{zq}{q}} \cdot G_c(z,q)
+\]
+decomposes $z^{\max(\mathfrak{c})}$ as a \emph{convolution}: extracting
+$[z^n]$ gives
+\begin{equation}\label{eq:convolution}
+  f_{n,c}(q) = [z^n]\,\GK_c(z,q)
+  = \sum_{j=0}^{n} \frac{q^j}{\qpochn{q}{q}{j}} \cdot g_{n-j,c}(q),
+\end{equation}
+where $q^j/\qpochn{q}{q}{j}$ counts partitions $\gamma$ with
+$\ell(\gamma) = j$ (equivalently, $\gamma_1 = j$), and $g_{n-j,c}(q)$
+is the corrected coefficient from $G_c(z,q)$.
+
+At the level of the bijection, this convolution reflects the fact that
+the max entry of a CPP receives contributions from both the base
+partition~$\gamma$ and the ALCD~$\mathfrak{d}$:
+\[
+  \max(\mathfrak{c}) = \underbrace{\gamma_1}_{\text{base partition height}}
+  \;+\; \underbrace{(\max(\mathfrak{c}) - \gamma_1)}_{\text{ALCD contribution}},
+\]
+where the ALCD contribution is the number of additional height levels
+added by the forward local rules beyond the base partition.
+
+\begin{remark}
+The corrected expansion $H(z) = \sum_{n \geq 0} q^n z^n/\qpochn{q}{q}{n}$
+(not $\sum z^n/\qpochn{q}{q}{n}$, which would be $1/\qpoch{z}{q}$)
+reflects the fact that a partition with exactly~$n$ parts has size at
+least~$n$ (each part $\geq 1$), contributing the factor $q^n$.
+\end{remark}
+
+
+%% ============================================================
+\section{Cylindric diagrams}
+\label{sec:alcd}
+%% ============================================================
+
+\subsection{The cylindric poset}
+
+\begin{definition}[Cylindric poset]
+\label{def:cyl-poset}
+For integers $n, m \geq 0$ with $T := n + m > 0$, the
+\emph{cylindric poset} $\mathfrak{G}(n,m)$ is the quotient of $\Z^2$
+by the equivalence relation $(x, y) \sim (x + n,\, y - m)$.  Its
+elements are equivalence classes of lattice points, inheriting the
+partial order from $\Z^2$.
+\end{definition}
+
+A binary string $\pi = (\pi_0, \pi_1, \ldots, \pi_{T-1}) \in \{0,1\}^T$
+with $n$ ones and $m$ zeros encodes the profile: $\pi_k = 1$ means
+``add a horizontal strip'' (going up) and $\pi_k = 0$ means ``remove
+a horizontal strip'' (going down).
+
+For rank~3 with profile $c = (c_0, c_1, c_2)$ and $d = c_0 + c_1 + c_2$,
+the binary string $\pi$ has length $T = d$ and is determined by the
+partition $\mu(c) = (c_1 + c_2,\, c_2,\, 0)$ associated to the profile.
+
+
+\subsection{Arbitrarily labelled cylindric diagrams}
+
+\begin{definition}[ALCD]
+\label{def:alcd}
+An \emph{arbitrarily labelled cylindric diagram} (ALCD) of profile $\pi$
+is an assignment of non-negative integers (``face labels'') to the faces
+of the cylindric poset $\mathfrak{G}(n,m)$, such that all but finitely
+many face labels are zero.
+
+More precisely, an ALCD $\mathfrak{d}$ is a function
+\[
+  \mathfrak{d}\colon \{\text{faces of } \mathfrak{G}(n,m)\} \to \Z_{\geq 0}
+\]
+with finite support.  The \emph{weight} of $\mathfrak{d}$ is
+$|\mathfrak{d}| := \sum_f \mathfrak{d}(f)$, the sum of all face labels.
+\end{definition}
+
+\begin{remark}[Why ``arbitrarily labelled'']
+The face labels are \textbf{arbitrary} non-negative integers --- there
+are no inequalities between adjacent face labels.  This is in contrast
+to the vertex labels in a growth diagram, which must satisfy interlacing
+conditions.  The word ``arbitrary'' refers to this freedom.
+\end{remark}
+
+\begin{remark}[Diagonal structure]
+\label{rem:diagonals}
+The faces of $\mathfrak{G}(n,m)$ are naturally grouped into
+\emph{diagonals}.  For rank~3 with profile $c = (c_0, c_1, c_2)$, the
+faces at each ``depth level'' $k$ form a diagonal with $T = d$ faces
+(one for each position around the cylinder).  A face at depth~$k$ and
+position~$i$ is denoted $\mathfrak{d}(k, i)$, where $k \geq 1$ and
+$i \in \{0, 1, \ldots, T-1\}$ (cyclic).
+
+The diagonal weight at depth~$k$ is
+$|\mathrm{diag}(k)|_{\mathfrak{d}} := \sum_{i=0}^{T-1} \mathfrak{d}(k,i)$.
+\end{remark}
+
+
+%% ============================================================
+\section{The growth diagram bijection}
+\label{sec:growth-diagram}
+%% ============================================================
+
+\subsection{Growth diagrams}
+
+\begin{definition}[Cylindric growth diagram]
+\label{def:growth-diagram}
+A \emph{cylindric growth diagram} of profile $\pi \in \{0,1\}^T$ is a
+labelling of the cylindric poset $\mathfrak{G}(n,m)$ consisting of:
+\begin{itemize}
+  \item \textbf{Vertex labels:} an integer partition $\lambda(v)$ at
+    each vertex~$v$.
+  \item \textbf{Face labels:} a non-negative integer $\mathfrak{d}(f)$
+    at each face~$f$.
+\end{itemize}
+These must satisfy:
+\begin{enumerate}
+  \item If $v \lhd w$ (covering relation) then $\lambda(v)/\lambda(w)$
+    or $\lambda(w)/\lambda(v)$ is a horizontal strip (depending on
+    whether the edge is ``up'' or ``down'').
+  \item All but finitely many vertices carry the same partition~$\gamma$
+    (the \emph{base partition}).
+  \item At each face with vertices $(\mu; \alpha, \beta; \lambda)$
+    and face label~$m$, the \emph{local rule} is satisfied:
+    $\lambda = \mathfrak{U}_{\alpha,\beta}(m, \mu)$.
+\end{enumerate}
+\end{definition}
+
+The growth diagram interpolates between the two sides of the bijection:
+\begin{itemize}
+  \item The \textbf{upper boundary} (the outermost ring of vertex
+    labels) gives a CPP $\mathfrak{c} = (\mu^0, \mu^1, \ldots,
+    \mu^{T-1})$.
+  \item The \textbf{face labels} give an ALCD $\mathfrak{d}$.
+  \item The \textbf{interior} converges to the base partition $\gamma$
+    at sufficient depth.
+\end{itemize}
+
+
+\subsection{The Burge local rule}
+
+The local rule $\mathfrak{U}_{\alpha,\beta}$ is the engine that drives
+the bijection.  It has type signature
+\begin{equation}\label{eq:local-rule-type}
+  \mathfrak{U}_{\alpha,\beta}\colon
+  \Z_{\geq 0} \times (D(\alpha) \cap D(\beta))
+  \to U(\alpha) \cap U(\beta),
+\end{equation}
+where $U(\mu)$ (resp.\ $D(\lambda)$) is the set of partitions obtained
+by adding (resp.\ removing) a horizontal strip to $\mu$
+(resp.\ from $\lambda$).
+
+\begin{definition}[Burge forward rule]
+\label{def:burge-forward}
+Given partitions $\alpha$, $\beta$, $\nu$ (with $\nu \leq \alpha$ and
+$\nu \leq \beta$ in the dominance order induced by horizontal strips)
+and a non-negative integer~$m$, define $\lambda =
+\mathfrak{U}_{\alpha,\beta}(m, \nu)$ by:
+\begin{enumerate}
+  \item Work in conjugate coordinates: $\alpha' = \mathrm{conj}(\alpha)$,
+    $\beta' = \mathrm{conj}(\beta)$, $\nu' = \mathrm{conj}(\nu)$.
+  \item Compute the column sets:
+    \begin{align*}
+      A &:= \{i \geq 1 : \alpha'_i > \nu'_i\}
+        && \text{(columns where $\alpha$ exceeds $\nu$)}, \\
+      B &:= \{i \geq 1 : \beta'_i > \nu'_i\}
+        && \text{(columns where $\beta$ exceeds $\nu$)}.
+    \end{align*}
+  \item \textbf{Cascade:} for each $i \in A \cap B$ (in increasing
+    order), let $\varepsilon(i)$ be the smallest integer $> i$ not
+    in $A \cup B$ and not previously assigned.
+    Set $C := \{\varepsilon(i) : i \in A \cap B\}$.
+  \item \textbf{Free columns:} let $D$ be the first $m$ elements of
+    $\Z_{>0} \setminus (A \cup B \cup C)$ (in increasing order).
+  \item \textbf{Build $\lambda$:} set $\lambda'_i := \nu'_i + [i \in A \cup B \cup C \cup D]$
+    (add one box to each target column).
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[Burge inverse rule]
+\label{def:burge-inverse}
+Given partitions $\alpha$, $\beta$, $\lambda$ (with $\lambda \geq \alpha$
+and $\lambda \geq \beta$), the inverse rule recovers $(m, \nu) =
+\mathfrak{U}_{\alpha,\beta}^{-1}(\lambda)$ by:
+\begin{enumerate}
+  \item Work in conjugate coordinates.
+  \item Compute the column sets:
+    \begin{align*}
+      \bar{A} &:= \{i \geq 1 : \lambda'_i > \alpha'_i\}, \\
+      \bar{B} &:= \{i \geq 1 : \lambda'_i > \beta'_i\}.
+    \end{align*}
+  \item \textbf{Reverse cascade:} for each $i \in \bar{A} \cap \bar{B}$
+    (in \emph{decreasing} order), let $\delta(i)$ be the largest
+    integer $< i$ not in $\bar{A} \cup \bar{B}$ and not previously
+    assigned.
+    Set $\bar{C} := \{\delta(i) : \delta(i) > 0\}$ and
+    $m := \#\{\delta(i) \leq 0\}$.
+  \item \textbf{Build $\nu$:} set $\nu'_i := \lambda'_i -
+    [i \in \bar{A} \cup \bar{B} \cup \bar{C}]$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}[Weight condition]
+\label{prop:weight}
+The local rule satisfies the weight identity:
+\begin{equation}\label{eq:weight-cond}
+  |\lambda| - |\nu| = |A \cup B \cup C \cup D|
+  = |A| + |B| - |A \cap B| + |C| + m,
+\end{equation}
+where $|C| = |A \cap B|$, so $|\lambda| - |\nu| = |A| + |B| + m$.
+In the growth diagram context (where $\alpha/\nu$ and $\beta/\nu$ are
+horizontal strips), this gives
+\begin{equation}\label{eq:weight-growth}
+  |\lambda| = |\alpha| + |\beta| - |\nu| + m.
+\end{equation}
+\end{proposition}
+
+
+\subsection{Constructing the bijection}
+
+Given a pair $(\gamma, \mathfrak{d}) \in \IP \times \ALCD(\pi)$, the
+CPP $\psi_\pi(\gamma, \mathfrak{d})$ is constructed by:
+\begin{enumerate}
+  \item \textbf{Initialise:} label all vertices at sufficient depth
+    with the base partition $\gamma$.
+  \item \textbf{Build upward:} at each face, apply the forward local
+    rule $\mathfrak{U}_{\alpha,\beta}(m, \nu) = \lambda$, using the
+    face label $m = \mathfrak{d}(f)$ and the vertex labels already
+    determined.
+  \item \textbf{Read off:} the upper boundary gives the CPP
+    $(\mu^0, \mu^1, \ldots, \mu^{T-1})$.
+\end{enumerate}
+
+Conversely, given a CPP $\mathfrak{c}$, the pair $(\gamma, \mathfrak{d})$
+is recovered by:
+\begin{enumerate}
+  \item \textbf{Initialise:} label the upper boundary with the CPP
+    partitions.
+  \item \textbf{Peel downward:} at each face, apply the inverse rule
+    $\mathfrak{U}_{\alpha,\beta}^{-1}(\lambda) = (m, \nu)$, extracting
+    the face label $m$ and the lower vertex label $\nu$.
+  \item \textbf{Converge:} after finitely many layers, all vertex labels
+    stabilise at the base partition $\gamma$.  The extracted face labels
+    constitute the ALCD $\mathfrak{d}$.
+\end{enumerate}
+
+
+\subsection{Strong weight preservation}
+
+The bijection is not merely weight-preserving but
+\textbf{strongly} weight-preserving.
+
+\begin{proposition}[PhD thesis, Chapter~3]
+\label{prop:strong-weight}
+If $\psi_\pi(\gamma, \mathfrak{d}) = (\mu^0, \mu^1, \ldots, \mu^{T-1})$,
+then for all $0 \leq k \leq T-1$:
+\begin{equation}\label{eq:strong-weight}
+  |\mu^k| = |\gamma| + |\mathrm{diag}(k)|_{\mathfrak{d}},
+\end{equation}
+where $|\mathrm{diag}(k)|_{\mathfrak{d}}$ is the total weight of the
+$k$-th diagonal of the ALCD (Remark~\ref{rem:diagonals}).
+
+In particular, the total weight of the CPP is
+\[
+  |\mathfrak{c}| = \sum_{k=0}^{T-1} |\mu^k|
+  = T \cdot |\gamma| + |\mathfrak{d}|,
+\]
+where $|\mathfrak{d}| = \sum_k |\mathrm{diag}(k)|_{\mathfrak{d}}$
+is the total weight of the ALCD.
+\end{proposition}
+
+This strong form is essential: it means the bijection preserves not
+just the total weight but the individual slice sizes.  This is the
+property that makes the bijection suitable for analysing the
+\emph{multivariate} generating function (which tracks each $|\mu^k|$
+separately).
+
+
+\subsection{The max statistic under the bijection}
+
+For the bivariate generating function $\GK_c(z,q) = \sum z^{\max(\mathfrak{c})} q^{|\mathfrak{c}|}$, the max statistic of a CPP
+$\mathfrak{c} = (\mu^0, \ldots, \mu^{T-1})$ is
+\[
+  \max(\mathfrak{c}) = \max_{0 \leq k \leq T-1} \mu^k_1
+\]
+(the largest first part among all slices).
+
+Under the bijection $\psi_\pi(\gamma, \mathfrak{d}) = \mathfrak{c}$,
+the max statistic depends on \emph{both} $\gamma$ and $\mathfrak{d}$:
+\[
+  \max(\mathfrak{c}) = \gamma_1 + \max_{k} \bigl(\text{max column index
+  used at depth~1, position~$k$}\bigr).
+\]
+More precisely, the first part $\mu^k_1$ is determined by the base
+partition $\gamma$ plus the effect of all face labels in the $k$-th
+column of the growth diagram.  The exact formula involves the cascade
+mechanism of the local rule.
+
+\begin{remark}
+The non-trivial dependence of the max statistic on both $\gamma$ and
+$\mathfrak{d}$ is why the $E$--$H$ factorisation at the level of
+$\GK_c(z,q)$ is more subtle than at the level of $\GK_c(1,q)$: the
+$z$-grading (by max) cannot be expressed as a simple product of
+$z$-gradings on $\gamma$ and $\mathfrak{d}$ separately.
+\end{remark}
+
+
+%% ============================================================
+\section{The polynomials $h_{m,c}(q)$ as ALCD generating functions}
+\label{sec:hmc}
+%% ============================================================
+
+\subsection{Factoring out the base partition}
+
+Recall the key generating functions:
+\begin{align}
+  f_{m,c}(q) &:= [z^m]\,\GK_c(z,q)
+    = \sum_{\substack{\mathfrak{c} \in \CPP(c) \\ \max(\mathfrak{c}) = m}}
+      q^{|\mathfrak{c}|},
+    \label{eq:fmc} \\
+  h_{m,c}(q) &:= \qpochn{q}{q}{m} \cdot f_{m,c}(q).
+    \label{eq:hmc}
+\end{align}
+
+The factor $1/\qpochn{q}{q}{m}$ generates partitions with largest part
+$\leq m$ (equivalently, with at most $m$ parts after conjugation).
+So $f_{m,c}(q)$ counts CPPs with $\max = m$, and division by
+$1/\qpochn{q}{q}{m}$ amounts to ``quotienting out'' the contribution of
+the base partition $\gamma$ (restricted to have $\gamma_1 \leq m$).
+
+Under the bijection, a CPP $\mathfrak{c}$ with $\max(\mathfrak{c}) = m$
+decomposes as $(\gamma, \mathfrak{d})$ where $\gamma$ contributes
+$q^{|\gamma|}$ to the weight and $\mathfrak{d}$ contributes
+$q^{|\mathfrak{d}|}$.  The multiplication by $\qpochn{q}{q}{m}$
+``cancels'' the sum over $\gamma$, leaving:
+
+\begin{equation}\label{eq:hmc-alcd}
+  h_{m,c}(q) = \sum_{\substack{\mathfrak{d} \in \ALCD(c) \\
+  \max(\psi(\gamma_0, \mathfrak{d})) = m}}
+  q^{|\mathfrak{d}|},
+\end{equation}
+where $\gamma_0$ is the unique base partition such that the resulting
+CPP has $\max = m$.
+
+\begin{remark}[Why this is subtle]
+The constraint $\max(\psi(\gamma, \mathfrak{d})) = m$ couples $\gamma$
+and $\mathfrak{d}$: the max of the CPP depends on both the base
+partition and the ALCD.  The factorisation
+$f_{m,c}(q) = h_{m,c}(q)/\qpochn{q}{q}{m}$ is exact at the level of
+generating functions, but the combinatorial interpretation of the
+individual objects counted by $h_{m,c}(q)$ requires specifying how
+the max constraint is distributed between $\gamma$ and $\mathfrak{d}$.
+
+Nevertheless, computational evidence confirms that $h_{m,c}(q) \in
+\Z_{\geq 0}[q]$ for all tested profiles.  This is a strictly stronger
+statement than positivity of $Q_{n,c}(q)$.
+\end{remark}
+
+
+%% ============================================================
+\section{The ground set for the involution}
+\label{sec:ground-set}
+%% ============================================================
+
+We now bring together all the pieces to give a precise description of
+the underlying set on which the sign-reversing involution must act.
+
+\subsection{The polynomial $Q_{n,c}(q)$}
+
+\begin{definition}[$Q_{n,c}(q)$]
+\label{def:Q}
+For a nonneg integer $n$ and profile $c = (c_0, c_1, c_2)$ with
+$d = c_0 + c_1 + c_2$ and $\ell = \gcd(d, 3)$, define
+\begin{equation}\label{eq:Q-def}
+  Q_{n,c}(q) := \qpochn{q^\ell}{q^\ell}{n}
+  \cdot [z^n]\!\Bigl(\qpoch{zq}{q} \cdot \GK_c(z,q)\Bigr)
+  = \qpochn{q^\ell}{q^\ell}{n} \cdot g_{n,c}(q).
+\end{equation}
+When $d \not\equiv 0 \pmod{3}$, we have $\ell = 1$ and
+$Q_{n,c}(q) = \qpochn{q}{q}{n} \cdot g_{n,c}(q)$.
+\end{definition}
+
+\subsection{The $q$-binomial decomposition}
+
+Recall the \emph{$q$-binomial coefficient}
+\[
+  \qbin{n}{j} := \frac{\qpochn{q}{q}{n}}{\qpochn{q}{q}{j}\,\qpochn{q}{q}{n-j}},
+\]
+which is a polynomial in $q$ equal to the generating function for
+partitions fitting inside a $j \times (n{-}j)$ rectangle:
+$\qbin{n}{j} = \sum_{\lambda \subseteq (n-j)^j} q^{|\lambda|}$.
+
+The polynomial $Q_{n,c}(q)$ has the alternating-sum representation:
+\begin{equation}\label{eq:Q-alt}
+  Q_{n,c}(q)
+  = \sum_{j=0}^{n} (-1)^j\, q^{j(j+1)/2}\,
+    \qbin{n}{j} \cdot h_{n-j,c}(q).
+\end{equation}
+
+Using the identity $q^{j(j+1)/2} \qbin{n}{j} = \sum_{\substack{S
+\subseteq \{1,\ldots,n\} \\ |S| = j}} q^{\sigma(S)}$
+(where $\sigma(S) = \sum_{s \in S} s$), this becomes:
+\begin{equation}\label{eq:Q-ground}
+  Q_{n,c}(q)
+  = \sum_{\substack{S \subseteq \{1,\ldots,n\} \\
+    \tau \in \mathcal{H}_{n-|S|,c}}}
+    (-1)^{|S|}\, q^{\sigma(S) + \operatorname{wt}(\tau)},
+\end{equation}
+where $\mathcal{H}_{m,c}$ is the set of objects counted by $h_{m,c}(q)$,
+equipped with the weight function $\operatorname{wt}$.
+
+\begin{remark}[From the analytic definition to the ground set]
+\label{rem:analytic-to-ground}
+The analytic definition of $Q_{n,c}(q)$ (see the companion note on the
+positivity conjecture) is
+\begin{equation}\label{eq:Q-analytic}
+  Q_{n,c}(q) = \qpochn{q}{q}{n}
+  \cdot [z^n]\!\bigl(\qpoch{zq}{q} \cdot \GK_c(z,q)\bigr).
+\end{equation}
+(Here we state the case $d \not\equiv 0 \pmod{3}$, i.e.\ $\ell =
+\gcd(d,3) = 1$; the general case replaces $(q)_n$ by
+$(q^\ell;q^\ell)_n$.)
+Let us trace through the three steps that convert this into the
+ground-set expression~\eqref{eq:Q-ground}.
+
+\medskip
+\noindent\textbf{Step~1: Expand $\qpoch{zq}{q}$ via Euler's identity.}
+The Euler identity gives
+$\qpoch{zq}{q} = \sum_{j \geq 0} (-1)^j q^{j(j+1)/2} z^j /
+\qpochn{q}{q}{j}$.
+Writing $f_{m,c}(q) = [z^m]\,\GK_c(z,q)$ for the coefficients of the
+original generating function, extracting $[z^n]$ yields
+\[
+  [z^n]\!\bigl(\qpoch{zq}{q} \cdot \GK_c(z,q)\bigr)
+  = \sum_{j=0}^{n} \frac{(-1)^j\, q^{j(j+1)/2}}{\qpochn{q}{q}{j}}
+    \cdot f_{n-j,c}(q)
+  = g_{n,c}(q).
+\]
+
+\noindent\textbf{Step~2: Multiply by $\qpochn{q}{q}{n}$.}
+Using $\qpochn{q}{q}{n}/\qpochn{q}{q}{j} =
+\qpochn{q}{q}{n-j} \cdot \qbin{n}{j}$ and the definition
+$h_{m,c}(q) = \qpochn{q}{q}{m} \cdot f_{m,c}(q)$, we obtain the
+$q$-binomial decomposition~\eqref{eq:Q-alt}:
+\[
+  Q_{n,c}(q) = \sum_{j=0}^{n} (-1)^j\, q^{j(j+1)/2}\,
+  \qbin{n}{j} \cdot h_{n-j,c}(q).
+\]
+This is the step where the denominators are cleared: each
+$1/\qpochn{q}{q}{j}$ is absorbed into a $q$-binomial coefficient,
+ensuring $Q_{n,c}(q)$ is a polynomial (not merely a formal power series).
+
+\medskip
+\noindent\textbf{Step~3: Biject $q$-binomials to subsets.}
+The following identity converts each $q$-binomial into a sum over
+subsets, producing the ground-set expression~\eqref{eq:Q-ground}.
+\end{remark}
+
+\begin{lemma}\label{lem:qbin-subsets}
+For integers $0 \leq j \leq n$,
+\begin{equation}\label{eq:qbin-subsets}
+  q^{j(j+1)/2}\,\qbin{n}{j}
+  = \sum_{\substack{S \subseteq \{1,\ldots,n\} \\ |S| = j}} q^{\sigma(S)},
+\end{equation}
+where $\sigma(S) = \sum_{s \in S} s$.
+\end{lemma}
+
+\begin{proof}
+There is a bijection between $j$-element subsets
+$S = \{s_1 < \cdots < s_j\} \subseteq \{1,\ldots,n\}$ and partitions
+$\lambda$ fitting inside a $j \times (n{-}j)$ rectangle, given by
+\[
+  \lambda_i = s_{j+1-i} - (j + 1 - i), \qquad i = 1,\ldots, j.
+\]
+Since $s_i \geq i$ (there are at least $i$ elements of $S$ that are
+$\leq s_i$), each $\lambda_i \geq 0$.  The strict ordering
+$s_1 < \cdots < s_j$ gives
+$\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_j \geq 0$,
+so $\lambda$ is a partition with at most $j$ parts.  Moreover
+$s_j \leq n$ gives $\lambda_1 = s_j - j \leq n - j$, so
+$\lambda$ fits inside the box $(n{-}j)^j$.
+
+The weight satisfies
+\[
+  |\lambda| = \sum_{i=1}^{j}(s_i - i) = \sigma(S) - \tfrac{j(j+1)}{2},
+\]
+so $q^{\sigma(S)} = q^{|\lambda| + j(j+1)/2}$.  Summing over all
+$j$-element subsets and using
+$\qbin{n}{j} = \sum_{\lambda \subseteq (n-j)^j} q^{|\lambda|}$:
+\[
+  \sum_{|S|=j} q^{\sigma(S)}
+  = q^{j(j+1)/2} \sum_{\lambda \subseteq (n-j)^j} q^{|\lambda|}
+  = q^{j(j+1)/2}\,\qbin{n}{j}. \qedhere
+\]
+\end{proof}
+
+
+\subsection{The ground set: three equivalent descriptions}
+
+We give three descriptions of the ground set, at increasing levels
+of explicitness.
+
+\medskip
+\noindent\textbf{Level 1: Abstract pairs.}
+The ground set is
+\begin{equation}\label{eq:G-abstract}
+  \mathcal{G}_{n,c} =
+  \bigsqcup_{j=0}^{n}
+  \bigl\{(S, \tau) : S \subseteq \{1,\ldots,n\},\;
+    |S| = j,\; \tau \in \mathcal{H}_{n-j,c}\bigr\},
+\end{equation}
+with sign $\varepsilon(S,\tau) = (-1)^{|S|}$ and weight
+$w(S,\tau) = \sigma(S) + \operatorname{wt}(\tau)$.
+
+Here $\tau$ is an \emph{abstract} element of the set
+$\mathcal{H}_{m,c}$ counted by $h_{m,c}(q)$.  The advantage of this
+description is its simplicity; the disadvantage is that $\tau$ is not a
+concrete combinatorial object.
+
+\medskip
+\noindent\textbf{Level 2: Pairs with ALCDs.}
+Using equation~\eqref{eq:hmc-alcd}, we can identify
+$\tau \in \mathcal{H}_{m,c}$ with an ALCD $\mathfrak{d}$ at the
+appropriate max level:
+\begin{equation}\label{eq:G-alcd}
+  \mathcal{G}_{n,c} =
+  \bigsqcup_{j=0}^{n}
+  \bigl\{(S, \mathfrak{d}) : S \subseteq \{1,\ldots,n\},\;
+    |S| = j,\; \mathfrak{d} \in \ALCD_{n-j}(c)\bigr\},
+\end{equation}
+where $\ALCD_m(c)$ denotes the set of ALCDs of profile~$c$ that produce
+a CPP with $\max = m$ when combined with the appropriate base partition.
+The weight is $w(S, \mathfrak{d}) = \sigma(S) + |\mathfrak{d}|$.
+
+Here $\mathfrak{d}$ is a concrete combinatorial object (a finitely-supported
+function from faces to $\Z_{\geq 0}$), but the constraint linking it
+to ``max level~$m$'' is implicit and involves the base partition.
+
+\medskip
+\noindent\textbf{Level 3: Triples with CPPs.}
+Expanding $h_{m,c}(q) = \qpochn{q}{q}{m} \cdot f_{m,c}(q)$
+and $f_{m,c}(q) = \sum_{\nu:\max(\nu)=m} q^{|\nu|}$, we get the
+fully explicit ground set:
+\begin{equation}\label{eq:G-triples}
+  \widetilde{\mathcal{G}}_{n,c} =
+  \bigsqcup_{j=0}^{n}
+  \left\{(S, U, \nu) :
+    \begin{array}{l}
+      S \subseteq \{1,\ldots,n\},\; |S| = j, \\[2pt]
+      U \subseteq \{1,\ldots,n-j\}, \\[2pt]
+      \nu \in \CPP(c),\; \max(\nu) = n - j
+    \end{array}
+  \right\},
+\end{equation}
+with sign $\varepsilon(S, U, \nu) = (-1)^{|S| + |U|}$ and weight
+$w(S, U, \nu) = \sigma(S) + \sigma(U) + |\nu|$.
+
+Here $U$ comes from the factor $\qpochn{q}{q}{m}$ and $\nu$ is a
+genuine CPP.  The expression for $Q_{n,c}(q)$ is:
+\begin{equation}
+  Q_{n,c}(q) = \sum_{(S, U, \nu) \in \widetilde{\mathcal{G}}_{n,c}}
+  (-1)^{|S|+|U|}\, q^{\sigma(S)+\sigma(U)+|\nu|}.
+\end{equation}
+
+
+\subsection{The relationship between the three levels}
+
+The three descriptions are related by:
+\[
+  \text{Level 3 (triples)}
+  \;\xrightarrow{\text{cancel $U$ vs.\ $\nu$}}\;
+  \text{Level 2 (ALCD pairs)}
+  \;\xrightarrow{\text{forget structure}}\;
+  \text{Level 1 (abstract pairs)}.
+\]
+
+The passage from Level~3 to Level~2 uses the bijection
+$\psi_\pi\colon (\gamma, \mathfrak{d}) \leftrightarrow \nu$ (with
+$\gamma$ absorbed into $U$ via the identity
+$h_{m,c} = (q)_m \cdot f_{m,c}$).  Since $h_{m,c}(q)$ is
+(computationally verified to be) nonneg, the sign from $(-1)^{|U|}$
+cancels internally, and we can work at Level~1 or Level~2 where only
+$(-1)^{|S|}$ contributes to the sign.
+
+
+\subsection{Summary: what the involution must do}
+
+A sign-reversing, weight-preserving involution
+$\iota\colon \mathcal{G}_{n,c} \to \mathcal{G}_{n,c}$ must satisfy:
+\begin{enumerate}
+  \item $\iota^2 = \operatorname{id}$.
+  \item Non-fixed points pair with opposite sign: if
+    $\iota(S, \tau) = (S', \tau') \neq (S, \tau)$,
+    then $|S'| \equiv |S| + 1 \pmod{2}$.
+  \item Weight is preserved:
+    $\sigma(S) + \operatorname{wt}(\tau)
+    = \sigma(S') + \operatorname{wt}(\tau')$.
+  \item Every fixed point $(S, \tau) = \iota(S, \tau)$ has
+    $|S| \equiv 0 \pmod{2}$.
+\end{enumerate}
+
+The fixed-point generating function gives $Q_{n,c}(q)$:
+\[
+  Q_{n,c}(q) = \sum_{\substack{(S,\tau) \in \mathcal{G}_{n,c} \\
+  \iota(S,\tau) = (S,\tau)}} q^{\sigma(S) + \operatorname{wt}(\tau)}.
+\]
+
+At Level~2 (ALCD pairs), the peel/glue mechanism of the local rules
+provides the natural transformation engine: the \textbf{inverse local
+rule} extracts face labels from the ALCD (reducing its weight) and
+deposits them into the subset~$S$, while the \textbf{forward local rule}
+does the reverse.  The challenge is to define a \emph{canonical} choice
+of which face label to peel or glue, determined entirely by the pair
+$(S, \mathfrak{d})$, such that the resulting map is involutive.
+
+
+%% ============================================================
+\section{Worked example}
+\label{sec:example}
+%% ============================================================
+
+\subsection{Setup: $d = 4$, $c = (2,2,0)$, $n = 1$}
+
+For this case, $Q_{1,(2,2,0)}(q) = q^2 + q^3 + q^4 + q^5$.
+
+\paragraph{The $h$-polynomials.}
+\begin{itemize}
+  \item $h_{0,c}(q) = 1$ (the empty ALCD).
+  \item $h_{1,c}(q) = q + q^2 + q^3 + q^4 + q^5$
+    (five ALCDs at max level~1, with weights $1, 2, 3, 4, 5$).
+\end{itemize}
+
+\paragraph{The alternating sum.}
+\[
+  Q_{1,c}(q) = h_{1,c}(q) - q \cdot h_{0,c}(q)
+  = (q + q^2 + q^3 + q^4 + q^5) - q = q^2 + q^3 + q^4 + q^5.
+\]
+
+\paragraph{The ground set $\mathcal{G}_{1,c}$ at Level~1.}
+\begin{itemize}
+  \item $j = 0$ (sign $+$): pairs $(\emptyset, \tau)$ with
+    $\tau \in \mathcal{H}_{1,c}$.
+    Five objects at weights $1, 2, 3, 4, 5$.
+  \item $j = 1$ (sign $-$): pairs $(\{1\}, \tau_0)$ with
+    $\tau_0 \in \mathcal{H}_{0,c}$.
+    One object at weight $\sigma(\{1\}) + 0 = 1$.
+\end{itemize}
+
+Total: six objects, five positive and one negative.
+
+\paragraph{The involution.}
+The unique negative object $(\{1\}, \tau_0)$ at weight~$1$ pairs with
+the unique positive object $(\emptyset, \tau_1^{\min})$ at weight~$1$
+(where $\tau_1^{\min}$ is the minimal-weight ALCD at max level~1).
+
+Bijectively, this pairing says: the ALCD $\tau_1^{\min}$ of weight~$1$
+can be ``peeled'' (via an inverse local rule that extracts a face label
+of value~$1$) to produce the empty ALCD $\tau_0$ of weight~$0$.
+
+The four surviving fixed points at weights $2, 3, 4, 5$ give
+$Q_{1,c}(q) = q^2 + q^3 + q^4 + q^5$. \qed
+
+
+%% ============================================================
+\section{Outlook: what the bijection provides}
+\label{sec:outlook}
+%% ============================================================
+
+The growth diagram bijection
+$\psi_\pi\colon (\IP, \ALCD(\pi)) \to \CPP(\pi)$ provides:
+
+\begin{enumerate}
+  \item \textbf{A concrete model for $\mathcal{H}_{m,c}$.}
+    The objects $\tau$ counted by $h_{m,c}(q)$ are (equivalence classes
+    of) ALCDs at the appropriate max level.
+
+  \item \textbf{A transformation mechanism.}
+    The forward and inverse local rules provide the peel/glue operations
+    needed for the involution: the inverse rule extracts face labels
+    (peeling), the forward rule deposits them (gluing).
+
+  \item \textbf{Weight tracking.}
+    The strong weight preservation (Proposition~\ref{prop:strong-weight})
+    ensures that peel/glue operations preserve the total $q$-weight,
+    which is the essential requirement for the involution.
+
+  \item \textbf{Multivariate compatibility.}
+    The strong weight preservation tracks individual slice sizes, so the
+    same framework should extend to the multivariate conjecture.
+\end{enumerate}
+
+The missing ingredient is the \textbf{canonical choice}: which face
+label to peel or glue, and how to decide between peeling and gluing,
+given a pair $(S, \mathfrak{d})$.  This choice must be globally
+consistent (involutive) and must produce fixed points only at
+even $|S|$.
+
+\begin{thebibliography}{99}
+\bibitem{Borodin}
+  A.~Borodin,
+  \emph{Periodic Schur process and cylindric partitions},
+  Duke Math.~J.\ \textbf{140} (2007), 391--468.
+
+\bibitem{Fomin}
+  S.~V.~Fomin,
+  \emph{Generalized Robinson--Schensted--Knuth correspondence},
+  J.\ Soviet Math.\ \textbf{41} (1988), 979--991.
+
+\bibitem{Krattenthaler}
+  C.~Krattenthaler,
+  \emph{Growth diagrams, and increasing and decreasing chains in
+  fillings of Ferrers shapes},
+  Adv.\ Appl.\ Math.\ \textbf{37} (2006), 404--431.
+
+\bibitem{Langer-thesis}
+  R.~Langer,
+  \emph{Cylindric Partitions and Bijective Proofs},
+  PhD thesis, University of Melbourne.
+
+\bibitem{Langer-cpp1}
+  R.~Langer,
+  \emph{Enumeration of Cylindric Plane Partitions -- Part~I},
+  2012. arXiv:1204.4583.
+\end{thebibliography}
+
+\end{document}

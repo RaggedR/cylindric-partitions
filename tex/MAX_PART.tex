@@ -1,0 +1,784 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{observation}[theorem]{Observation}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\CPP}{\operatorname{CPP}}
+\newcommand{\RPP}{\operatorname{RPP}}
+\newcommand{\SSYT}{\operatorname{SSYT}}
+\newcommand{\GK}{\operatorname{GK}}
+\newcommand{\QSym}{\operatorname{QSym}}
+\newcommand{\Sym}{\operatorname{Sym}}
+
+% q-series notation
+\newcommand{\qpoch}[2]{(#1;#2)_\infty}
+\newcommand{\qpochn}[3]{(#1;#2)_{#3}}
+\newcommand{\qbin}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+
+\title{The maximum entry in reverse plane partitions\\
+and cylindric plane partitions}
+\author{Robin Langer}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We collect what is known about reverse plane partitions (RPPs)
+and cylindric plane partitions (CPPs) refined by their maximum
+entry. The maximum entry~$n$ governs the ``depth'' of the
+combinatorial object: it is the number of layers in the
+level-set decomposition, the number of non-intersecting lattice
+paths in the NILP model, and the number of insertion steps in
+the RSK/growth-diagram framework. We describe the transfer
+matrix formulation (products of skew Schur functions),
+Borodin's product formula, the E--H factorization that extracts
+Warnaar's $Q_{n,c}(q)$ polynomials, and the partial
+quasi-symmetry of the frequency refinement at fixed
+maximum entry.
+\end{abstract}
+
+\tableofcontents
+
+%% ========================================================================
+\section{Reverse plane partitions and the maximum entry}
+\label{sec:rpp}
+%% ========================================================================
+
+\subsection{Definitions}
+
+A \emph{reverse plane partition} (RPP) of shape~$\lambda$ is a
+filling of the Young diagram of~$\lambda$ with nonneg integers
+that is weakly increasing along rows (left to right) and weakly
+increasing down columns (top to bottom). We write $\RPP(\lambda)$
+for the set of all RPPs of shape~$\lambda$.
+
+\begin{remark}
+Some authors use the convention that entries are weakly
+\emph{decreasing} (``plane partitions'' in the sense of
+MacMahon). We follow the reverse/increasing convention, which
+matches the interlacing-sequence model and Stanley's
+$P$-partition framework.
+\end{remark}
+
+The \emph{weight} of an RPP~$\pi$ is
+$|\pi| = \sum_{(i,j) \in \lambda} \pi_{ij}$,
+and the \emph{maximum entry} is
+$\max(\pi) = \max_{(i,j)} \pi_{ij}$.
+
+Stanley's celebrated formula~\cite{stanley-1972} gives the
+weight generating function:
+\begin{equation}\label{eq:stanley-hook}
+  \sum_{\pi \in \RPP(\lambda)} q^{|\pi|}
+  = \prod_{u \in \lambda} \frac{1}{1 - q^{h_\lambda(u)}},
+\end{equation}
+where $h_\lambda(u)$ is the hook length at box~$u$.
+
+\subsection{Level-set decomposition}
+
+Given an RPP~$\pi$ with $\max(\pi) = n$, define the
+\emph{level sets}:
+\[
+  L_k(\pi) = \{(i,j) \in \lambda : \pi_{ij} \geq k\},
+  \qquad k = 1, 2, \ldots, n.
+\]
+Since $\pi$ is weakly increasing in both directions,
+each $L_k(\pi)$ is a Young diagram (the upper-left corner
+condition is preserved). We obtain a chain of partitions:
+\begin{equation}\label{eq:level-chain}
+  \lambda = L_0 \supseteq L_1 \supseteq L_2
+  \supseteq \cdots \supseteq L_n \supseteq \emptyset,
+\end{equation}
+and the weight decomposes as
+$|\pi| = \sum_{k=1}^{n} |L_k|$
+(each box at height~$\geq k$ contributes 1 for each level).
+
+The RPP is uniquely determined by its level-set chain.
+Thus:
+
+\begin{proposition}\label{prop:rpp-level-sets}
+RPPs of shape $\lambda$ with $\max \leq n$ are in bijection
+with chains of partitions
+$\lambda \supseteq \mu^{(1)} \supseteq \cdots \supseteq
+\mu^{(n)} \supseteq \emptyset$
+inside~$\lambda$.
+\end{proposition}
+
+This is the ``$n$-layer'' decomposition: max entry~$= n$
+means exactly $n$ layers.
+
+\subsection{The interlacing-sequence model}
+
+Reading an RPP along its anti-diagonals gives an
+\emph{interlacing sequence} of partitions. For shape~$\lambda$
+with profile (binary string) $\pi = (\pi_1, \ldots, \pi_T)$:
+\[
+  \emptyset = \nu^{(0)},\; \nu^{(1)},\; \ldots,\;
+  \nu^{(T)},\; \nu^{(T+1)} = \emptyset,
+\]
+where $\nu^{(k-1)}$ and $\nu^{(k)}$ satisfy the interlacing
+condition determined by~$\pi_k$:
+\begin{itemize}
+  \item If $\pi_k = 0$: $\nu^{(k)}/\nu^{(k-1)}$ is a
+    horizontal strip (row added);
+  \item If $\pi_k = 1$: $\nu^{(k-1)}/\nu^{(k)}$ is a
+    horizontal strip (row removed).
+\end{itemize}
+
+In this model, the maximum entry of the RPP equals
+$\max_{k,j} \nu^{(k)}_j$, the maximum part across all
+partitions in the sequence.
+
+\subsection{Bounding the maximum entry}
+\label{sec:rpp-bounded}
+
+For RPPs of shape $\lambda$ with max entry $\leq m$, we
+restrict all parts $\nu^{(k)}_j \leq m$ in the interlacing
+sequence. This is equivalent to requiring that each partition
+$\nu^{(k)}$ has at most $m$ columns (in English convention),
+or equivalently that the conjugate $(\nu^{(k)})'$ has at most
+$m$ parts.
+
+The generating function for RPPs of shape $\lambda$ refined
+by maximum entry is:
+\begin{equation}\label{eq:rpp-max-gf}
+  \sum_{\pi \in \RPP(\lambda)} z^{\max(\pi)} q^{|\pi|}
+  = \sum_{n \geq 0} g_{n,\lambda}(q)\, z^n.
+\end{equation}
+The variable~$z$ tracks the maximum entry, and
+$g_{n,\lambda}(q)$ counts RPPs of shape~$\lambda$ with exact
+max entry~$n$ by weight.
+
+%% ========================================================================
+\section{Cylindric plane partitions}
+\label{sec:cpp}
+%% ========================================================================
+
+\subsection{Definition and generating function}
+
+A \emph{rank-$k$ cylindric plane partition} with profile
+$c = (c_1, \ldots, c_k)$ is a $k$-tuple of partitions
+$(\nu^{(1)}, \ldots, \nu^{(k)})$ satisfying the
+\emph{cyclic} interlacing conditions:
+\begin{equation}\label{eq:cpp-interlacing}
+  \nu^{(i)}_j \geq \nu^{(i+1)}_{j + c_{i+1}},
+  \qquad i = 1, \ldots, k,
+  \quad \text{indices mod $k$}.
+\end{equation}
+When $k = 3$ and $c = (c_0, c_1, c_2)$ with $d = |c|$:
+\[
+  \nu^{(1)}_j \geq \nu^{(2)}_{j+c_1}, \qquad
+  \nu^{(2)}_j \geq \nu^{(3)}_{j+c_2}, \qquad
+  \nu^{(3)}_j \geq \nu^{(1)}_{j+c_0}.
+\]
+
+RPPs are the special case where the profile corresponds
+to a partition shape and the boundary condition is
+$\nu^{(0)} = \nu^{(T+1)} = \emptyset$ (non-cyclic).
+The cyclic boundary condition is what distinguishes CPPs.
+
+The two-variable generating function is:
+\begin{equation}\label{eq:GK}
+  \GK_c(z, q) = \sum_{\pi \in \CPP(c)} z^{n(\pi)} q^{|\pi|}
+  = \sum_{n \geq 0} g_n(q)\, z^n,
+\end{equation}
+where $n(\pi) = \max_{i,j} \nu^{(i)}_j$ is the maximum entry.
+
+\subsection{Borodin's product formula}
+
+Borodin~\cite{borodin-2007} proved:
+\begin{equation}\label{eq:borodin}
+  \GK_c(1, q) = \sum_{\pi \in \CPP(c)} q^{|\pi|}
+  = \prod_{s \in \mathcal{C}(c)} \frac{1}{1 - q^{h(s)}},
+\end{equation}
+where $\mathcal{C}(c)$ is the ``cylindric shape'' determined
+by the profile~$c$, and $h(s)$ is the hook length of box~$s$
+in this cylindric shape. This generalizes
+Stanley's formula~\eqref{eq:stanley-hook} for RPPs.
+
+The $z$-refined version involves the transfer matrix
+(Section~\ref{sec:transfer-matrix}).
+
+%% ========================================================================
+\section{The NILP model: max entry = number of paths}
+\label{sec:nilp}
+%% ========================================================================
+
+In the non-intersecting lattice path (NILP) interpretation:
+\begin{quote}
+A CPP with max entry $= n$ corresponds to $n$ non-intersecting
+lattice paths on the cylinder.
+\end{quote}
+
+Each ``layer'' (the level set $\{(i,j) : \nu^{(i)}_j \geq k\}$)
+contributes one path. The paths are non-intersecting because
+the interlacing conditions force the level sets to be nested.
+
+The maximum entry thus controls the \emph{combinatorial
+complexity}: $n = 1$ gives a single path (equivalent to a
+single interlacing chain), while larger~$n$ requires
+coordinating $n$ nested paths on the cylinder.
+
+For the positivity conjecture, the case $n = 1$ is trivial
+($g_1$ counts objects directly), and the difficulty grows
+with~$n$ because the alternating-sign E--H extraction
+(Section~\ref{sec:EH}) involves deeper cancellation.
+
+%% ========================================================================
+\section{The transfer matrix and Schur functions}
+\label{sec:transfer-matrix}
+%% ========================================================================
+
+\subsection{Vertex operator formulation}
+
+The generating function $\GK_c(z,q)$ can be expressed using
+vertex operators acting on the ring of symmetric functions.
+The Pieri rules for Schur functions give:
+\[
+  s_\mu[X] \cdot h_r[X]
+  = \sum_{\lambda \in U_r(\mu)} s_\lambda[X],
+  \qquad
+  s_\lambda[X + w]
+  = \sum_{\mu \in D_r(\lambda)} s_\mu[X]\, w^r,
+\]
+where $U_r(\mu)$ (resp.\ $D_r(\lambda)$) is the set of
+partitions obtained from $\mu$ by adding (resp.\ removing) a
+horizontal $r$-strip.
+
+The coefficient of $z^n$ in $\GK_c(z,q)$ is:
+\begin{equation}\label{eq:transfer-matrix}
+  g_n(q) = \sum_{\vec{\lambda}}
+  \prod_{i=1}^{k}
+  s_{\lambda^{(i+1)}/\lambda^{(i)}}(1, q, q^2, \ldots),
+\end{equation}
+where the sum is over $k$-tuples of partitions
+$\vec{\lambda} = (\lambda^{(1)}, \ldots, \lambda^{(k)})$
+satisfying the cyclic interlacing~\eqref{eq:cpp-interlacing}
+with all parts~$\leq n$.
+
+\subsection{Schur positivity}
+
+Each factor $s_{\mu/\nu}(1, q, q^2, \ldots)$ in
+\eqref{eq:transfer-matrix} is the principal specialization
+of a skew Schur function, which counts semistandard Young
+tableaux of skew shape~$\mu/\nu$ by major index:
+\[
+  s_{\mu/\nu}(1, q, q^2, \ldots)
+  = \sum_{T \in \SSYT(\mu/\nu)} q^{|T|}.
+\]
+Before specialization, \eqref{eq:transfer-matrix} is a sum
+of products of skew Schur functions. Products of skew Schur
+functions are Schur-positive by the Littlewood--Richardson
+rule, so:
+
+\begin{proposition}\label{prop:schur-pos}
+The ``unspecialized'' transfer matrix expression
+\[
+  \widetilde{g}_n^{\mathrm{TM}}(X)
+  = \sum_{\vec{\lambda}}
+  \prod_{i=1}^{k}
+  s_{\lambda^{(i+1)}/\lambda^{(i)}}(X)
+\]
+is a Schur-positive symmetric function.
+Under the principal specialization $x_j \mapsto q^{j-1}$,
+it recovers $g_n(q)$.
+\end{proposition}
+
+\begin{remark}
+This ``unspecialized'' lift tracks a \emph{single} alphabet
+$X$ shared across all $k$ skew Schur factors. It refines
+the total weight but does \emph{not} distinguish which
+factor (= which diagonal of the CPP) a box belongs to.
+The full frequency refinement
+$\tilde{g}_n(z_1, z_2, \ldots)$ from
+Section~\ref{sec:frequency} is a different (and finer)
+multivariate lift, and it is \emph{not} symmetric.
+\end{remark}
+
+\subsection{Connection to SSYT}
+
+For RPPs of shape $\lambda$ (the non-cylindric case),
+the transfer matrix reduces to:
+\[
+  g_{n,\lambda}^{\mathrm{RPP}}(q)
+  = \sum_{\substack{\mu^{(0)} = \emptyset \subseteq
+    \mu^{(1)} \subseteq \cdots \subseteq \mu^{(n)} \\
+    \mu^{(n)} = \lambda}}
+  \prod_{i=1}^{n} s_{\mu^{(i)}/\mu^{(i-1)}}(1, q, q^2, \ldots).
+\]
+The unspecialized version $\sum \prod_i s_{\mu^{(i)}/\mu^{(i-1)}}(X)$
+is a single Schur function evaluated at a product of
+alphabets: it equals $s_\lambda(X^n)$ under appropriate
+plethystic substitution.
+
+More concretely, RPPs of shape~$\lambda$ with
+$\max \leq n$ are in bijection with semistandard Young
+tableaux of shape~$\lambda$ with entries in $\{1, \ldots, n\}$
+(via the level-set/Gelfand--Tsetlin pattern correspondence),
+giving:
+\begin{equation}\label{eq:rpp-schur}
+  \sum_{\substack{\pi \in \RPP(\lambda) \\
+  \max(\pi) \leq n}} q^{|\pi|}
+  = s_\lambda(1, q, q^2, \ldots, q^{n-1}).
+\end{equation}
+
+The \emph{exact} max-entry count $g_{n,\lambda}(q)$ from
+\eqref{eq:rpp-max-gf} is then recovered by differencing:
+\begin{equation}\label{eq:rpp-exact-max}
+  g_{n,\lambda}(q)
+  = s_\lambda(1, q, \ldots, q^{n-1})
+  - s_\lambda(1, q, \ldots, q^{n-2}),
+\end{equation}
+the contribution of RPPs whose maximum entry is exactly~$n$.
+This is the RPP analogue of the E--H extraction: the
+cumulative $\leq n$ formula is clean (a single Schur
+specialization), but isolating the $= n$ piece requires
+a subtraction that destroys manifest positivity.
+
+\begin{remark}
+For RPPs, positivity of~\eqref{eq:rpp-exact-max} is
+immediate: $g_{n,\lambda}(q) \geq 0$ because it counts
+objects. But the analogous extraction for CPPs ---
+Warnaar's $Q_{n,c}(q)$ in~\eqref{eq:Q-def} --- involves
+the infinite product $(zq;q)_\infty$ rather than a simple
+difference, making positivity a nontrivial conjecture.
+\end{remark}
+
+%% ========================================================================
+\section{Growth diagrams and RSK}
+\label{sec:rsk}
+%% ========================================================================
+
+\subsection{Fomin's growth diagrams}
+
+Fomin's theory of growth diagrams~\cite{fomin-1986,fomin-1995}
+provides a unified framework for RSK-type correspondences.
+A \emph{growth diagram} is a two-dimensional grid of
+partitions satisfying local rules at each cell.
+
+For an RPP $\pi$ of shape $\lambda$ with max entry~$n$:
+\begin{enumerate}
+  \item The RPP is encoded as an $n$-step process,
+    where step~$k$ records the $k$-th level set~$L_k$.
+  \item Each step corresponds to one ``row'' of the growth
+    diagram.
+  \item The local rules (Burge, Knuth, or dual) govern
+    how partitions grow at each cell.
+  \item The boundary conditions encode the shape~$\lambda$
+    and the level-set structure.
+\end{enumerate}
+
+The key observation:
+\begin{quote}
+\emph{The maximum entry of the RPP equals the number of rows
+(= insertion steps) in the growth diagram.}
+\end{quote}
+
+\subsection{RSK and the maximum entry}
+
+Under the RSK correspondence (in the growth-diagram
+formulation):
+
+\begin{itemize}
+  \item An RPP~$\pi$ of shape~$\lambda$ with $\max(\pi) = n$
+    maps to a pair $(P, Q)$ of tableaux.
+  \item The \emph{insertion tableau}~$P$ is a semistandard
+    Young tableau with entries in $\{1, \ldots, n\}$.
+    In particular, $\max(P) = \max(\pi) = n$.
+  \item The \emph{recording tableau}~$Q$ encodes the order
+    in which cells are filled during the growth process.
+  \item The shape of~$P$ (= shape of~$Q$) is determined by
+    the interlacing structure.
+\end{itemize}
+
+\begin{remark}
+For cylindric partitions, the cyclic boundary condition means
+the growth diagram ``wraps around.'' This is the setting of
+the cylindric growth diagrams developed
+in~\cite{langer-thesis,langer-part-II}.
+The RSK output is no longer a pair of tableaux but rather
+a pair of \emph{cylindric tableaux}, and the analysis
+is more delicate.
+\end{remark}
+
+\subsection{What max entry controls in RSK}
+
+The maximum entry~$n$ governs three equivalent aspects of
+the RSK decomposition:
+
+\begin{center}
+\begin{tabular}{l|l}
+  \textbf{Model} & \textbf{Max entry $= n$ means} \\
+  \hline
+  Level sets & $n$ nested layers \\
+  NILP & $n$ non-intersecting paths \\
+  Growth diagram & $n$ rows (insertion steps) \\
+  RSK output & $\max(P) = n$ \\
+  Schur functions & alphabet of size~$n$
+\end{tabular}
+\end{center}
+
+\begin{remark}[What max entry does \emph{not} control]
+Under RSK, the maximum entry of the input does \emph{not}
+determine:
+\begin{itemize}
+  \item The shape of the output tableaux (which depends on
+    the full interlacing structure, not just the depth);
+  \item The number of rows or columns of the output
+    (Schensted's theorem relates the longest increasing
+    subsequence to the first row, not to the maximum entry);
+  \item Any clean statistic on the \emph{recording}
+    tableau~$Q$.
+\end{itemize}
+Under the Hillman--Grassl correspondence~\cite{hillman-grassl}
+(a different bijection for RPPs), the max entry of the RPP
+has no known clean characterization on the output side.
+\end{remark}
+
+%% ========================================================================
+\section{Gansner's trace generating function}
+\label{sec:gansner}
+%% ========================================================================
+
+Gansner~\cite{gansner-1981} studied a different multivariate
+refinement of RPPs: the \emph{trace generating function},
+where one tracks the sum of entries along each anti-diagonal.
+
+For an RPP~$\pi$ of shape~$\lambda$, define the $d$-th trace as
+$t_d(\pi) = \sum_{j-i=d} \pi_{ij}$. Gansner showed:
+\begin{equation}\label{eq:gansner}
+  \sum_{\pi \in \RPP(\lambda)}
+  \prod_{d} x_d^{t_d(\pi)}
+  = \prod_{u = (i,j) \in \lambda}
+  \frac{1}{1 - x_{j-i}^{h_\lambda(u)}}.
+\end{equation}
+Under the specialization $x_d \mapsto q$ for all $d$,
+this recovers Stanley's formula~\eqref{eq:stanley-hook}.
+
+\begin{remark}[Gansner vs.\ frequency refinement]
+Gansner's trace GF and our frequency GF
+(Section~\ref{sec:frequency}) are \emph{different}
+multivariate refinements:
+\begin{center}
+\begin{tabular}{l|l|l}
+  & \textbf{Gansner (traces)} &
+  \textbf{Frequency} \\
+  \hline
+  Variable & $x_d$ per diagonal $d$ &
+  $z_k$ per value $k$ \\
+  Statistic & $t_d = \sum_{j-i=d} \pi_{ij}$ &
+  $\#_k = |\{(i,j) : \pi_{ij} = k\}|$ \\
+  Symmetry & Symmetric in each $x_d$
+  & Quasi-symmetric in $z_k$'s \\
+  Product formula & Yes \eqref{eq:gansner} & No \\
+  Max entry & Not directly visible &
+  $\max\{k : \#_k > 0\}$
+\end{tabular}
+\end{center}
+The frequency refinement can ``see'' the max entry
+(it is $\max\{k : z_k \text{ appears}\}$), while Gansner's
+trace refinement cannot (the max entry is not a linear
+function of the diagonal sums).
+\end{remark}
+
+%% ========================================================================
+\section{The E--H factorization and Warnaar's $Q$ polynomials}
+\label{sec:EH}
+%% ========================================================================
+
+\subsection{Extracting $Q_{n,c}(q)$}
+
+The \emph{Euler--Hamburger factorization} separates
+$\GK_c(z,q)$ into a universal factor and a profile-dependent
+remainder:
+\begin{equation}\label{eq:EH}
+  \GK_c(z,q) = \frac{1}{\qpoch{zq}{q}} \cdot F_c(z,q),
+  \qquad
+  F_c(z,q) = \qpoch{zq}{q} \cdot \GK_c(z,q).
+\end{equation}
+
+Writing $F_c(z,q) = \sum_{n \geq 0} h_n(q) z^n$, the
+$Q$ polynomials are:
+\begin{equation}\label{eq:Q-def}
+  Q_{n,c}(q) = \qpochn{q}{q}{n} \cdot h_n(q)
+  = \qpochn{q}{q}{n}
+  \cdot [z^n]\bigl(\qpoch{zq}{q} \cdot \GK_c(z,q)\bigr).
+\end{equation}
+
+\begin{conjecture}[Warnaar~\cite{warnaar-2021}]
+\label{conj:warnaar}
+For all $n \geq 0$ and all profiles~$c$ with
+$d = |c| \not\equiv 0 \pmod{3}$, the polynomial
+$Q_{n,c}(q)$ has nonneg integer coefficients.
+\end{conjecture}
+
+\subsection{The max-entry structure of $Q_n$}
+
+The extraction~\eqref{eq:Q-def} can be rewritten
+using the ``ground set'' formulation:
+\begin{equation}\label{eq:Q-ground-set}
+  Q_{n,c}(q) = \sum_{j=0}^{n}\;
+  \sum_{\substack{S \subseteq \{1,\ldots,n\} \\ |S|=j}}\;
+  \sum_{U \subseteq \{1,\ldots,n-j\}}\;
+  \sum_{\substack{\nu \in \CPP(c) \\
+  \max(\nu) = n-j}}
+  (-1)^{|S|+|U|}\, q^{\sigma(S)+\sigma(U)+|\nu|}.
+\end{equation}
+
+This makes explicit that $Q_n$ involves CPPs at
+\emph{every} max entry from $0$ to $n$: the $j$-th term
+uses CPPs with $\max = n - j$. The alternating sign
+$(-1)^{|S|+|U|}$ must produce miraculous cancellation to
+yield a nonneg polynomial.
+
+\subsection{The $q$-binomial decomposition}
+
+The relationship between $Q_n$ and the ``corrected''
+coefficients $h_m = \qpochn{q}{q}{m} \cdot g_m$ is:
+\begin{equation}\label{eq:q-binom-decomp}
+  Q_n = \sum_{j=0}^{n} (-1)^j\, q^{\binom{j+1}{2}}\,
+  \qbin{n}{j}\, h_{n-j},
+\end{equation}
+with inverse:
+\begin{equation}\label{eq:q-binom-inverse}
+  h_m = \sum_{j=0}^{m} q^j\, \qbin{m}{j}\, Q_{m-j}.
+\end{equation}
+
+The polynomials $h_m(q)$ are nonneg for all tested
+profiles (a key finding), and the alternating
+$q$-binomial sum~\eqref{eq:q-binom-decomp} must preserve
+nonnegativity --- this is the core mystery.
+
+%% ========================================================================
+\section{Frequency refinement at fixed max entry}
+\label{sec:frequency}
+%% ========================================================================
+
+\subsection{The frequency generating function}
+
+For a CPP $\pi = (\nu^{(1)}, \ldots, \nu^{(k)})$, the
+\emph{value frequency} of~$k$ is
+$\#_k(\pi) = |\{(i,j) : \nu^{(i)}_j = k\}|$.
+The \emph{frequency generating function} for all CPPs:
+\[
+  \widetilde{\GK}_c(\mathbf{z})
+  = \sum_{\pi \in \CPP(c)}
+  z_1^{\#_1(\pi)} z_2^{\#_2(\pi)} \cdots
+\]
+is quasi-symmetric and $L$-positive
+(see~\cite{langer-qsym}).
+
+At fixed max entry:
+\[
+  \tilde{g}_n = \sum_{\max(\pi) = n}
+  z_1^{\#_1(\pi)} \cdots z_n^{\#_n(\pi)}
+  \;\in\; \Z[z_1, \ldots, z_n].
+\]
+
+\subsection{Partial quasi-symmetry}
+
+The function $\tilde{g}_n$ is \emph{not} quasi-symmetric
+in $z_1, \ldots, z_n$ (the value~$n$ is privileged: every
+CPP with $\max = n$ has $\#_n \geq 1$, but may have
+$\#_1 = 0$). However, it retains a partial quasi-symmetry:
+
+\begin{observation}[Computational]\label{obs:partial-qsym}
+For all tested profiles ($d \leq 5$, $n \leq 3$): writing
+\[
+  \tilde{g}_n = \sum_{m \geq 1} z_n^m \cdot
+  f_{n,m}(z_1, \ldots, z_{n-1}),
+\]
+each slice $f_{n,m}$ is quasi-symmetric in
+$z_1, \ldots, z_{n-1}$. Equivalently,
+$\tilde{g}_n \in z_n \cdot \QSym(z_1, \ldots, z_{n-1})[z_n]$.
+\end{observation}
+
+The argument: relabelling the non-$n$ values
+$\{v_1 < \cdots < v_k\} \subset \{1, \ldots, n-1\}$ to
+any other increasing sequence
+$\{w_1 < \cdots < w_k\} \subset \{1, \ldots, n-1\}$
+preserves the interlacing conditions, because:
+\begin{enumerate}
+  \item Interlacing among non-$n$ entries depends only
+    on their relative order;
+  \item Every non-$n$ entry $v < n$, so all inequalities
+    with $n$-entries are automatically satisfied.
+\end{enumerate}
+
+\subsection{Failure of slice $L$-positivity}
+
+While the full $\widetilde{\GK}_c$ is $L$-positive, the
+individual slices $f_{n,m}$ are \emph{not}. For $n = 3$
+(two non-$n$ variables), the $M$-coefficients satisfy
+$a_{(k)} > a_{(j,k)}$ for all tested profiles, giving
+$L_{(a,b)} = M_{(a,b)} - M_{(a+b)} < 0$.
+
+\subsection{The variable-count mismatch}
+\label{sec:mismatch}
+
+The E--H factorization~\eqref{eq:EH} couples objects living
+in different numbers of variables:
+\begin{itemize}
+  \item The factor $\qpochn{q}{q}{n} = \prod_{k=1}^{n}(1 - q^k)$
+    lifts to the elementary symmetric functions
+    $e_1, e_2, \ldots$ in \emph{infinitely many} variables
+    (or equivalently, to $\prod_{k \geq 1}(1 - z_k)$
+    in $\QSym$).
+  \item The coefficient $\tilde{g}_n$ is a polynomial in
+    \emph{only $n$ variables} $z_1, \ldots, z_n$.
+\end{itemize}
+
+The product $\qpochn{q}{q}{n} \cdot g_n(q)$ in one variable
+makes sense (multiply two polynomials in~$q$), but any
+multivariate lift must reconcile infinite-variable and
+finite-variable objects. This is a structural obstacle to
+extending the $\QSym$ framework from $\widetilde{\GK}_c$
+(where it succeeds) to $Q_{n,c}$ (where it fails).
+
+%% ========================================================================
+\section{Summary: what is and isn't known}
+\label{sec:summary}
+%% ========================================================================
+
+\begin{center}
+\begin{tabular}{l|c|c}
+  \textbf{Object / Property}
+  & \textbf{RPPs}
+  & \textbf{CPPs} \\
+  \hline
+  Max entry = number of layers
+  & Classical & Classical \\
+  Hook-product formula ($z = 1$)
+  & Stanley~\cite{stanley-1972}
+  & Borodin~\cite{borodin-2007} \\
+  Max $\leq n$ via Schur functions
+  & Eq.~\eqref{eq:rpp-schur}
+  & Transfer matrix~\eqref{eq:transfer-matrix} \\
+  Growth diagram / RSK
+  & Fomin~\cite{fomin-1995}
+  & Cylindric GD~\cite{langer-part-II} \\
+  Trace GF (Gansner)
+  & \cite{gansner-1981}
+  & Not studied \\
+  Frequency GF quasi-symmetric
+  & Yes (P-partition)
+  & Yes~\cite{langer-qsym} \\
+  Frequency GF $L$-positive
+  & Expected
+  & Yes~\cite{langer-qsym} \\
+  Partial QSym at fixed max
+  & Expected
+  & Yes (Obs.~\ref{obs:partial-qsym}) \\
+  Slice $L$-positivity
+  & Unknown
+  & \textbf{No} (fails at $n \geq 3$) \\
+  E--H factorization
+  & ---
+  & Warnaar~\cite{warnaar-2021} \\
+  $Q_{n,c}(q) \geq 0$
+  & ---
+  & \textbf{Open} (Conj.~\ref{conj:warnaar})
+\end{tabular}
+\end{center}
+
+\medskip
+
+\noindent\textbf{Gaps in the literature:}
+\begin{enumerate}
+  \item The frequency refinement $\tilde{g}_n$ (at fixed
+    max entry) does not appear to have been studied, for
+    either RPPs or CPPs. The partial quasi-symmetry
+    (Observation~\ref{obs:partial-qsym}) appears new.
+  \item Gansner's trace generating function has not been
+    extended to cylindric partitions. The cyclic boundary
+    condition complicates the diagonal structure.
+  \item The Hillman--Grassl image of the maximum entry is
+    unknown. A clean characterization could yield a new
+    approach to the hook-product formula.
+  \item The failure of slice $L$-positivity (despite
+    aggregate $L$-positivity) has not been observed before
+    and may constrain which algebraic approaches can prove
+    positivity of~$Q_{n,c}$.
+\end{enumerate}
+
+%% ========================================================================
+%% References
+%% ========================================================================
+
+\begin{thebibliography}{99}
+
+\bibitem{borodin-2007}
+A.~Borodin,
+Periodic Schur process and cylindric partitions,
+\emph{Duke Math.\ J.}\ \textbf{140} (2007), 391--468.
+
+\bibitem{fomin-1986}
+S.~V.~Fomin,
+Generalized Robinson--Schensted--Knuth correspondence,
+\emph{Zap.\ Nauchn.\ Sem.\ LOMI}\ \textbf{155} (1986), 156--175.
+
+\bibitem{fomin-1995}
+S.~Fomin,
+Schur operators and Knuth correspondences,
+\emph{J.~Combin.\ Theory Ser.~A}\ \textbf{72} (1995), 277--292.
+
+\bibitem{gansner-1981}
+E.~R.~Gansner,
+The Hillman--Grassl correspondence and the enumeration of
+reverse plane partitions,
+\emph{J.~Combin.\ Theory Ser.~A}\ \textbf{30} (1981), 71--89.
+
+\bibitem{gessel-krattenthaler-1997}
+I.~M.~Gessel and C.~Krattenthaler,
+Cylindric partitions,
+\emph{Trans.\ Amer.\ Math.\ Soc.}\ \textbf{349} (1997), 429--479.
+
+\bibitem{hillman-grassl}
+A.~P.~Hillman and R.~M.~Grassl,
+Reverse plane partitions and tableau hook numbers,
+\emph{J.~Combin.\ Theory Ser.~A}\ \textbf{21} (1976), 216--221.
+
+\bibitem{langer-thesis}
+R.~Langer,
+\emph{Enumeration of cylindric plane partitions},
+PhD thesis, Universit\'e Claude Bernard Lyon~1, 2021.
+
+\bibitem{langer-part-II}
+R.~Langer,
+Enumeration of cylindric plane partitions~-- Part~II,
+arXiv:1209.1807.
+
+\bibitem{langer-qsym}
+R.~Langer,
+Quasi-symmetric refinement of the cylindric partition
+generating function, 2025. In preparation.
+
+\bibitem{stanley-1972}
+R.~P.~Stanley,
+Ordered structures and partitions,
+\emph{Mem.\ Amer.\ Math.\ Soc.}\ \textbf{119}, 1972.
+
+\bibitem{stanley-ec2}
+R.~P.~Stanley,
+\emph{Enumerative Combinatorics}, Volume~2,
+Cambridge University Press, 1999.
+
+\bibitem{warnaar-2021}
+S.~O.~Warnaar,
+The $A_2$ Andrews--Gordon identities and cylindric partitions,
+arXiv:2111.07550.
+
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,164 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\qpochn}[3]{(#1;#2)_{#3}}
+\newcommand{\qbin}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+
+\title{Corrected $q$-Binomial Inverse for $h_m$ and $Q_n$}
+\author{Notes (February 2026)}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{The corrected inverse formula}
+
+The forward $q$-binomial relation between $Q_n$ and $h_m$ is:
+\begin{equation}\label{eq:forward}
+  Q_n = \sum_{j=0}^{n} (-1)^j\, q^{\binom{j+1}{2}}\,
+    \qbin{n}{j}\, h_{n-j}.
+\end{equation}
+
+\begin{proposition}\label{prop:inverse}
+The inverse of \eqref{eq:forward} is:
+\begin{equation}\label{eq:inverse}
+  h_m = \sum_{k=0}^{m} q^k\, \qbin{m}{k}\, Q_{m-k}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+From the E--H factorisation $\mathrm{GK}_c(z,q) = H(z) \cdot F_c(z,q)$
+where $H(z) = 1/\qpochn{zq}{q}{\infty}$ and
+$F_c(z,q) = \qpochn{zq}{q}{\infty} \cdot \mathrm{GK}_c(z,q)$, we have:
+\begin{align*}
+  [z^m]\, H(z) &= \frac{q^m}{\qpochn{q}{q}{m}}, \\
+  [z^m]\, F_c(z,q) &= \frac{Q_m}{\qpochn{q}{q}{m}}.
+\end{align*}
+The first identity is Euler's partition identity
+$1/\qpochn{z}{q}{\infty} = \sum_{m \geq 0} z^m/\qpochn{q}{q}{m}$
+evaluated at $z \mapsto zq$, giving $[z^m] = q^m/\qpochn{q}{q}{m}$.
+
+Since $\mathrm{GK}_c = H \cdot F_c$, extracting $[z^m]$ gives:
+\[
+  g_m = \sum_{k=0}^{m} [z^k]\,H(z) \cdot [z^{m-k}]\,F_c(z,q)
+  = \sum_{k=0}^{m} \frac{q^k}{\qpochn{q}{q}{k}} \cdot
+    \frac{Q_{m-k}}{\qpochn{q}{q}{m-k}}.
+\]
+Multiplying both sides by $\qpochn{q}{q}{m}$ and using
+$h_m = \qpochn{q}{q}{m} \cdot g_m$:
+\[
+  h_m = \sum_{k=0}^{m} \frac{\qpochn{q}{q}{m}}
+    {\qpochn{q}{q}{k}\,\qpochn{q}{q}{m-k}}
+    \cdot q^k \cdot Q_{m-k}
+  = \sum_{k=0}^{m} q^k\, \qbin{m}{k}\, Q_{m-k}. \qedhere
+\]
+\end{proof}
+
+\begin{remark}
+An earlier version of \texttt{definitions.tex} had $q^{j^2}$ in place
+of $q^j$ in the inverse formula.  The error likely arose from confusion
+with the forward formula's $q^{\binom{j+1}{2}}$.  The key difference:
+\begin{itemize}
+  \item Forward: the sign-reversing Euler factor
+    $\qpochn{zq}{q}{\infty} = \sum (-1)^j q^{\binom{j+1}{2}} z^j / \qpochn{q}{q}{j}$
+    contributes $q^{\binom{j+1}{2}}$.
+  \item Inverse: the partition-counting factor
+    $1/\qpochn{zq}{q}{\infty} = \sum q^j z^j / \qpochn{q}{q}{j}$
+    contributes $q^j$.
+\end{itemize}
+\end{remark}
+
+\section{Immediate corollary: $Q \geq 0$ implies $h \geq 0$}
+
+\begin{corollary}
+If $Q_n \in \Z_{\geq 0}[q]$ for all $n \geq 0$, then
+$h_m \in \Z_{\geq 0}[q]$ for all $m \geq 0$.
+\end{corollary}
+
+\begin{proof}
+Every term in \eqref{eq:inverse} is a product of non-negative
+polynomials: $q^k \geq 0$, $\qbin{m}{k} \in \Z_{\geq 0}[q]$,
+and $Q_{m-k} \in \Z_{\geq 0}[q]$ by hypothesis.
+\end{proof}
+
+The converse fails: $h_m \geq 0$ does not imply $Q_n \geq 0$,
+because the forward formula \eqref{eq:forward} is an alternating sum.
+
+\section{Corrected examples for $d = 2$, $c = (1,1,0)$}
+
+With $Q_n = q^{n^2}$ (first Rogers--Ramanujan), the inverse gives:
+\[
+  h_m = \sum_{k=0}^{m} q^{k + (m-k)^2}\, \qbin{m}{k}.
+\]
+\begin{align*}
+  h_0 &= 1, \\
+  h_1 &= q^{0+1}\qbin{1}{0} + q^{1+0}\qbin{1}{1} = q + q = 2q, \\
+  h_2 &= q^{0+4}\qbin{2}{0} + q^{1+1}\qbin{2}{1} + q^{2+0}\qbin{2}{2}
+       = q^4 + q^2(1+q) + q^2 = 2q^2 + q^3 + q^4.
+\end{align*}
+
+\section{Dominance investigation (negative result)}
+
+We explored whether $Q_n \geq 0$ could be explained by
+coefficient-wise dominance relations between successive $h_m$.
+Define:
+\begin{align*}
+  D_m &= h_m - q \cdot h_{m-1}, \\
+  R_n &= \sum_{j=1}^{n} (-1)^{j-1}\, q^{\binom{j+1}{2}}\,
+    \qbin{n}{j}\, h_{n-j},
+\end{align*}
+so that $Q_n = h_n - R_n$.  Computations for
+$d = 1, 2, 4, 5$ confirm:
+\begin{enumerate}
+  \item $D_m \geq 0$ for all $m$ and all tested profiles.
+  \item $R_n \geq 0$ for all $n$ and all tested profiles.
+  \item Even partial sums $P_n^{(2k)} = \sum_{j=0}^{2k}(\cdots) \geq 0$.
+\end{enumerate}
+
+However, all three properties are \textbf{consequences} of $Q_n \geq 0$,
+not independent facts:
+
+\begin{proposition}
+$R_n = \sum_{k=1}^{n} q^k\, \qbin{n}{k}\, Q_{n-k}$.
+\end{proposition}
+
+\begin{proof}
+This is the inverse formula \eqref{eq:inverse} with the $k=0$ term
+($Q_n$) removed: $R_n = h_n - Q_n = \sum_{k=1}^n q^k \qbin{n}{k} Q_{n-k}$.
+\end{proof}
+
+\begin{proposition}
+$D_m = Q_m + \sum_{j=1}^{m} q^{2j}\, \qbin{m-1}{j}\, Q_{m-j}$.
+\end{proposition}
+
+\begin{proof}
+From \eqref{eq:inverse}:
+$D_m = \sum_{k=0}^m q^k \qbin{m}{k} Q_{m-k}
+     - \sum_{k=0}^{m-1} q^{k+1} \qbin{m-1}{k} Q_{m-1-k}$.
+Reindex the second sum ($k \mapsto j-1$) and use
+$\qbin{m}{j} - \qbin{m-1}{j-1} = q^j \qbin{m-1}{j}$.
+\end{proof}
+
+Thus $D_m \geq 0$ and $R_n \geq 0$ follow from $Q_k \geq 0$ for
+$k \leq m$ (resp.\ $k \leq n-1$).
+The positivity of $Q_n$ cannot be decomposed into simpler
+pairwise dominance inequalities via this approach.
+
+\bigskip
+\noindent\textbf{Conclusion.}
+The conjecture $Q_n \geq 0$ appears to be irreducibly about the
+interaction between the full sequence $\{h_m\}$ (encoding the CPP
+structure via $h_m = \qpochn{q}{q}{m} \cdot g_m$) and the
+$q$-binomial transform.  Proving it likely requires a direct
+construction (bijective or algebraic) rather than reduction to
+simpler inequalities.
+
+\end{document}

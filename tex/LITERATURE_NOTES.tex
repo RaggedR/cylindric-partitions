@@ -1,0 +1,129 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+
+\title{Literature Notes: Operators on Cylindric Partitions}
+\author{Notes}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Korff--Palazzo: $h$-positivity for cylindric reverse plane partitions}
+
+\textbf{Reference:} C.~Korff and D.~Palazzo,
+\emph{Cylindric symmetric functions and positivity},
+\href{https://arxiv.org/abs/1804.05647}{arXiv:1804.05647} (2020).
+Published in \emph{Algebraic Combinatorics} 3(1), 191--247.
+(Conference version: \href{https://arxiv.org/abs/1802.08977}{arXiv:1802.08977}, FPSAC 2018.)
+
+\medskip
+\noindent\textbf{Their setup:}
+\begin{itemize}
+  \item Objects: cylindric \emph{reverse} plane partitions (CRPPs),
+    entries weakly \emph{increasing} along rows and down columns,
+    with cylindric periodicity.  Parameters: $k$~rows (our rank),
+    $n = $ rank of $\mathfrak{sl}_n$ (bounds part sizes),
+    $d = $ winding number.
+  \item Generating function: the \emph{cylindric complete symmetric
+    function} $h_{\lambda/d/\mu}(x_1, x_2, \ldots)$, a symmetric
+    function in infinitely many variables.
+\end{itemize}
+
+\medskip
+\noindent\textbf{Their main result (Theorem~1):}
+The cylindric complete symmetric function expands in the
+$\{h_\nu\}$ basis (ordinary complete homogeneous symmetric functions)
+with non-negative integer coefficients:
+\[
+  h_{\lambda/d/\mu} = \sum_\nu N^{\lambda}_{\mu,\nu}\, h_\nu,
+  \qquad N^{\lambda}_{\mu,\nu} \in \mathbb{Z}_{\geq 0}.
+\]
+The coefficients $N^{\lambda}_{\mu,\nu}$ count pairs of permutations
+in the wreath product $G(n,1,k) = C_n \wr S_k$.
+
+\medskip
+\noindent\textbf{Proof technique:} Entirely representation-theoretic.
+Extended affine symmetric group, Verlinde algebra, modular $S$-matrix.
+No combinatorial operators are defined.
+
+\medskip
+\noindent\textbf{Relationship to our work:}
+\begin{itemize}
+  \item \textbf{Different ``$h$'':}
+    Their $h$-positivity is a symmetric function expansion statement
+    ($h_{\lambda/d/\mu}$ expands nonneg in the $\{h_\nu\}$ basis).
+    Our $h_m = (q)_m \cdot g_m \geq 0$ is about a single-variable
+    polynomial.  These are \textbf{not the same} statement.
+  \item \textbf{Wrong direction:}
+    Even if their $h$-positivity implies our $h_m \geq 0$ via
+    principal specialisation, this is the \textbf{easy} direction.
+    The corrected $q$-binomial inverse
+    $h_m = \sum_j q^j \binom{m}{j}_q Q_{m-j}$ already shows
+    $Q_n \geq 0 \Rightarrow h_m \geq 0$ trivially.  What we need
+    is $Q_n \geq 0$, and $h_m \geq 0$ does not imply this
+    (the forward formula is an alternating sum).
+  \item \textbf{Reverse vs.\ standard:}
+    They work with CRPPs (entries non-decreasing), we work with
+    CPPs (entries non-increasing).  Related by
+    complementation/conjugation but not identical.
+  \item Their $k = 3$ matches our rank~3.
+  \item Their $n$ is related to our max entry bound, but the
+    precise dictionary needs work.
+\end{itemize}
+
+\medskip
+\noindent\textbf{TODO:}
+\begin{enumerate}
+  \item Read the full 63-page journal version (arXiv:1804.05647).
+  \item Determine whether the principal specialisation of their
+    Theorem~1 implies our $h_m(q) \geq 0$.
+  \item Check whether their $N^{\lambda}_{\mu,\nu}$ for $k = 3$
+    relate to our $Q_{n,c}(q)$ coefficients.
+\end{enumerate}
+
+
+\section{Tingley: crystal operators on cylindric partitions}
+
+\textbf{Reference:} P.~Tingley,
+\emph{Three combinatorial models for $\widehat{\mathfrak{sl}}(n)$
+crystals, with applications to cylindric plane partitions},
+\href{https://arxiv.org/abs/math/0702062}{arXiv:math/0702062} (2007).
+
+\medskip
+\noindent
+Tingley defines Kashiwara crystal operators $e_i, f_i$
+($i = 0, 1, \ldots, n-1$) directly on cylindric plane partitions.
+These operators:
+\begin{itemize}
+  \item \textbf{Preserve} the cylindric structure (profile/interlacing),
+  \item \textbf{Change weight} by a simple root $\alpha_i$ (add/remove
+    a single box),
+  \item Are \textbf{not} weight-preserving.
+\end{itemize}
+
+\noindent\textbf{Relevance:} These are the only known local operators
+on CPPs that preserve the profile.  They move a single box (unlike
+crush/peel which move an entire ring).  Understanding how they
+maintain interlacing may be key.
+
+
+\section{Other relevant references}
+
+\begin{itemize}
+  \item \textbf{Corteel--Dousse--Uncu} (2022),
+    \href{https://arxiv.org/abs/2201.03047}{arXiv:2201.03047}:
+    Layer-peeling gives coupled $q$-difference equations between
+    GFs for different profiles.  Algebraic, not bijective.
+  \item \textbf{Garsia--Milne} (1981): Involution principle for
+    constructing weight-preserving bijections from sign-reversing
+    involutions.  Universal but opaque.  Applicable to the $Q_n$
+    alternating sum.
+  \item \textbf{Warnaar} (2023),
+    \href{https://arxiv.org/abs/2111.07550}{arXiv:2111.07550}:
+    Proves the $A_2$ Andrews--Gordon identities using CPPs.
+    Conjecture~2.7 ($Q_{n,c} \geq 0$) remains open.
+\end{itemize}
+
+
+\end{document}

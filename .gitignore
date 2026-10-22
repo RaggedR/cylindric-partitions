@@ -1,0 +1,18 @@
+# Large data / vector stores — regenerable, not source
+data/
+__pycache__/
+*.pyc
+
+# Internal agent working instructions (not part of the exposition)
+CLAUDE.md
+
+# LaTeX build artifacts (compiled PDFs under pdf/ and tex/ are kept)
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.bbl
+*.blg

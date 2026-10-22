@@ -1,0 +1,95 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\CPP}{\operatorname{CPP}}
+\newcommand{\GK}{\operatorname{GK}}
+\newcommand{\qpochn}[3]{(#1;#2)_{#3}}
+\newcommand{\qbin}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+
+\title{Per-Slice Multivariate Refinement of $g_m$}
+\author{Notes}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Per-slice refinement}
+
+Following the multivariate Borodin identity (thesis, Section~4.1),
+we refine the generating function $g_m$ by assigning a separate variable
+to each partition in the CPP triple.  For a rank-3 cylindric plane
+partition $\nu = (\nu_0, \nu_1, \nu_2)$ with profile $c = (c_0, c_1, c_2)$,
+define the \emph{per-slice multivariate generating function}:
+\[
+  g_m(z_0, z_1, z_2)
+  \;=\; \sum_{\substack{\nu \in \CPP(c) \\ \max(\nu) = m}}
+    z_0^{|\nu_0|}\, z_1^{|\nu_1|}\, z_2^{|\nu_2|}.
+\]
+The univariate specialization $z_0 = z_1 = z_2 = q$ recovers the
+standard $g_m(q) = [z^m]\GK_c(z,q)$.
+
+In the thesis, this refinement arises from replacing
+$z^{|\mathfrak{c}|}$ by $z_0^{|\mu_0|} z_1^{|\mu_1|} \cdots z_{T-1}^{|\mu_{T-1}|}$
+on the left-hand side of the Borodin identity, with corresponding
+substitutions on the product side:
+\begin{align*}
+  z^{nT} &\mapsto z_0^n z_1^n \cdots z_{T-1}^n, \\
+  z^{j-i+nT} &\mapsto z_0^n \cdots z_i^n \, z_{i+1}^{n+1} \cdots z_j^{n+1} \, z_{j+1}^n \cdots z_{T-1}^n
+  \quad (i < j).
+\end{align*}
+
+\section{Computational observations}
+
+\texttt{multivariate\_Q.py} computes $g_m(z_0,z_1,z_2)$ for various
+profiles.  Key findings:
+
+\begin{enumerate}
+\item \textbf{Specialization verified.}  For all tested profiles
+  ($d = 1, 2, 4, 5$) and $m \leq 3$, the specialization
+  $z_i = q$ matches the univariate $g_m(q)$ exactly.
+
+\item \textbf{All coefficients of $g_1$ equal~1.}
+  For $m = 1$, every CPP has a distinct slice-weight triple
+  $(|\nu_0|, |\nu_1|, |\nu_2|)$, so all coefficients of
+  $g_1(z_0, z_1, z_2)$ are~1.  This holds because $\max(\nu) = 1$
+  forces each $\nu_k = (1^{|\nu_k|})$, so the partition is
+  determined by its size.
+
+\item \textbf{No $S_3$ symmetry.}  The polynomial $g_m$ is not
+  symmetric under permutation of $z_0, z_1, z_2$, reflecting
+  the asymmetry of the profile $c = (c_0, c_1, c_2)$.
+
+\item \textbf{Cyclic staircase for $d = 1$.}
+  For $c = (1,0,0)$ and $m = 1$, the slice weights advance as
+  \[
+    (1,0,0),\; (1,1,0),\; (1,1,1),\; (2,1,1),\; (2,2,1),\;
+    (2,2,2),\; (3,2,2),\; \ldots
+  \]
+  cycling through which slice increases by~1 at each step.
+
+\item \textbf{Collisions at $m \geq 2$.}
+  For $m \geq 2$, distinct CPPs can share the same slice-weight
+  triple (e.g.\ partitions $(2)$ and $(1,1)$ both have size~2),
+  so coefficients exceed~1.
+\end{enumerate}
+
+\begin{remark}
+  This is distinct from the \emph{per-ring} refinement
+  $t_1^{b_1} \cdots t_m^{b_m}$ where $b_k$ is the number of cells
+  at height~$k$.  The per-ring version does not specialise correctly
+  to $(q)_m \cdot g_m$ because $\prod_{k=1}^m (1 - t_k)$ specialises
+  under $t_k = q$ to $(1-q)^m$, not $\prod_{k=1}^m (1-q^k) = (q)_m$.
+\end{remark}
+
+\end{document}

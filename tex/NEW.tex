@@ -1,0 +1,645 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\La}{\Lambda}
+\newcommand{\GK}{\operatorname{GK}}
+\newcommand{\CPP}{\operatorname{CPP}}
+\newcommand{\qpoch}[2]{(#1;#2)_\infty}
+\newcommand{\qpochn}[3]{(#1;#2)_{#3}}
+\newcommand{\qbin}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\wt}{wt}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\id}{id}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{The CPP Ground Set \\
+  and the $(S, U, \pi)$ Framework}
+\author{Robin Langer}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We reformulate the ground set for the sign-reversing
+involution on~$Q_{n,c}(q)$.  The previous framework
+used pairs~$(S, \mathfrak{d})$ where~$\mathfrak{d}$ is
+an ascending list of cylindric diagrams (ALCD), which
+requires the polynomials~$h_m(q) = (q)_m \cdot g_m(q)$
+to have nonneg coefficients.  Since this is not guaranteed
+in general, we replace the ALCD by a genuine cylindric
+plane partition~$\pi$ and absorb the signs from~$(q)_m$
+into an auxiliary subset~$U$.  The resulting ground set
+consists of triples~$(S, U, \pi)$ and does not require
+any nonnegativity assumption beyond the obvious~$g_m \geq 0$.
+We describe the lattice path interpretation: $\pi$~is
+always a family of non-intersecting paths on the cylinder,
+while~$S$ and~$U$ contribute two independent layers of
+alternating signs.
+\end{abstract}
+
+\tableofcontents
+
+
+%% ============================================================
+\section{Motivation: why \texorpdfstring{$h_m$}{h\_m} is not enough}
+%% ============================================================
+
+Recall the $q$-binomial decomposition
+\begin{equation}\label{eq:qbin-decomp}
+  Q_{n,c}(q)
+  = \sum_{j=0}^{n} (-1)^j \, q^{\binom{j+1}{2}}
+    \qbin{n}{j}_{\!q} \; h_{n-j}(q),
+\end{equation}
+where $h_m(q) = \qpochn{q}{q}{m} \cdot g_m(q)$ and
+$g_m(q) = [z^m]\,\GK_c(z,q)$ is the generating function
+for cylindric plane partitions of height~$m$.
+
+In the previous framework (CANONICAL\_PEEL.tex), the ground
+set was
+\[
+  \mathcal{G}_{n,c}
+  = \bigl\{(S, \mathfrak{d})
+    : S \subseteq [n],\;
+      \mathfrak{d} \in H_{n-|S|, c}\bigr\},
+\]
+where~$H_{m,c}$ is a combinatorial set of cardinality
+$h_m(q)$ (counted with $q$-weight).  This requires every
+coefficient of~$h_m(q)$ to be nonneg.
+
+\begin{remark}
+Computationally, $h_m(q)$ is nonneg for all profiles
+tested with $d \not\equiv 0 \pmod{3}$ and $d \leq 8$.
+However, for $d \equiv 0 \pmod{3}$ it \emph{is} negative.
+\end{remark}
+
+\begin{example}[$d = 3$: $h_1$ has negative coefficients]
+\label{ex:h1-negative}
+For $c = (2, 1, 0)$, $d = 3$, the CPP count at height~$1$
+is
+\[
+  g_1(q) = 2q + 3q^2 + 3q^3 + 3q^4 + 4q^5 + 3q^6
+    + 3q^7 + 4q^8 + 3q^9 + 3q^{10} + 4q^{11} + \cdots
+\]
+The coefficients oscillate with period~$3$:
+$\ldots, 4, 3, 3, 4, 3, 3, \ldots$.  Since
+$h_1 = (1-q) \cdot g_1$, we get
+\[
+  h_1(q)
+  = 2q + q^2 + q^5 - q^6 + q^8 - q^9 + q^{11} - q^{12}
+    + \cdots
+\]
+The coefficient of~$q^k$ in~$h_1$ is $g_1[k] - g_1[k-1]$,
+which is negative whenever~$g_1$ drops (e.g.\
+$g_1[6] = 3 < 4 = g_1[5]$, giving $h_1[6] = -1$).
+
+This means the ALCD ground set $\{(S, \mathfrak{d})\}$ has
+$-1$ elements at weight~$6$ --- not a genuine set.
+\end{example}
+
+The fix is to go back to the \emph{always-nonneg}
+quantity~$g_m(q)$, which literally counts CPPs, and to
+absorb the alternating signs from~$(q)_m$ into a separate
+subset.
+
+
+%% ============================================================
+\section{The new ground set}
+%% ============================================================
+
+We start from the identity
+\begin{equation}\label{eq:Q-from-gk}
+  Q_{n,c}(q)
+  = \sum_{j=0}^{n} (-1)^j \, q^{\binom{j+1}{2}}
+    \cdot \frac{\qpochn{q}{q}{n}}{\qpochn{q}{q}{j}}
+    \cdot g_{n-j}(q).
+\end{equation}
+This is obtained from~\eqref{eq:qbin-decomp} by writing
+$\qbin{n}{j}_q \cdot \qpochn{q}{q}{n-j} = \qpochn{q}{q}{n}/\qpochn{q}{q}{j}$
+and noting $h_{n-j} = \qpochn{q}{q}{n-j} \cdot g_{n-j}$.
+
+We decompose each factor combinatorially.
+
+\medskip\noindent
+\textbf{Factor 1: the Euler part.}
+The term $(-1)^j q^{\binom{j+1}{2}}$ comes from the
+initial segment $S = \{1, 2, \ldots, j\}$:
+\begin{equation}\label{eq:euler-factor}
+  (-1)^j \, q^{1 + 2 + \cdots + j}
+  = (-1)^{|S|} \, q^{\sigma(S)},
+  \qquad S = [j].
+\end{equation}
+
+\medskip\noindent
+\textbf{Factor 2: the $(q)_n / (q)_j$ part.}
+\begin{equation}\label{eq:qn-qj-factor}
+  \frac{\qpochn{q}{q}{n}}{\qpochn{q}{q}{j}}
+  = \prod_{k=j+1}^{n} (1 - q^k)
+  = \sum_{U \subseteq \{j+1, \ldots, n\}}
+    (-1)^{|U|} \, q^{\sigma(U)}.
+\end{equation}
+
+\medskip\noindent
+\textbf{Factor 3: the CPP part.}
+\begin{equation}\label{eq:cpp-factor}
+  g_{n-j}(q)
+  = \sum_{\pi \in \CPP_{n-j, c}} q^{\wt(\pi)},
+\end{equation}
+where $\CPP_{m,c}$ denotes the set of rank-$r$ cylindric
+plane partitions of profile~$c$ and height~$m$.
+
+\begin{definition}[The ground set $\mathcal{G}_{n,c}$]
+\label{def:ground-set}
+The \emph{ground set} is
+\[
+  \mathcal{G}_{n,c}
+  = \Bigl\{(S, U, \pi)
+    : \begin{array}{l}
+        S = \{1, \ldots, j\} \text{ for some } 0 \leq j \leq n, \\
+        U \subseteq \{j+1, \ldots, n\}, \\
+        \pi \in \CPP_{n - j,\, c}
+      \end{array}
+    \Bigr\}.
+\]
+Each element carries:
+\begin{itemize}
+  \item \textbf{Sign:} $\varepsilon(S, U, \pi) = (-1)^{|S| + |U|}$.
+  \item \textbf{Weight:} $w(S, U, \pi) = \sigma(S) + \sigma(U) + \wt(\pi)$.
+\end{itemize}
+\end{definition}
+
+\begin{proposition}\label{prop:ground-set-identity}
+\[
+  Q_{n,c}(q)
+  = \sum_{(S, U, \pi) \in \mathcal{G}_{n,c}}
+    (-1)^{|S| + |U|} \, q^{\sigma(S) + \sigma(U) + \wt(\pi)}.
+\]
+\end{proposition}
+
+\begin{proof}
+Expand~\eqref{eq:Q-from-gk} using
+\eqref{eq:euler-factor}--\eqref{eq:cpp-factor}.
+\end{proof}
+
+
+%% ============================================================
+\section{The combined set \texorpdfstring{$T = S \cup U$}{T = S ∪ U}}
+%% ============================================================
+
+Set $T = S \cup U \subseteq [n]$.  Since $S = [j]$ and
+$U \subseteq \{j+1, \ldots, n\}$, the sets $S$ and~$U$
+are disjoint and we have
+\[
+  |T| = |S| + |U| = j + |U|,
+  \qquad
+  \sigma(T) = \sigma(S) + \sigma(U).
+\]
+So the sign and weight simplify:
+\[
+  \varepsilon = (-1)^{|T|},
+  \qquad
+  w = \sigma(T) + \wt(\pi).
+\]
+
+\begin{remark}
+The decomposition $T = S \cup U$ is \emph{not} unique: a
+subset $T \subseteq [n]$ can arise from different values
+of~$j$.  Specifically, $j$ can be any value in
+$\{0, 1, \ldots, n\}$ such that $[j] \subseteq T$.  The
+maximum such~$j$ is the length of the initial consecutive
+run in~$T$:
+\[
+  j_{\max}(T) = \max\{k \geq 0 : \{1,\ldots,k\} \subseteq T\}.
+\]
+Different choices of~$j$ give different CPP
+heights~$n - j$, so the ground set is genuinely
+\emph{three-dimensional}: the triple~$(S, U, \pi)$
+carries more information than the pair~$(T, \pi)$.
+\end{remark}
+
+
+%% ============================================================
+\section{Lattice path interpretation}
+\label{sec:lattice-paths}
+%% ============================================================
+
+Each component of the triple~$(S, U, \pi)$ has a clear
+role in the lattice path picture.
+
+\subsection*{The CPP $\pi$: non-intersecting paths}
+
+A cylindric plane partition $\pi = (\nu^0, \nu^1,
+\ldots, \nu^{r-1})$ of profile~$c$ and height~$m$ encodes
+a family of~$r$ non-intersecting lattice paths on the
+cylinder with~$m$ levels.  Each level corresponds to an
+entry value $1 \leq s \leq m$.  The interlacing conditions
+\[
+  \nu^i_{p} \geq \nu^{i+1}_{p + c_i}
+  \qquad \text{(indices mod $r$)}
+\]
+ensure that the paths do not cross.
+
+\emph{Key point:} $\pi$ is always a family of
+\textbf{non-intersecting} paths.  There are no
+``intersecting CPPs'' in this framework.
+
+\subsection*{$S = \{1, \ldots, j\}$: peeled layers}
+
+The initial segment $S = [j]$ records that the
+bottom~$j$ layers of a height-$n$ path family have been
+\emph{peeled off}.  The CPP $\pi$ has height~$n - j$
+(it lives on the \emph{inner} cylinder after removing
+the $j$~outermost layers).
+
+Geometrically: a height-$n$ CPP has layers
+$1, 2, \ldots, n$.  Layer~$s$ is the horizontal strip
+between the $(s{-}1)$-th and $s$-th level.  Peeling
+layers $1, \ldots, j$ means these layers are ``detached''
+from the CPP and contribute only their level numbers
+$1 + 2 + \cdots + j = \sigma(S)$ to the weight.
+
+The sign $(-1)^j$ reflects that each peeled layer
+introduces one ``virtual crossing'' between the
+detached paths and the remaining family.
+
+\subsection*{$U \subseteq \{j+1, \ldots, n\}$: base removal}
+
+In the E--H factorisation
+$\GK_c = F_c / \qpoch{zq}{q}$, the factor
+$1/\qpochn{q}{q}{m} = \sum_\lambda q^{|\lambda|}$ (sum
+over partitions with parts~$\leq m$) generates a
+\emph{base partition}: an ordinary partition that slides
+underneath all the lattice paths without affecting their
+relative positions.  Every CPP of height~$m$ contains
+this trivial base.
+
+The factor $\qpochn{q}{q}{m}$ in
+$h_m = \qpochn{q}{q}{m} \cdot g_m$ \emph{removes} the
+base partition via inclusion--exclusion.  Expanding
+$\prod_{k=j+1}^n (1 - q^k)$: each factor $(1 - q^k)$
+offers a binary choice --- leave level~$k$ alone
+(coefficient~$1$) or subtract its base strip
+(coefficient~$-q^k$).  The subset $U$ records which
+levels are being subtracted.
+
+\subsection*{Two types of defect}
+
+The triple $(S, U, \pi)$ carries two independent layers
+of sign:
+
+\medskip
+\begin{center}
+\begin{tabular}{l|l|l}
+  & \textbf{$S$ (crossings)} &
+    \textbf{$U$ (base removal)} \\ \hline
+  \textbf{What} &
+    peeled layers &
+    subtracted base strips \\
+  \textbf{Range} &
+    $S = \{1, \ldots, j\}$ &
+    $U \subseteq \{j{+}1, \ldots, n\}$ \\
+  \textbf{NILP meaning} &
+    virtual crossings between &
+    inclusion--exclusion for \\
+  & detached and remaining paths &
+    removing trivial padding \\
+  \textbf{Sign} &
+    $(-1)^{|S|}$ &
+    $(-1)^{|U|}$ \\
+  \textbf{Weight} &
+    $\sigma(S) = 1 + \cdots + j$ &
+    $\sigma(U)$
+\end{tabular}
+\end{center}
+
+\medskip\noindent
+The total sign is $(-1)^{|S|+|U|}$ and the total weight
+is $\sigma(S) + \sigma(U) + \wt(\pi)$.  Fixed points of
+the involution must have $|S| + |U|$ even; the ideal fixed
+points are $(\emptyset, \emptyset, \pi)$ with sign~$+1$.
+
+
+%% ============================================================
+\section{The involution}
+\label{sec:involution}
+%% ============================================================
+
+To prove positivity of~$Q_{n,c}(q)$, we need a
+sign-reversing, weight-preserving involution
+$\iota \colon \mathcal{G}_{n,c} \to \mathcal{G}_{n,c}$
+whose fixed points all have positive sign.
+
+The sign is $(-1)^{|S| + |U|}$, so $\iota$ must change
+the parity of~$|S| + |U|$.  There are three types of
+elementary moves.
+
+\subsection{Type 1: flip a \texorpdfstring{$U$}{U}-element}
+
+Choose some $k \in \{j+1, \ldots, n\}$ and toggle its
+membership in~$U$:
+\[
+  (S, U, \pi) \;\longmapsto\; (S, U \triangle \{k\}, \pi').
+\]
+Here $\pi$ does not change, so weight preservation
+requires $\sigma(U \triangle \{k\}) = \sigma(U) \pm k$
+and $\wt(\pi')$ adjusts accordingly.
+
+If $\pi' = \pi$ (the CPP is unchanged), then the weight
+changes by $\pm k$ from the $U$-part alone.  This means a
+pure $U$-flip can only be weight-preserving if we also
+modify $\pi$.
+
+\subsection{Type 2: peel/glue}
+
+Extend or shrink the initial segment:
+\[
+  (S, U, \pi) \;\longmapsto\; (S', U', \pi'),
+  \qquad |S'| = |S| \pm 1.
+\]
+Peeling ($j \to j+1$): detach layer $j+1$ from $\pi$,
+producing a CPP~$\pi'$ of height~$n - j - 1$.
+The weight of the detached layer (horizontal strip at
+level $j+1$) must be absorbed.
+
+Gluing ($j \to j-1$): attach a new outermost layer
+to~$\pi$, producing $\pi'$ of height $n - j + 1$.
+
+\subsection{Type 3: transfer at the boundary}
+
+Move element $j+1$ between $S$ and~$U$:
+\begin{itemize}
+  \item If $j+1 \in U$: remove $j+1$ from~$U$ and
+    extend $S$ to $[j+1]$.  This increases~$|S|$ by~1
+    and decreases~$|U|$ by~1, so $|S|+|U|$ is unchanged
+    --- \textbf{no sign change}.  Not useful for the
+    involution directly, but useful as a preparatory step.
+  \item If $j+1 \notin U$: extend $S$ to $[j+1]$ and
+    the parity of $|S|+|U|$ increases by~1.  This \emph{is}
+    a sign-reversing move.
+\end{itemize}
+
+
+%% ============================================================
+\section{Comparison with the ALCD framework}
+\label{sec:comparison}
+%% ============================================================
+
+\begin{center}
+\begin{tabular}{lll}
+  \hline
+  & \textbf{ALCD framework} & \textbf{CPP framework} \\
+  \hline
+  Ground set & $(S, \mathfrak{d})$
+    & $(S, U, \pi)$ \\[2pt]
+  $S$ & $S \subseteq [n]$ (arbitrary)
+    & $S = [j]$ (initial segment) \\[2pt]
+  Combinatorial object
+    & $\mathfrak{d} \in H_{m,c}$ (ALCD)
+    & $\pi \in \CPP_{m,c}$ (CPP) \\[2pt]
+  Requires & $h_m(q) \geq 0$
+    & $g_m(q) \geq 0$ (automatic) \\[2pt]
+  Sign & $(-1)^{|S|}$
+    & $(-1)^{|S| + |U|}$ \\[2pt]
+  Weight & $\sigma(S) + \wt(\mathfrak{d})$
+    & $\sigma(S) + \sigma(U) + \wt(\pi)$ \\[2pt]
+  NILP meaning & $\mathfrak{d}$ encodes
+    & $\pi$ is always \\
+  & (non)-intersecting paths
+    & non-intersecting \\[2pt]
+  Involution & peel/glue at one level
+    & three types of moves \\
+  \hline
+\end{tabular}
+\end{center}
+
+The key advantage of the CPP framework is robustness:
+$g_m(q)$ is a nonneg polynomial by definition (it counts
+CPPs), so the ground set is well-defined without any
+additional assumptions.
+
+The cost is an extra layer of structure: the subset~$U$
+adds a second source of alternating signs.  But this also
+provides more flexibility for the involution, since there
+are more elementary moves available.
+
+
+%% ============================================================
+\section{Structure of the involution}
+\label{sec:structure}
+%% ============================================================
+
+The involution $\iota$ on $\mathcal{G}_{n,c}$ should
+proceed as follows.
+
+\begin{enumerate}
+  \item \textbf{If $U \neq \emptyset$:}
+    try to cancel using a $U$-flip.
+    Let $k = \min(U)$ or $k = \max(U)$ (the canonical
+    choice).  If there exists $\pi'$ with
+    $\wt(\pi') = \wt(\pi) + k$ (or $\wt(\pi) - k$) and
+    the same height, pair
+    $(S, U, \pi) \leftrightarrow (S, U \setminus \{k\}, \pi')$.
+
+  \item \textbf{If $U = \emptyset$ and $j \geq 1$:}
+    try to cancel using a peel/glue.
+    The outermost layer of $\pi$ at level $j$ can be
+    detached (if the strip size matches) or a new layer
+    can be attached.
+
+  \item \textbf{If $U = \emptyset$ and $j = 0$:}
+    the element $(S, U, \pi) = (\emptyset, \emptyset, \pi)$
+    has sign $+1$.  This is a candidate \textbf{fixed point}.
+    It contributes to~$Q_{n,c}(q)$ if and only if no
+    valid pairing exists.
+\end{enumerate}
+
+The fixed points of~$\iota$ are triples
+$(\emptyset, \emptyset, \pi)$ that survive all
+cancellation attempts.  These are CPPs of height~$n$
+that contribute $q^{\wt(\pi)}$ to~$Q_{n,c}(q)$.
+
+\begin{remark}
+The fixed points are a \emph{subset} of the CPPs of
+height~$n$.  Not every height-$n$ CPP survives: some
+are paired with elements having $U \neq \emptyset$ or
+$S \neq \emptyset$.  The surviving CPPs are exactly
+those that generate~$Q_{n,c}(q)$.
+\end{remark}
+
+
+%% ============================================================
+\section{Three strategies for the involution}
+\label{sec:strategies}
+%% ============================================================
+
+The two signed sets $S$ and $U$ can be handled in several
+ways.
+
+\subsection{Strategy 1: sequential sieve}
+
+First cancel all $U$-signs (the $(q)_m$ inclusion--exclusion),
+then cancel all $S$-signs (the crossing cancellation).
+This is equivalent to:
+\begin{enumerate}
+  \item Prove $h_m \in \N[q]$ (the $U$-sieve produces
+    a nonneg result), then
+  \item apply the Franklin involution from
+    CANONICAL\_PEEL.tex to the residual.
+\end{enumerate}
+This is the original approach.  It works when
+$h_m \geq 0$, but fails for $d \equiv 0 \pmod{3}$ because
+the $U$-sieve does not close up cleanly.
+
+\subsection{Strategy 2: interleaved sieve}
+
+At each step, choose whether to toggle an element of $S$
+or an element of $U$, based on a priority rule.  The
+Franklin comparison generalises: compare the ``cheapest''
+$U$-flip (smallest $k \in U$ or smallest $k \notin U$) with
+the cheapest peel/glue, and do whichever is smaller.
+
+This interleaves the two types of cancellation, potentially
+resolving cases where the sequential approach gets stuck.
+
+\subsection{Strategy 3: combined set}
+
+Define $T = S \cup U \subseteq [n]$ and run a single
+Franklin sieve on~$T$.  The sign is $(-1)^{|T|}$ and the
+weight is $\sigma(T) + \wt(\pi)$.  At each level~$k$,
+toggle $k \in T$ (adding or removing~$k$), adjusting the
+CPP height if $k$ is at the $S$--$U$ boundary.
+
+The difficulty: toggling $k \in T$ may change whether $k$
+belongs to $S$ or $U$, which changes the CPP height, which
+changes the set of available CPPs.  The coupling between
+$|S|$ and the CPP height is the main obstruction.
+
+
+%% ============================================================
+\section{The priority rule}
+\label{sec:priority}
+%% ============================================================
+
+The involution must choose which move to apply.
+We propose the following priority:
+
+\begin{enumerate}
+  \item \textbf{$U$-cancellation first.}
+    If $U \neq \emptyset$, work with~$U$ before
+    touching~$S$ or~$\pi$.  The $U$-flip is the simplest
+    move (it does not change the CPP height), so it
+    should be preferred.
+
+  \item \textbf{Smallest element.}
+    When cancelling via~$U$, always target
+    $k = \min(U)$ (analogous to the Franklin
+    involution targeting the smallest part).
+
+  \item \textbf{Peel/glue as fallback.}
+    Only modify~$S$ (and hence the CPP height) when
+    no $U$-cancellation is available.
+\end{enumerate}
+
+This priority ensures:
+\begin{itemize}
+  \item Elements with $U \neq \emptyset$ are handled
+    first, leaving only $(S, \emptyset, \pi)$ elements
+    for the peel/glue step.
+  \item The $U$-cancellation step is entirely within the
+    set of CPPs of the \emph{same height}, making it
+    easier to verify involutivity.
+  \item The peel/glue step operates on a smaller residual
+    set, reducing the complexity of the canonical peel
+    problem.
+\end{itemize}
+
+
+%% ============================================================
+\section{Open questions}
+%% ============================================================
+
+\begin{enumerate}
+  \item \textbf{$U$-cancellation mechanism.}
+    When $k \in U$, how exactly is the partner
+    CPP~$\pi'$ with $\wt(\pi') = \wt(\pi) \pm k$
+    chosen?  This requires a canonical bijection
+    between weight-$w$ and weight-$(w+k)$ CPPs of the
+    same height, which exists when $g_m$ has
+    nondecreasing coefficients (up to a point) but
+    needs to be made explicit.
+
+  \item \textbf{Interaction between $U$ and peel/glue.}
+    After the $U$-cancellation step eliminates all
+    elements with $U \neq \emptyset$, the residual
+    elements are $(S, \emptyset, \pi)$.  These have
+    sign $(-1)^{|S|}$ and weight
+    $\sigma(S) + \wt(\pi)$.  This is exactly the ALCD
+    framework restricted to initial-segment subsets~$S$.
+    The peel/glue involution from
+    CANONICAL\_PEEL.tex applies to this residual.
+
+  \item \textbf{Does the $U$-step close up?}
+    For the $U$-cancellation to define an involution
+    on its own, we need: if $(S, U, \pi)$ maps to
+    $(S, U', \pi')$, then applying the same rule to
+    $(S, U', \pi')$ returns to $(S, U, \pi)$.  This
+    requires the bijection $\pi \leftrightarrow \pi'$
+    to be its own inverse.
+
+  \item \textbf{Weight constraint.}
+    The $U$-flip at level~$k$ changes the $U$-weight
+    by~$\pm k$.  For weight preservation, $\wt(\pi)$
+    must change by~$\mp k$.  This means we need to
+    find, for each CPP~$\pi$ of height~$m$, a
+    partner~$\pi'$ of the same height with
+    $\wt(\pi') = \wt(\pi) \pm k$.  This is a matching
+    problem on CPPs --- nontrivial but concrete.
+
+  \item \textbf{Fixed points of the $U$-step.}
+    Elements $(S, U, \pi)$ with $U \neq \emptyset$ that
+    cannot be $U$-cancelled (no valid $\pi'$ exists)
+    must be handled by a different mechanism.  Do these
+    exist?  If so, they need to be routed to the
+    peel/glue step.
+\end{enumerate}
+
+
+%% ============================================================
+\section{Connection to previous notes}
+%% ============================================================
+
+\begin{itemize}
+  \item \textbf{CANONICAL\_PEEL.tex:}
+    The peel/glue framework for the ALCD ground set.
+    Sections 3--4 (Franklin comparison, weight condition)
+    apply directly to the residual after $U$-cancellation.
+
+  \item \textbf{Q\_NILP.tex:}
+    The enlarged path space and crossing framework.
+    Section~4.3 (intersecting paths as relaxed interlacing)
+    describes what happens when $S \neq \emptyset$.
+
+  \item \textbf{Q\_LOCAL.tex:}
+    The local rule and conflict detection ($A \cap B$).
+    Relevant for the peel/glue step on the residual.
+\end{itemize}
+
+
+\end{document}

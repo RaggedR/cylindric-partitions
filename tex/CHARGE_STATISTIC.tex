@@ -1,0 +1,303 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{question}[theorem]{Question}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\CPP}{\operatorname{CPP}}
+\newcommand{\GK}{\operatorname{GK}}
+\newcommand{\QSym}{\operatorname{QSym}}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\Des}{\operatorname{Des}}
+\newcommand{\charge}{\operatorname{charge}}
+\newcommand{\SSYT}{\operatorname{SSYT}}
+\newcommand{\wt}{\operatorname{wt}}
+
+% q-series notation
+\newcommand{\qpoch}[2]{(#1;#2)_\infty}
+\newcommand{\qpochn}[3]{(#1;#2)_{#3}}
+\newcommand{\qbin}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+
+\title{Literature connections: word statistics, charge,\\
+and $L$-positivity for cylindric partitions}
+\author{Notes for research}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We collect four threads from the literature that connect
+to the $L$-positivity of the cylindric partition frequency
+generating function $\widetilde{\GK}_c \in \QSym$
+established in our companion note (QUASI\_SYMMETRIC.tex).
+The goal is to identify the right combinatorial framework
+for understanding this positivity and its relationship
+to Warnaar's Conjecture~2.7.
+\end{abstract}
+
+%% ========================================================================
+\section{The charge statistic (Lascoux--Sch\"utzenberger)}
+\label{sec:charge}
+%% ========================================================================
+
+Lascoux and Sch\"utzenberger~\cite{LS78,LS79} introduced the
+\emph{charge} statistic on words and semistandard Young tableaux.
+For a tableau $T \in \SSYT(\lambda, \mu)$ (shape~$\lambda$,
+content~$\mu$), the charge $\charge(T) \in \Z_{\geq 0}$ is
+computed from the \emph{reading word} $w(T)$ as follows:
+
+\begin{enumerate}
+  \item Read the entries of~$T$ from right to left, bottom to top,
+    to obtain the word $w(T) = w_1 w_2 \cdots w_n$.
+  \item Decompose $w(T)$ into ``standard subwords'' by
+    successively extracting the leftmost occurrence of
+    $1, 2, \ldots, \mu_1$, then repeating.
+  \item The charge of each standard subword is
+    $\sum_{i \in \Des(\sigma)} (n - i)$, where $\sigma$ is
+    the subword read as a permutation and $\Des$ denotes
+    its descent set.
+  \item $\charge(T)$ is the sum of the charges of all subwords.
+\end{enumerate}
+
+The main theorem is that Kostka--Foulkes polynomials satisfy
+\[
+  K_{\lambda,\mu}(q) = \sum_{T \in \SSYT(\lambda,\mu)} q^{\charge(T)}.
+\]
+
+\begin{question}
+Is there an analog of the charge statistic for cylindric
+partitions? Specifically, given a CPP
+$\pi = (\nu^{(1)}, \nu^{(2)}, \nu^{(3)})$, can one define
+a reading word $w(\pi)$ and a charge-like statistic such that
+the $Q_{n,c}(q)$ polynomials (or the $L$-coefficients of
+$\widetilde{\GK}_c$) are given by a charge-weighted sum?
+\end{question}
+
+\begin{remark}
+We have previously verified computationally that $Q_{n,c}(q)$
+does \emph{not} decompose as a nonneg sum of Kostka--Foulkes
+polynomials $K_{\lambda,\mu}(q)$. However, the QSym framework
+may require a \emph{different} charge-like statistic adapted to
+compositions rather than partitions.
+\end{remark}
+
+%% ========================================================================
+\section{The plactic monoid and crystal bases}
+\label{sec:plactic}
+%% ========================================================================
+
+The \emph{plactic monoid} (Lascoux--Sch\"utzenberger~\cite{LS81})
+is the quotient of the free monoid on positive integers by the
+Knuth relations:
+\begin{align*}
+  xzy &\equiv zxy \quad \text{if } x \leq y < z, \\
+  yxz &\equiv yzx \quad \text{if } x < y \leq z.
+\end{align*}
+Two words are \emph{plactically equivalent} if and only if they
+have the same RSK insertion tableau. The plactic monoid provides
+a combinatorial model for the representation ring of $GL_n$:
+\[
+  s_\lambda \cdot s_\mu = \sum_\nu c^\nu_{\lambda\mu}\, s_\nu,
+\]
+where the Littlewood--Richardson coefficient $c^\nu_{\lambda\mu}$
+counts plactic classes of words with certain content and
+RSK shape conditions.
+
+In the language of Kashiwara's crystal bases, the plactic monoid
+is the monoid of the crystal graph $B(\infty)$ for type~$A$.
+The crystal operators $\tilde{e}_i, \tilde{f}_i$ act on words
+and preserve the RSK recording tableau while modifying the
+insertion tableau.
+
+\begin{question}
+The descent set of a word is a plactic invariant (it depends only
+on the RSK insertion tableau via the descent set of the
+corresponding standard tableau). Since $\widetilde{\GK}_c$ is
+$L$-positive and $L_\alpha$ encodes descent sets, can the
+$L$-coefficients $b_\alpha(c)$ be interpreted as counting
+plactic classes of ``cylindric words'' with descent
+composition~$\alpha$?
+\end{question}
+
+\begin{remark}
+For type $A_2$ (rank~3), the crystal graph has a natural
+connection to the three partitions $(\nu^{(1)}, \nu^{(2)},
+\nu^{(3)})$ in a CPP via the weight lattice of~$\mathfrak{sl}_3$.
+The cylindric condition (cyclic interlacing) may correspond to
+a periodicity condition on crystal paths, connecting to the
+\emph{affine} crystal $\widehat{B}(\Lambda)$ for
+$\widehat{\mathfrak{sl}}_3$.
+\end{remark}
+
+%% ========================================================================
+\section{Keys and Demazure atoms (Lascoux)}
+\label{sec:keys}
+%% ========================================================================
+
+Lascoux~\cite{Las90} introduced \emph{keys} (also called
+\emph{Demazure characters} or \emph{key polynomials})
+$\kappa_\alpha$ indexed by compositions $\alpha$, and their
+``atomic'' decomposition: the \emph{Demazure atoms}
+$\mathfrak{A}_\alpha$ satisfy
+\[
+  \kappa_\alpha = \sum_{\beta \leq \alpha} \mathfrak{A}_\beta,
+\]
+where $\leq$ is the Bruhat-like order on compositions.
+
+The Demazure atoms form a basis of the polynomial ring
+$\Z[x_1, \ldots, x_n]$ (in finitely many variables) that is
+closely related to the fundamental quasi-symmetric functions:
+under the limit $n \to \infty$, the atoms stabilize to
+the $L_\alpha$.
+
+More precisely, Mason~\cite{Mas09} showed that
+the \emph{quasi-key polynomials} (also called
+\emph{Demazure atoms}) map to fundamental quasi-symmetric
+functions under the forgetful map from polynomials to
+quasi-symmetric functions.
+
+\begin{question}
+Can $\widetilde{\GK}_c$ be lifted from $\QSym$ to the polynomial
+ring as a positive sum of Demazure atoms? If so, the extra
+structure (dependence on a specific number of variables) might
+encode the max-entry information that is lost in the QSym
+framework.
+\end{question}
+
+%% ========================================================================
+\section{$P$-partitions and labeled posets (Stanley, Gessel)}
+\label{sec:P-partitions}
+%% ========================================================================
+
+Stanley's theory of $P$-partitions~\cite{Sta72} provides the
+foundational connection between labeled posets and quasi-symmetric
+functions. Gessel~\cite{Ges84} showed that the generating function
+for $P$-partitions of a labeled poset $(P, \omega)$ is always
+a nonneg sum of fundamental quasi-symmetric functions:
+\[
+  \Gamma_{(P,\omega)}(\mathbf{z})
+  = \sum_{\substack{f: P \to \Z_{>0} \\ f \text{ is a
+    $(P,\omega)$-partition}}} \prod_{p \in P} z_{f(p)}
+  = \sum_\alpha c_\alpha\, L_\alpha,
+  \qquad c_\alpha \in \Z_{\geq 0}.
+\]
+
+A \emph{$(P,\omega)$-partition} is an order-preserving map
+$f: P \to \Z_{>0}$ that satisfies strict inequalities
+$f(p) < f(q)$ whenever $p <_P q$ and $\omega(p) > \omega(q)$
+(i.e., at ``descents'' of the labeling).
+
+\begin{question}\label{q:poset}
+Can cylindric partitions be realized as $P$-partitions for
+a suitable labeled poset? Concretely:
+\begin{enumerate}
+  \item Define a poset $P_c$ whose elements are the positions
+    $(i, j)$ (partition~$i$, row~$j$) of a CPP with profile~$c$.
+  \item The interlacing conditions $\nu^{(i)}_j \geq
+    \nu^{(i')}_{j'}$ define order relations on~$P_c$.
+  \item A labeling $\omega: P_c \to \{1, 2, \ldots\}$ determines
+    which inequalities are strict vs.\ weak.
+  \item A CPP is then exactly a $(P_c, \omega)$-partition,
+    and $L$-positivity of $\widetilde{\GK}_c$ follows from
+    Stanley--Gessel theory.
+\end{enumerate}
+\end{question}
+
+The key subtlety is the \emph{cyclic} nature of the interlacing:
+$\nu^{(3)}_j \geq \nu^{(1)}_{j+c_0}$ closes the cycle
+$1 \to 2 \to 3 \to 1$. A standard (acyclic) poset cannot directly
+model this. However, by unrolling the cycle (working with a
+finite number of values), the resulting poset may be acyclic,
+and the $P$-partition framework may apply.
+
+\begin{remark}
+If Question~\ref{q:poset} has a positive answer, then the
+$L$-positivity of $\widetilde{\GK}_c$ would follow from
+general theory, and the $L$-coefficients $b_\alpha$ would
+count \emph{linear extensions} of~$P_c$ with descent
+set~$D(\alpha)$. This would provide a concrete
+combinatorial interpretation of the $b_\alpha$.
+\end{remark}
+
+%% ========================================================================
+\section{Summary and connections}
+\label{sec:summary}
+%% ========================================================================
+
+The four threads above suggest the following picture:
+
+\begin{center}
+\begin{tabular}{l|l|l}
+  \textbf{Framework} & \textbf{Key object} & \textbf{Connection to CPPs} \\
+  \hline
+  Charge (LS) & $q^{\charge(T)}$ on SSYT
+    & Refines $K_{\lambda,\mu}(q)$; \\
+    & & need cylindric analog \\
+  Plactic (LS) & Crystal graph $B(\lambda)$
+    & Affine crystals for $\widehat{\mathfrak{sl}}_3$ \\
+    & & model cylindric tableaux \\
+  Keys (Lascoux) & Demazure atoms $\mathfrak{A}_\alpha$
+    & Lift from QSym to polynomials; \\
+    & & may encode max-entry \\
+  $P$-partitions (SG) & Labeled poset $(P, \omega)$
+    & CPP interlacing $\approx$ poset; \\
+    & & cyclic closure is the obstacle
+\end{tabular}
+\end{center}
+
+The most promising direction for proving $L$-positivity appears
+to be the $P$-partition approach (Section~\ref{sec:P-partitions}),
+as it would give $L$-positivity directly from general theory.
+The charge/crystal approaches may be more relevant for the
+original $Q_{n,c}(q)$ positivity problem, where the max-entry
+variable must be incorporated.
+
+\begin{thebibliography}{99}
+\bibitem{Ges84}
+I.~Gessel,
+\emph{Multipartite $P$-partitions and inner products of skew
+Schur functions},
+Contemp.\ Math.\ \textbf{34} (1984), 289--317.
+
+\bibitem{Las90}
+A.~Lascoux,
+\emph{Polyn\^omes de Schubert: une approche historique},
+S\'eminaire Lotharingien de Combinatoire \textbf{B25a} (1990).
+
+\bibitem{LS78}
+A.~Lascoux and M.-P.~Sch\"utzenberger,
+\emph{Sur une conjecture de H.\,O.~Foulkes},
+C.\,R.\ Acad.\ Sci.\ Paris S\'er.~A \textbf{286} (1978), 323--324.
+
+\bibitem{LS79}
+A.~Lascoux and M.-P.~Sch\"utzenberger,
+\emph{Le mono\"ide plaxique},
+Quad.\ Ricerca Sci.\ \textbf{109} (1981), 129--156.
+
+\bibitem{LS81}
+A.~Lascoux and M.-P.~Sch\"utzenberger,
+\emph{Croissance des polyn\^omes de Foulkes--Green},
+C.\,R.\ Acad.\ Sci.\ Paris S\'er.~A \textbf{288} (1979), 95--98.
+
+\bibitem{Mas09}
+S.~Mason,
+\emph{An explicit construction of type~A Demazure atoms},
+J.~Algebraic Combin.\ \textbf{29} (2009), no.~3, 295--313.
+
+\bibitem{Sta72}
+R.\,P.~Stanley,
+\emph{Ordered structures and partitions},
+Mem.\ Amer.\ Math.\ Soc.\ \textbf{119} (1972).
+\end{thebibliography}
+
+\end{document}

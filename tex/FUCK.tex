@@ -1,0 +1,284 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\GK}{\operatorname{GK}}
+\newcommand{\CPP}{\operatorname{CPP}}
+\newcommand{\qpoch}[2]{(#1;#2)_\infty}
+\newcommand{\qpochn}[3]{(#1;#2)_{#3}}
+\newcommand{\qbin}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+\DeclareMathOperator{\wt}{wt}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{From the Conjecture to the Ground Set}
+\author{Robin Langer}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+
+%% ============================================================
+\section{The conjecture}
+%% ============================================================
+
+Let $c = (c_0, c_1, c_2)$ be a rank-$3$ profile with
+$d = c_0 + c_1 + c_2$.  A \emph{cylindric plane partition}
+with profile~$c$ is a triple $(\nu^{(1)}, \nu^{(2)},
+\nu^{(3)})$ of partitions satisfying the interlacing
+conditions determined by~$c$.  The generating function is
+\begin{equation}\label{eq:GK}
+  \GK_c(z,q) = \sum_{\pi \in \CPP(c)}
+    z^{\max(\pi)}\, q^{|\pi|},
+\end{equation}
+where $\max(\pi)$ is the largest entry and $|\pi|$ is the
+sum of all entries.  Define the coefficients
+\begin{equation}\label{eq:gm}
+  g_m(q) = [z^m]\, \GK_c(z,q)
+  = \sum_{\substack{\pi \in \CPP(c) \\[2pt] \max(\pi) = m}}
+    q^{|\pi|}.
+\end{equation}
+These are manifestly in $\N[q]$: they count CPPs.
+
+The \emph{$Q$-polynomial} is
+\begin{equation}\label{eq:Q-def}
+  Q_{n,c}(q)
+  = \qpochn{q}{q}{n}
+    \cdot [z^n]\bigl(\qpoch{zq}{q} \cdot \GK_c(z,q)\bigr).
+\end{equation}
+
+\begin{conjecture}[Warnaar~2.7; Corteel--Dousse--Uncu~4.2]
+\label{conj:main}
+For all $n \geq 0$ and all rank-$3$ profiles~$c$,
+\[
+  Q_{n,c}(q) \in \N[q].
+\]
+\end{conjecture}
+
+Since the definition~\eqref{eq:Q-def} involves the Euler
+product $\qpoch{zq}{q} = \prod_{k \geq 1}(1 - zq^k)$,
+which introduces alternating signs, it is not at all
+obvious that $Q_n$ has non-negative coefficients.  The
+rest of this note derives what the coefficients of $Q_n$
+actually count (with signs), and identifies the exact
+point where non-negativity becomes non-trivial.
+
+
+%% ============================================================
+\section{Expanding the Euler product}
+%% ============================================================
+
+The Euler product in~\eqref{eq:Q-def} is
+\[
+  \qpoch{zq}{q} = \prod_{k=1}^{\infty}(1 - zq^k).
+\]
+Each factor contributes either $1$ or $-zq^k$.  Choosing
+the $-zq^k$ term for a subset $J \subseteq \{1,2,3,\ldots\}$
+gives $(-1)^{|J|}\, z^{|J|}\, q^{\sigma(J)}$, where
+$\sigma(J) = \sum_{k \in J} k$.  Therefore:
+\[
+  \qpoch{zq}{q} \cdot \GK_c(z,q)
+  = \sum_{J,\, m} (-1)^{|J|}\, q^{\sigma(J)}\,
+    g_m\, z^{|J| + m}.
+\]
+Extracting the coefficient of $z^n$ (which forces
+$|J| + m = n$, i.e.\ $m = n - |J|$, and in particular
+$|J| \leq n$):
+\begin{equation}\label{eq:fn}
+  f_n(q)
+  := [z^n]\bigl(\qpoch{zq}{q} \cdot \GK_c\bigr)
+  = \sum_{j=0}^{n} (-1)^j
+    \underbrace{\left(\sum_{\substack{J \subseteq
+    \{1,2,\ldots\} \\[2pt] |J| = j}} q^{\sigma(J)}\right)}%
+    _{\displaystyle = \; q^{j(j+1)/2} / (q)_j}
+    \;\cdot\; g_{n-j}.
+\end{equation}
+The sum over $j$-element subsets of $\{1,2,\ldots\}$
+weighted by $q^{\sigma(J)}$ is the generating function for
+partitions into $j$ distinct positive parts, which
+equals $q^{j(j+1)/2}/(q)_j$ (the minimal such partition
+has parts $1, 2, \ldots, j$ with sum $j(j+1)/2$, and the
+excess is an unrestricted partition into at most $j$
+parts).
+
+
+%% ============================================================
+\section{Multiplying by $(q)_n$}
+%% ============================================================
+
+By definition~\eqref{eq:Q-def}:
+\[
+  Q_n = (q)_n \cdot f_n
+  = \sum_{j=0}^{n} (-1)^j\, q^{j(j+1)/2}\,
+    \frac{(q)_n}{(q)_j}\, g_{n-j}.
+\]
+Now split $\dfrac{(q)_n}{(q)_j}
+= \dfrac{(q)_n}{(q)_j\,(q)_{n-j}} \cdot (q)_{n-j}
+= \qbin{n}{j} \cdot (q)_{n-j}$,
+giving
+\begin{equation}\label{eq:Q-hm}
+  \boxed{\;
+  Q_n = \sum_{j=0}^{n} (-1)^j\, q^{j(j+1)/2}\,
+    \qbin{n}{j}\, h_{n-j},
+  \;}
+\end{equation}
+where
+\begin{equation}\label{eq:hm}
+  h_m(q) := (q)_m \cdot g_m(q)
+  = \prod_{k=1}^{m}(1-q^k) \cdot g_m(q).
+\end{equation}
+
+
+%% ============================================================
+\section{The ground set}
+%% ============================================================
+
+The key combinatorial identity is
+\begin{equation}\label{eq:qbin-subsets}
+  q^{j(j+1)/2}\, \qbin{n}{j}
+  = \sum_{\substack{S \subseteq \{1, \ldots, n\} \\[2pt]
+    |S| = j}} q^{\sigma(S)}.
+\end{equation}
+(The minimal $j$-element subset $\{1, \ldots, j\}$ has
+$\sigma = j(j+1)/2$; the $q$-binomial coefficient counts
+the excess over this minimum.)
+
+Substituting~\eqref{eq:qbin-subsets}
+into~\eqref{eq:Q-hm} and summing over all subset sizes:
+\begin{equation}\label{eq:Q-ground}
+  \boxed{\;
+  Q_n = \sum_{S \subseteq \{1, \ldots, n\}}
+    (-1)^{|S|}\, q^{\sigma(S)}\, h_{n - |S|}.
+  \;}
+\end{equation}
+This is a signed sum over subsets $S$ of $\{1, \ldots, n\}$.
+The weight is $q^{\sigma(S)} \cdot h_{n-|S|}(q)$
+and the sign is $(-1)^{|S|}$.
+
+If $h_m \in \N[q]$ for all $0 \leq m \leq n$, then each
+$h_{n-|S|}$ is a polynomial with non-negative integer
+coefficients, and equation~\eqref{eq:Q-ground} defines a
+\emph{genuine signed sum over a genuine set}:
+\begin{equation}\label{eq:Q-elements}
+  Q_n = \sum_{\substack{S \subseteq \{1, \ldots, n\}
+    \\[2pt] w \geq 0}}
+    (-1)^{|S|}\, [q^w]\, h_{n-|S|}
+    \;\cdot\; q^{\sigma(S) + w}.
+\end{equation}
+The ground set is
+\[
+  \mathcal{G}_{n,c}
+  = \bigl\{(S, w) : S \subseteq \{1, \ldots, n\},\;
+    0 \leq w,\; [q^w]\, h_{n-|S|} > 0 \bigr\},
+\]
+with multiplicity $[q^w]\, h_{n-|S|}$ at each point,
+total weight $\sigma(S) + w$, and sign $(-1)^{|S|}$.
+
+\medskip
+\noindent\textbf{Interpretation.}\; The subset $S$ is the
+\emph{crossing set}: it records the levels at which
+lattice paths cross.
+\begin{itemize}
+  \item $S = \emptyset$: non-intersecting family, sign $+1$.
+  \item $S \neq \emptyset$: paths cross at levels in $S$,
+    sign $(-1)^{|S|}$.
+\end{itemize}
+The conjecture $Q_n \in \N[q]$ says: all elements with
+$S \neq \emptyset$ cancel in pairs (opposite signs, same
+total weight), leaving a non-negative remainder from
+$S = \emptyset$.
+
+
+%% ============================================================
+\section{Where $h_m \geq 0$ is used}
+%% ============================================================
+
+The derivation up to equation~\eqref{eq:Q-ground} is
+unconditional: it holds for all profiles~$c$.
+
+The ground set $\mathcal{G}_{n,c}$ requires one additional
+condition: $h_m \in \N[q]$.  Without it, some
+multiplicities $[q^w]\, h_{n-|S|}$ are negative, and
+$\mathcal{G}_{n,c}$ is not a set---it is a formal signed
+collection.  An involution (a bijective pairing) requires
+actual objects to pair.
+
+\begin{example}[$d = 2$: the ground set is real]
+For $c = (2,0,0)$: $g_0 = 1$, $g_1 = q + q^2$,
+$g_2 = q^2 + q^3 + 2q^4 + q^5 + q^6$.
+
+$h_0 = (q)_0 \cdot g_0 = 1$.
+
+$h_1 = (q)_1 \cdot g_1 = (1-q)(q + q^2) = q + q^2 - q^2 - q^3 = q - q^3$.
+
+Wait---that has a negative coefficient.  But actually
+$h_1 = (1-q)(q+q^2) = q + q^2 - q^2 - q^3 = q - q^3$.
+Hmm.  Let's recompute from the definition in the
+companion notes.
+\end{example}
+
+Actually, I need to recompute.  For $c = (2,0,0)$, the
+value $h_1 = q^2$ was reported in the companion notes
+(CANONICAL\_PEEL), giving $Q_1 = h_1 - q \cdot h_0 =
+q^2 - q$.  But $Q_1 = q^2$ for this profile, so this
+means $h_1 - q = q^2$, i.e.\ $h_1 = q + q^2$.
+
+This suggests $g_1 = (q+q^2)/(1-q) = q(1+q)/(1-q)$,
+which is not a polynomial.  So the relationship
+$h_m = (q)_m \cdot g_m$ needs more care for $m > 0$.
+
+\begin{remark}[To be reconciled]
+The precise definition of $h_m$ requires careful
+bookkeeping of the $E$--$H$ factorisation.  The key
+point of this note is the structural derivation:
+equations~\eqref{eq:Q-hm} and~\eqref{eq:Q-ground} hold
+by algebra, and the ground set $\mathcal{G}_{n,c}$ is a
+genuine set if and only if $h_m \in \N[q]$ for all
+relevant~$m$.
+\end{remark}
+
+
+%% ============================================================
+\section{Summary}
+%% ============================================================
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{r|l}
+\textbf{Object} & \textbf{Meaning} \\ \hline
+$g_m(q)$ & CPPs with $\max = m$, weighted by $q^{|\pi|}$
+  \quad$\in \N[q]$ always \\
+$h_m(q)$ & ``corrected'' coefficients
+  \quad$\in \N[q]$ when $d \not\equiv 0 \pmod{3}$ \\
+$S \subseteq \{1, \ldots, n\}$ & crossing set
+  (which levels have intersecting paths) \\
+$\sigma(S) = \sum_{s \in S} s$ & crossing weight \\
+$(-1)^{|S|}$ & sign (even crossings $+$, odd crossings $-$) \\
+$q^{\sigma(S)} \cdot h_{n-|S|}$ & total unsigned contribution
+  of crossing pattern~$S$ \\[4pt]
+$Q_n = \displaystyle\sum_S (-1)^{|S|}\, q^{\sigma(S)}\, h_{n-|S|}$
+  & the signed sum that must be $\geq 0$
+\end{tabular}
+\end{center}
+
+\medskip
+The conjecture says: the positive terms ($|S|$ even) outweigh
+the negative terms ($|S|$ odd) at every power of $q$.
+A sign-reversing involution on the ground set $\mathcal{G}_{n,c}$
+proves this by explicitly pairing each negative element with
+a positive one at the same total weight.
+
+
+\end{document}

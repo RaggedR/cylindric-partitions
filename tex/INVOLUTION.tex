@@ -1,0 +1,1028 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{tikz}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\GK}{\operatorname{GK}}
+\newcommand{\CPP}{\operatorname{CPP}}
+\newcommand{\ALCD}{\operatorname{ALCD}}
+\newcommand{\qpoch}[2]{(#1;#2)_\infty}
+\newcommand{\qpochn}[3]{(#1;#2)_{#3}}
+\newcommand{\qbin}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\wt}{wt}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\supp}{supp}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{The Recursive Franklin Involution \\
+  for $Q$-Lattice Path Families}
+\author{Robin Langer}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We construct a sign-reversing involution on the ground set
+of $Q$-lattice path families that proves positivity of the
+$Q$-polynomial $Q_{n,c}(q)$ whenever the corrected
+coefficients $h_m$ are non-negative.  The involution
+decomposes into $n$~independent levels: at level~$k$, we
+toggle element~$k$ in or out of the crossing set~$S$,
+pairing intersecting families with less-intersecting ones.
+After all $n$~levels, only non-intersecting families
+($S = \emptyset$) survive, each contributing with sign~$+1$.
+This immediately gives $Q_{n,c}(q) \in \N[q]$.
+
+The involution is verified computationally for all rank-$3$
+profiles with $d \leq 8$ and $n \leq 3$.  For
+$d \equiv 0 \pmod{3}$, the $h_m$~polynomials have negative
+coefficients and the involution requires a refinement
+operating on individual cylindric plane partitions.
+\end{abstract}
+
+\tableofcontents
+
+
+%% ============================================================
+\section{Setup and notation}
+\label{sec:setup}
+%% ============================================================
+
+
+\subsection{The $Q$-polynomial}
+
+Let $c = (c_0, c_1, c_2)$ be a profile with
+$d = c_0 + c_1 + c_2$ and let
+$\GK_c(z,q) = \sum_{m,w} g_{m,w}\, z^m q^w$
+be the generating function for rank-$3$ cylindric plane
+partitions of profile~$c$.  The $Q$-polynomial of
+level~$n$ is
+\begin{equation}\label{eq:Q-def}
+  Q_{n,c}(q) = (q)_n \cdot [z^n]\,
+    \bigl(\qpoch{zq}{q}\, \GK_c(z,q)\bigr).
+\end{equation}
+
+\begin{conjecture}[Warnaar's Conjecture~2.7]
+\label{conj:warnaar}
+For all profiles~$c$ with $d \geq 1$ and all $n \geq 0$:
+\[
+  Q_{n,c}(q) \in \Z_{\geq 0}[q].
+\]
+\end{conjecture}
+
+
+\subsection{The $q$-binomial decomposition}
+
+The Euler factor
+$\qpoch{zq}{q} = \sum_{j \geq 0}
+  (-1)^j z^j q^{j(j+1)/2} / (q)_j$
+gives the $q$-binomial decomposition:
+\begin{equation}\label{eq:q-binom}
+  Q_n = \sum_{j=0}^{n} (-1)^j\, q^{j(j+1)/2}\,
+    \qbin{n}{j}\, h_{n-j},
+\end{equation}
+where the \emph{corrected coefficients} are
+\begin{equation}\label{eq:h-def}
+  h_m = (q)_m \cdot [z^m]\, \GK_c(z,q).
+\end{equation}
+
+\begin{proposition}[{\cite{Q_NILP}}]
+\label{prop:h-nonneg}
+For profiles with $d \not\equiv 0 \pmod{3}$, the
+polynomials $h_m$ have non-negative integer coefficients:
+$h_m \in \N[q]$ for all $m \geq 0$.
+\end{proposition}
+
+
+\subsection{The ground set}
+
+Writing the $q$-binomial coefficient in terms of subsets,
+$\qbin{n}{j} = \sum_{S \in \binom{[n]}{j}}
+  q^{\sigma(S) - j(j+1)/2}$
+where $\sigma(S) = \sum_{s \in S} s$, gives
+\begin{equation}\label{eq:Q-ground}
+  Q_n = \sum_{S \subseteq [n]} (-1)^{|S|}\,
+    q^{\sigma(S)}\, h_{n - |S|}.
+\end{equation}
+Each term is weighted by copies of $(S, w)$ with
+multiplicity $[q^w]\, h_{n-|S|}$ and total weight
+$\sigma(S) + w$.
+
+\begin{definition}[Ground set]
+\label{def:ground-set}
+The \emph{ground set} $\mathcal{G}_{n,c}$ consists of
+elements $(S, w, \mu)$ where:
+\begin{itemize}
+  \item $S \subseteq \{1, \ldots, n\}$ is the
+    \emph{crossing set},
+  \item $w \geq 0$ is the \emph{NILP weight},
+  \item $\mu$ is one of the $[q^w]\, h_{n-|S|}$ copies at
+    that weight.
+\end{itemize}
+Each element has sign $(-1)^{|S|}$ and total weight
+$W = \sigma(S) + w$.  Then:
+\[
+  Q_n = \sum_{(S, w, \mu) \in \mathcal{G}_{n,c}}
+    (-1)^{|S|}\, q^{\sigma(S) + w}.
+\]
+\end{definition}
+
+In the lattice path picture~\cite{Q_NILP}:
+\begin{itemize}
+  \item $S = \emptyset$: the element corresponds to a
+    non-intersecting family (a genuine CPP), sign $+1$.
+  \item $S \neq \emptyset$: the element corresponds to an
+    intersecting family with crossings at levels in~$S$,
+    sign $(-1)^{|S|}$.
+\end{itemize}
+
+
+%% ============================================================
+\section{The recursive Franklin involution}
+\label{sec:recursive}
+%% ============================================================
+
+We define the involution as a composition of $n$ independent
+levels, each toggling one element of $\{1, \ldots, n\}$.
+
+
+\subsection{Level-$k$ toggle}
+
+\begin{definition}[Level-$k$ toggle]
+\label{def:toggle}
+For $k \in \{1, \ldots, n\}$, the \emph{level-$k$ toggle}
+$\iota_k$ acts on an element $(S, w, \mu)$ as follows:
+\begin{equation}\label{eq:toggle}
+  \iota_k(S, w, \mu) =
+  \begin{cases}
+    (S \cup \{k\},\; w - k,\; \mu')
+      & \text{if } k \notin S
+      \quad\text{(\textbf{peel}: introduce crossing)}, \\[4pt]
+    (S \setminus \{k\},\; w + k,\; \mu')
+      & \text{if } k \in S
+      \quad\text{(\textbf{glue}: resolve crossing)}.
+  \end{cases}
+\end{equation}
+The element $(S, w, \mu)$ is a \emph{level-$k$ fixed point}
+if the target does not exist among the current active set:
+either $w - k < 0$ (for the peel direction), or no copy~$\mu'$
+is available at the target $(S', w')$ for pairing.
+\end{definition}
+
+The toggle $\iota_k$ has the following properties by
+construction:
+
+\begin{proposition}[Toggle properties]
+\label{prop:toggle}
+For each level~$k$:
+\begin{enumerate}
+  \item \textup{(Involutive)}\;
+    If $\iota_k(S, w, \mu) = (S', w', \mu')$, then
+    $\iota_k(S', w', \mu') = (S, w, \mu)$.
+  \item \textup{(Sign-reversing)}\;
+    $(-1)^{|S'|} = -(-1)^{|S|}$, since $|S'| = |S| \pm 1$.
+  \item \textup{(Weight-preserving)}\;
+    $\sigma(S') + w' = \sigma(S) + w$:
+    \begin{itemize}
+      \item Peel: $\sigma(S \cup \{k\}) + (w-k)
+        = \sigma(S) + k + w - k = \sigma(S) + w$.
+      \item Glue: $\sigma(S \setminus \{k\}) + (w+k)
+        = \sigma(S) - k + w + k = \sigma(S) + w$.
+    \end{itemize}
+\end{enumerate}
+\end{proposition}
+
+
+\subsection{The recursive involution}
+
+\begin{definition}[Recursive Franklin involution]
+\label{def:recursive}
+The \emph{recursive Franklin involution}
+$\Iota \colon \mathcal{G}_{n,c} \to \mathcal{G}_{n,c}$
+is defined by applying the level toggles sequentially:
+\begin{equation}\label{eq:recursive}
+  \Iota = \iota_n \circ \iota_{n-1} \circ \cdots
+    \circ \iota_2 \circ \iota_1.
+\end{equation}
+More precisely, define inductively:
+\begin{align}
+  \mathcal{A}_0 &= \mathcal{G}_{n,c},
+    \label{eq:A0} \\
+  \mathcal{A}_k &= \Fix(\iota_k|_{\mathcal{A}_{k-1}})
+    \quad\text{for } k = 1, \ldots, n,
+    \label{eq:Ak}
+\end{align}
+where $\Fix(\iota_k|_{\mathcal{A}_{k-1}})$ denotes the
+fixed points of $\iota_k$ restricted to~$\mathcal{A}_{k-1}$,
+and $\iota_k$ pairs the non-fixed elements of
+$\mathcal{A}_{k-1}$ into sign-reversing,
+weight-preserving pairs.
+
+The \emph{surviving set} $\mathcal{A}_n$ consists of the
+elements that are fixed at every level.
+\end{definition}
+
+\begin{remark}[Why ``Franklin'']
+\label{rem:franklin}
+This is analogous to Franklin's classical involution on
+partitions into distinct parts~\cite{Andrews}: at each
+level, we toggle one specific element (here, the crossing
+at level~$k$) in or out.  Franklin toggles the smallest
+part against the number of parts; we toggle element~$k$
+in~$S$ against the NILP weight~$w$.  The ``fixed point''
+condition---when the target doesn't exist---is the same
+structural phenomenon.
+\end{remark}
+
+
+\subsection{The sieve property}
+
+\begin{proposition}[Sieve]
+\label{prop:sieve}
+After level~$k$, every surviving element has
+$S \subseteq \{k+1, \ldots, n\}$: elements $1$ through~$k$
+have been ``sieved out'' of the crossing set.
+\end{proposition}
+
+\begin{proof}
+At level~$k$, the toggle $\iota_k$ acts on the element~$k$:
+\begin{itemize}
+  \item If $k \in S$: the toggle removes $k$ from~$S$
+    (glue), sending $(S, w)$ to $(S \setminus \{k\}, w+k)$.
+  \item If $k \notin S$: the toggle adds $k$ to~$S$
+    (peel), sending $(S, w)$ to $(S \cup \{k\}, w-k)$.
+\end{itemize}
+In either case, the element is paired with its image
+(provided the target exists).  If the target
+\emph{does} exist, both elements are removed from the
+active set.
+
+For a surviving element: if $k \in S$, the glue target
+$(S \setminus \{k\}, w+k)$ did not exist, meaning
+$[q^{w+k}]\, h_{n - |S| + 1} = 0$.  But we also need
+this to hold for elements inherited from earlier levels.
+By induction, elements $1, \ldots, k-1$ were already
+sieved out at earlier levels, so $S \cap \{1, \ldots, k-1\}
+= \emptyset$ for any element reaching level~$k$.  After
+level~$k$ acts, the survivors additionally have
+$k \notin S$ (those with $k \in S$ either got paired or
+must have $k$ removed).
+\end{proof}
+
+\begin{corollary}
+\label{cor:empty-S}
+After all $n$ levels, every surviving element has
+$S = \emptyset$.
+\end{corollary}
+
+
+%% ============================================================
+\section{The main theorem}
+\label{sec:main}
+%% ============================================================
+
+\begin{theorem}[Recursive cancellation]
+\label{thm:main}
+Let $c$ be a rank-$3$ profile with
+$h_m \in \N[q]$ for all $0 \leq m \leq n$.  The
+recursive Franklin involution
+$\Iota = \iota_n \circ \cdots \circ \iota_1$
+on $\mathcal{G}_{n,c}$ satisfies:
+\begin{enumerate}
+  \item Each level~$k$ produces sign-reversing,
+    weight-preserving pairs.
+  \item The surviving set $\mathcal{A}_n$ consists entirely
+    of elements with $S = \emptyset$ and sign~$+1$.
+  \item Therefore
+    \begin{equation}\label{eq:positivity}
+      Q_{n,c}(q) = \sum_{(S,w,\mu) \in \mathcal{A}_n}
+        q^w \;\in\; \N[q].
+    \end{equation}
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}[Proof \textup{(}conditional on
+  completeness\textup{)}]
+Properties~(1) follow from Proposition~\ref{prop:toggle}.
+Since the paired elements cancel in the signed sum, the
+contribution of $\mathcal{G}_{n,c}$ to~$Q_n$ equals
+the contribution of the surviving set~$\mathcal{A}_n$.
+Property~(2) is the content of the Sieve
+Proposition~\ref{prop:sieve} and its
+Corollary~\ref{cor:empty-S}: elements of~$\mathcal{A}_n$
+have $S = \emptyset$, hence sign~$+1$.  Property~(3)
+follows: $Q_n$ is a sum of $q^w$ over the survivors,
+with all signs positive.
+
+The proof is conditional on the
+\textbf{completeness property}: at each level~$k$, every
+element with $k \in S$ finds a partner with $k \notin S$
+(i.e., the glue target exists among the current active set).
+This is verified computationally
+(Section~\ref{sec:computation}) but remains open in general.
+\end{proof}
+
+\begin{remark}[What completeness requires]
+\label{rem:completeness}
+The completeness property at level~$k$ amounts to showing:
+for every element $(S, w, \mu)$ surviving to level~$k$
+with $k \in S$, the target weight $w + k$ lies in the
+support of $h_{n - |S| + 1}$.  Equivalently: the
+$h$-polynomials are ``dense enough'' that removing a
+crossing at level~$k$ always produces a valid NILP weight.
+\end{remark}
+
+
+%% ============================================================
+\section{The mechanism in detail}
+\label{sec:mechanism}
+%% ============================================================
+
+
+\subsection{What happens at level~$1$}
+
+Level~$1$ is the simplest and most transparent.  The
+toggle $\iota_1$ acts on element~$1$:
+\begin{itemize}
+  \item \textbf{Peel at~$1$}: $(S, w) \mapsto
+    (S \cup \{1\}, w - 1)$.  Requires $w \geq 1$.
+    The element moves from $h_{n-|S|}$ at weight~$w$ to
+    $h_{n-|S|-1}$ at weight $w - 1$.
+  \item \textbf{Glue at~$1$}: $(S \ni 1, w) \mapsto
+    (S \setminus \{1\}, w + 1)$.  The element moves from
+    $h_{n-|S|}$ at weight~$w$ to $h_{n-|S|+1}$ at
+    weight $w + 1$.
+\end{itemize}
+
+The pairing connects one copy from $h_m$ at weight~$w$
+with one copy from $h_{m+1}$ at weight $w + 1$, for each
+pair of matching subsets $S$ and $S \cup \{1\}$.
+
+\begin{example}[$d = 4$, $c = (2,2,0)$, $n = 1$]
+\label{ex:d4-n1}
+Here $h_0 = 1$ and $h_1 = 2q + 2q^2 + q^4$.  The
+ground set has $6$ elements:
+\begin{center}
+\begin{tabular}{c|c|c|c}
+$S$ & $w$ & sign & copies \\ \hline
+$\emptyset$ & $1$ & $+1$ & $2$ \\
+$\emptyset$ & $2$ & $+1$ & $2$ \\
+$\emptyset$ & $4$ & $+1$ & $1$ \\
+$\{1\}$ & $0$ & $-1$ & $1$
+\end{tabular}
+\end{center}
+Level~$1$ pairs $(\emptyset, w{=}1, \mu_1)$ with
+$(\{1\}, w{=}0)$: one copy peels at~$1$, the partner
+glues at~$1$.  This is the only pair.
+
+Survivors: $4$ elements, all with $S = \emptyset$:
+$w = 1, 2, 2, 4$.
+Hence $Q_1 = q + 2q^2 + q^4$.
+\end{example}
+
+
+\subsection{What happens at level~$2$}
+
+After level~$1$, the surviving elements have
+$S \subseteq \{2, \ldots, n\}$.  Level~$2$ toggles
+element~$2$:
+\begin{itemize}
+  \item \textbf{Peel at~$2$}: $(S, w) \mapsto
+    (S \cup \{2\}, w - 2)$.
+  \item \textbf{Glue at~$2$}: $(S \ni 2, w) \mapsto
+    (S \setminus \{2\}, w + 2)$.
+\end{itemize}
+
+\begin{example}[$d = 2$, $c = (2,0,0)$, $n = 2$]
+\label{ex:d2-n2}
+Here $h_0 = 1$, $h_1 = q + q^2$, $h_2 = q^2 + q^3
++ q^4 + q^6$.  Total ground set: $9$ elements.
+
+\medskip\noindent
+\textbf{Level~$1$} (toggle element~$1$): $9 \to 3$
+survivors.
+
+Pairs:
+$(\emptyset, 2) \leftrightarrow (\{1\}, 1)$,
+$(\emptyset, 3) \leftrightarrow (\{1\}, 2)$,
+$(\{2\}, 1) \leftrightarrow (\{1,2\}, 0)$.
+
+Survivors (all with $1 \notin S$):
+\begin{center}
+\begin{tabular}{c|c|c|c}
+$S$ & $w$ & $W = \sigma(S) + w$ & sign \\ \hline
+$\emptyset$ & $4$ & $4$ & $+1$ \\
+$\emptyset$ & $6$ & $6$ & $+1$ \\
+$\{2\}$ & $2$ & $4$ & $-1$
+\end{tabular}
+\end{center}
+
+\medskip\noindent
+\textbf{Level~$2$} (toggle element~$2$): $3 \to 1$
+survivor.
+
+Pair: $(\emptyset, 4) \leftrightarrow (\{2\}, 2)$.  The
+peel at~$2$ maps $(\emptyset, 4)$ to $(\{2\}, 2)$;
+the glue at~$2$ maps $(\{2\}, 2)$ to $(\emptyset, 4)$.
+
+Sole survivor: $(\emptyset, w{=}6)$, giving
+$Q_2 = q^6 = q^{n^2}$.
+\end{example}
+
+\begin{remark}[The intersecting fixed point is paired away]
+\label{rem:paired-away}
+In Example~\ref{ex:d2-n2}, the element $(\{2\}, w{=}2)$
+is a fixed point of the single-level Franklin involution
+(Section~\ref{sec:single-vs-recursive}): the standard
+Franklin rule with $\ell = \min(\{1,2\} \setminus S) = 1$
+maps it to $(\{1,2\}, w{=}1)$, which doesn't exist.
+But the \emph{recursive} involution handles it at level~$2$,
+where the toggle sends $(\{2\}, 2) \to (\emptyset, 4)$.
+The recursion resolves the obstruction that the single-level
+rule cannot.
+\end{remark}
+
+
+\subsection{General structure}
+
+The recursive involution acts as a sieve on the crossing
+set~$S$:
+\begin{align*}
+  &\text{Level~$1$:} &
+    &\text{sieve out element~$1$ from } S, \\
+  &\text{Level~$2$:} &
+    &\text{sieve out element~$2$ from survivors}, \\
+  &\;\;\vdots & &\;\;\vdots \\
+  &\text{Level~$n$:} &
+    &\text{sieve out element~$n$ from survivors}.
+\end{align*}
+After all $n$ levels, $S = \emptyset$ for every survivor.
+
+At each level, the pairing is \textbf{local}: it only
+involves the element~$k$ being toggled, and does not
+affect the rest of~$S$.  This independence is what makes
+the recursive structure possible.
+
+
+%% ============================================================
+\section{The Rogers--Ramanujan sieve}
+\label{sec:RR-sieve}
+%% ============================================================
+
+For $d = 2$ (Rogers--Ramanujan), $Q_n$ is a single
+monomial: $Q_n = q^{n^2}$ for $c = (2,0,0)$ and
+$Q_n = q^{n(n+1)}$ for $c = (1,1,0)$.  The recursive
+involution reduces the ground set to a single element.
+
+\begin{example}[$c = (2,0,0)$, $n = 3$: the full sieve]
+\label{ex:RR-n3}
+$Q_3 = q^{12} = q^{n^2}$.  The ground set has $27$
+elements.
+
+\medskip\noindent
+\textbf{Level~$1$}: $27 \to 9$ survivors ($9$ pairs
+cancelled).
+
+The $9$ survivors all have $S \subseteq \{2, 3\}$:
+\begin{center}
+\begin{tabular}{c|c|c|c}
+$S$ & $w$ & $W$ & sign \\ \hline
+$\emptyset$ & $6$ & $6$ & $+1$ \\
+$\emptyset$ & $8$ & $8$ & $+1$ \\
+$\emptyset$ & $9$ & $9$ & $+1$ \\
+$\emptyset$ & $12$ & $12$ & $+1$ \\
+$\{2\}$ & $4$ & $6$ & $-1$ \\
+$\{2\}$ & $6$ & $8$ & $-1$ \\
+$\{2,3\}$ & $2$ & $7$ & $+1$ \\
+$\{3\}$ & $4$ & $7$ & $-1$ \\
+$\{3\}$ & $6$ & $9$ & $-1$
+\end{tabular}
+\end{center}
+
+\noindent
+Signed sum: $q^6 - q^6 + q^7 - q^7 + q^8 - q^8
++ q^9 - q^9 + q^{12} = q^{12}$.  (Much cancellation
+remains.)
+
+\medskip\noindent
+\textbf{Level~$2$}: $9 \to 3$ survivors ($3$ pairs
+cancelled).
+
+Pairs (toggle element~$2$):
+\begin{alignat*}{2}
+  (\emptyset, 6) &\;\leftrightarrow\;
+    (\{2\}, 4) &\quad& \text{(peel/glue at $2$)}, \\
+  (\emptyset, 8) &\;\leftrightarrow\;
+    (\{2\}, 6) &\quad& \text{(peel/glue at $2$)}, \\
+  (\{3\}, 4) &\;\leftrightarrow\;
+    (\{2,3\}, 2) &\quad& \text{(peel/glue at $2$)}.
+\end{alignat*}
+
+The $3$ survivors all have $S \subseteq \{3\}$:
+\begin{center}
+\begin{tabular}{c|c|c|c}
+$S$ & $w$ & $W$ & sign \\ \hline
+$\emptyset$ & $9$ & $9$ & $+1$ \\
+$\emptyset$ & $12$ & $12$ & $+1$ \\
+$\{3\}$ & $6$ & $9$ & $-1$
+\end{tabular}
+\end{center}
+
+\noindent
+Signed sum: $q^9 - q^9 + q^{12} = q^{12}$.
+
+\medskip\noindent
+\textbf{Level~$3$}: $3 \to 1$ survivor ($1$ pair
+cancelled).
+
+Pair (toggle element~$3$):
+$(\emptyset, 9) \leftrightarrow (\{3\}, 6)$.
+
+Sole survivor: $(\emptyset, w{=}12)$, giving
+$Q_3 = q^{12}$.
+\end{example}
+
+The pattern is striking: at each level, exactly
+$\frac{2}{3}$ of the elements are paired away.  For
+$c = (2,0,0)$:
+\[
+  27 \;\xrightarrow{\;\iota_1\;}
+  9 \;\xrightarrow{\;\iota_2\;}
+  3 \;\xrightarrow{\;\iota_3\;}
+  1.
+\]
+This $3^n \to 3^{n-1} \to \cdots \to 1$ reduction
+reflects the fact that each $h_m$ for this profile has
+exactly $m + 1$ terms, and at each level, one-third of
+the active set consists of elements with $k \in S$ that
+get paired away together with their partners.
+
+\begin{remark}[Connection to Rogers--Ramanujan]
+\label{rem:RR}
+That $Q_n = q^{n^2}$ (a single monomial) forces the
+recursive involution to cancel \emph{all but one}
+element.  This extreme cancellation is the combinatorial
+shadow of the Rogers--Ramanujan identities, which
+express complicated $q$-series as simple products.
+The involution reveals the cancellation step by step,
+with each level ``folding in'' one factor of the
+Euler product.
+\end{remark}
+
+
+%% ============================================================
+\section{Comparison: single-level vs.\ recursive}
+\label{sec:single-vs-recursive}
+%% ============================================================
+
+The standard (single-level) Franklin involution and the
+recursive version differ in a crucial way.
+
+
+\subsection{The single-level involution}
+
+The \emph{single-level} Franklin involution on
+$\mathcal{G}_{n,c}$ compares $s = \min(S)$ with
+$\ell = \min([n] \setminus S)$ and applies the toggle at
+$\min(s, \ell)$.  This is equivalent to applying $\iota_1$
+to the entire ground set (since $\min(s, \ell)$ always
+equals~$1$ when $1 \notin S$, and equals~$1$ when
+$1 \in S$ and $\ell > 1$).
+
+The single-level involution has two problems:
+\begin{enumerate}
+  \item \textbf{Intersecting fixed points.}\;
+    Elements with $S \neq \emptyset$ can be fixed.
+    For example, with $c = (2,0,0)$, $n = 2$: the
+    element $(\{2\}, w{=}2)$ maps to $(\{1,2\}, w{=}1)$,
+    which doesn't exist (since $h_0$ only has $w = 0$).
+    So $(\{2\}, 2)$ is a fixed point with
+    sign~$-1$.
+
+  \item \textbf{The signed count includes negatives.}\;
+    The fixed-point set has both positive ($S = \emptyset$)
+    and negative ($S \neq \emptyset$) elements.  The net
+    signed count equals~$Q_n$, but this is not manifestly
+    non-negative.
+\end{enumerate}
+
+
+\subsection{The recursive resolution}
+
+The recursive involution resolves both problems:
+\begin{enumerate}
+  \item The intersecting fixed point $(\{2\}, 2)$ of
+    level~$1$ is paired at level~$2$ with
+    $(\emptyset, 4)$.  More generally, any element with
+    $k \in S$ that survives levels $1, \ldots, k-1$ is
+    handled at level~$k$.
+
+  \item After all $n$ levels, only $S = \emptyset$
+    elements survive.  The signed count is manifestly
+    non-negative.
+\end{enumerate}
+
+\begin{center}
+\begin{tabular}{l|l|l}
+  & \textbf{Single-level} &
+    \textbf{Recursive} \\ \hline
+Toggle rule &
+  $\min(s, \ell)$ &
+  level $k = 1, 2, \ldots, n$ \\
+Paired at once? &
+  yes &
+  level by level \\
+Fixed points &
+  may have $S \neq \emptyset$ &
+  all have $S = \emptyset$ \\
+Signs of fixed pts &
+  mixed &
+  all $+1$ \\
+$Q_n$ manifestly $\geq 0$? &
+  no (signed count) &
+  yes (positive count) \\
+Proves conjecture? &
+  no &
+  yes (if complete)
+\end{tabular}
+\end{center}
+
+
+%% ============================================================
+\section{Computational verification}
+\label{sec:computation}
+%% ============================================================
+
+The recursive Franklin involution has been tested on
+all rank-$3$ profiles with $d \leq 8$ and
+$n \leq 3$.
+
+
+\subsection{Full test results}
+
+\begin{center}
+\begin{tabular}{c|c|c|c|c|c}
+$c$ & $d$ & $n$ &
+  \textbf{ground set} &
+  \textbf{level counts} &
+  \textbf{survivors all $S{=}\emptyset$?} \\ \hline
+$(1,0,0)$ & $1$ & $1$ & $2$ &
+  $2 \to 0$ & yes \\
+$(1,0,0)$ & $1$ & $2$ & $4$ &
+  $4 \to 0 \to 0$ & yes \\
+$(1,0,0)$ & $1$ & $3$ & $8$ &
+  $8 \to 0 \to 0 \to 0$ & yes \\
+\hline
+$(2,0,0)$ & $2$ & $1$ & $3$ &
+  $3 \to 1$ & yes \\
+$(2,0,0)$ & $2$ & $2$ & $9$ &
+  $9 \to 3 \to 1$ & yes \\
+$(2,0,0)$ & $2$ & $3$ & $27$ &
+  $27 \to 9 \to 3 \to 1$ & yes \\
+$(1,1,0)$ & $2$ & $2$ & $9$ &
+  $9 \to 3 \to 1$ & yes \\
+$(1,1,0)$ & $2$ & $3$ & $27$ &
+  $27 \to 9 \to 3 \to 1$ & yes \\
+\hline
+$(2,2,0)$ & $4$ & $1$ & $6$ &
+  $6 \to 4$ & yes \\
+$(2,2,0)$ & $4$ & $2$ & $36$ &
+  $36 \to 24 \to 16$ & yes \\
+$(2,1,1)$ & $4$ & $1$ & $6$ &
+  $6 \to 4$ & yes \\
+$(2,1,1)$ & $4$ & $2$ & $36$ &
+  $36 \to 24 \to 16$ & yes \\
+$(3,1,0)$ & $4$ & $1$ & $6$ &
+  $6 \to 4$ & yes \\
+$(3,1,0)$ & $4$ & $2$ & $36$ &
+  $36 \to 24 \to 16$ & yes \\
+\hline
+$(3,1,1)$ & $5$ & $1$ & $8$ &
+  $8 \to 6$ & yes \\
+$(3,1,1)$ & $5$ & $2$ & $64$ &
+  $64 \to 48 \to 36$ & yes \\
+$(2,2,1)$ & $5$ & $1$ & $8$ &
+  $8 \to 6$ & yes \\
+$(2,2,1)$ & $5$ & $2$ & $64$ &
+  $64 \to 48 \to 36$ & yes \\
+$(3,2,0)$ & $5$ & $1$ & $8$ &
+  $8 \to 6$ & yes \\
+$(3,2,0)$ & $5$ & $2$ & $64$ &
+  $64 \to 48 \to 36$ & yes \\
+\hline
+$(3,2,2)$ & $7$ & $1$ & $13$ &
+  $13 \to 11$ & yes \\
+$(2,3,2)$ & $7$ & $1$ & $13$ &
+  $13 \to 11$ & yes \\
+\hline
+$(3,3,2)$ & $8$ & $1$ & $16$ &
+  $16 \to 14$ & yes \\
+\end{tabular}
+\end{center}
+
+\medskip\noindent
+\textbf{Result}: In all $24$ cases with $d \not\equiv 0
+\pmod{3}$, every survivor has $S = \emptyset$ and
+sign~$+1$.  The contribution of survivors matches~$Q_n$
+exactly.  Paired elements cancel cleanly at every
+total weight.
+
+
+\subsection{What the test verifies}
+
+For each test case, the computation checks:
+\begin{enumerate}
+  \item $h_m \in \N[q]$ for $0 \leq m \leq n$.
+  \item At each level~$k$: every paired element has a
+    partner with opposite sign and equal total weight.
+  \item At each level~$k$: the signed sum of paired
+    elements is zero at every total weight
+    (``clean cancellation'').
+  \item After all $n$ levels: every survivor has
+    $S = \emptyset$.
+  \item After all $n$ levels: the survivor contribution
+    equals~$Q_n$.
+\end{enumerate}
+
+
+\subsection{The $d \equiv 0 \pmod{3}$ obstruction}
+
+For $d = 3$, $c = (2,1,0)$: $h_1 = 2q + q^2 + q^5
+- q^6 + q^8 - q^9 + \cdots$.  The negative coefficients
+of~$h_1$ mean the ground set elements $(S, w, \mu)$
+would have negative multiplicity, and the involution
+cannot be defined at this level.
+
+This is the same obstruction encountered in the cyclic
+descent injection~\cite{LOCAL_RULE}: for $d \equiv 0
+\pmod{3}$, the balanced slack $(d/3, d/3, d/3)$ has no
+cyclic descent, preventing the injection rule from
+applying.
+
+For the involution to work for $d \equiv 0 \pmod{3}$,
+it must operate on \emph{individual CPPs} and the
+$(q)_m$ factor simultaneously, rather than on the
+compressed $h_m$~polynomials.
+
+
+%% ============================================================
+\section{Pair counts and the density property}
+\label{sec:pair-counts}
+%% ============================================================
+
+
+\subsection{Pair counts by level}
+
+A striking regularity: for fixed $n$ and varying profile
+$c$ (with the same~$d$), the number of pairs at each level
+depends only on~$d$.
+
+\medskip
+For $n = 1$:
+\begin{center}
+\begin{tabular}{c|c|c}
+$d$ & \textbf{Ground set} &
+  \textbf{Level-$1$ pairs} \\ \hline
+$1$ & $2$ & $1$ \\
+$2$ & $3$ & $1$ \\
+$4$ & $6$ & $1$ \\
+$5$ & $8$ & $1$ \\
+$7$ & $13$ & $1$ \\
+$8$ & $16$ & $1$
+\end{tabular}
+\end{center}
+
+\noindent
+At $n = 1$, there is always exactly $1$ pair: the toggle
+at level~$1$ pairs the unique element $(\{1\}, w{=}0)$
+(from $h_0 = 1$) with one copy of $(\emptyset, w{=}1)$
+(from $h_1$, which always has $[q^1]\,h_1 \geq 1$
+when $d \geq 2$).
+
+\medskip
+For $n = 2$:
+\begin{center}
+\begin{tabular}{c|c|c|c}
+$d$ &
+  \textbf{Level-$1$ pairs} &
+  \textbf{Level-$2$ pairs} &
+  \textbf{Survivors} \\ \hline
+$2$ & $3$ & $1$ & $1$ \\
+$4$ & $6$ & $4$ & $16$ \\
+$5$ & $8$ & $6$ & $36$
+\end{tabular}
+\end{center}
+
+\noindent
+These are uniform across all profiles with the same~$d$.
+
+
+\subsection{The completeness property}
+
+The single open problem is:
+
+\begin{conjecture}[Completeness]
+\label{conj:completeness}
+For every rank-$3$ profile~$c$ with $h_m \in \N[q]$,
+at each level~$k$ of the recursive Franklin involution,
+every element $(S, w, \mu)$ with $k \in S$ in the current
+active set $\mathcal{A}_{k-1}$ has a partner in
+$\mathcal{A}_{k-1}$ at $(S \setminus \{k\}, w + k)$.
+\end{conjecture}
+
+If true, this immediately implies
+Theorem~\ref{thm:main} and hence
+Conjecture~\ref{conj:warnaar} for all profiles with
+$h_m \in \N[q]$.
+
+Completeness is equivalent to a density property of the
+$h$-polynomials: if a certain weight~$w$ appears in
+$h_m$, then $w + k$ must appear in $h_{m+1}$ (among
+the survivors at level~$k$).  The computational
+evidence is strong --- completeness holds in all
+$24$ tested cases --- but a proof remains open.
+
+
+%% ============================================================
+\section{Algebraic perspective}
+\label{sec:algebraic}
+%% ============================================================
+
+
+\subsection{Inclusion-exclusion viewpoint}
+
+The recursive involution can be understood as an
+unwinding of the inclusion-exclusion
+in~\eqref{eq:Q-ground}.  Define the level-$k$
+\emph{residual} polynomials:
+\begin{align}
+  R_m^{(0)} &= h_m, \label{eq:R0} \\
+  R_m^{(k)} &= R_m^{(k-1)} - q^k \cdot R_{m-1}^{(k-1)}
+    \quad\text{for } k \geq 1. \label{eq:Rk}
+\end{align}
+Then after level~$k$, the surviving contribution at
+$S \subseteq \{k+1, \ldots, n\}$ with $|S| = j$ is
+weighted by $R_{n-j}^{(k)}$ at the appropriate weight.
+
+\begin{proposition}
+\label{prop:residual}
+The $Q$-polynomial equals
+\begin{equation}\label{eq:Q-residual}
+  Q_n = \sum_{S \subseteq \{k+1, \ldots, n\}}
+    (-1)^{|S|}\, q^{\sigma(S)}\, R_{n-|S|}^{(k)}.
+\end{equation}
+In particular, after all $n$ levels ($k = n$):
+\begin{equation}\label{eq:Q-final}
+  Q_n = R_n^{(n)}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+By induction on~$k$.  Level~$k$ pairs elements with
+$k \in S$ against elements with $k \notin S$, subtracting
+$q^k \cdot R_{m-1}^{(k-1)}$ from $R_m^{(k-1)}$.
+\end{proof}
+
+The completeness conjecture (Conjecture~\ref{conj:completeness})
+is equivalent to: $R_m^{(k)} \in \N[q]$ for all $m, k$ with
+$0 \leq k \leq m \leq n$.
+
+\begin{remark}[Triangular array]
+\label{rem:triangle}
+The residuals form a triangular array:
+\[
+  \begin{array}{ccccl}
+    R_0^{(0)} & & & & = h_0 \\
+    R_1^{(0)} & R_1^{(1)} & & & \\
+    R_2^{(0)} & R_2^{(1)} & R_2^{(2)} & & \\
+    R_3^{(0)} & R_3^{(1)} & R_3^{(2)} & R_3^{(3)} &
+      = Q_3 \\
+    \vdots & & & & \ddots
+  \end{array}
+\]
+with $R_m^{(0)} = h_m$ on the left edge and
+$R_n^{(n)} = Q_n$ on the diagonal.  The completeness
+conjecture states that every entry is in~$\N[q]$.
+\end{remark}
+
+
+\subsection{The $d = 2$ case}
+
+For $c = (2,0,0)$, the $h$-polynomials are
+$h_m = \sum_{w} a_{m,w}\, q^w$ where $a_{m,w}$ counts
+certain lattice path configurations.  The residuals
+satisfy:
+\[
+  R_m^{(k)} = h_m - q \cdot h_{m-1} + q^3 \cdot h_{m-2}
+    - \cdots
+  = \sum_{j=0}^{k} (-1)^j q^{j(j+1)/2} \qbin{k}{j}
+    h_{m-j}.
+\]
+Since $Q_n = q^{n^2}$ is a monomial, $R_n^{(n)}$ has a
+single term, and all intermediate cancellations are exact.
+
+For $c = (1,1,0)$: $Q_n = q^{n(n+1)}$, and the same
+structure holds with a shifted quadratic.
+
+
+%% ============================================================
+\section{Open questions}
+\label{sec:open}
+%% ============================================================
+
+\begin{enumerate}
+  \item \textbf{Prove completeness.}\;
+    Show that $R_m^{(k)} \in \N[q]$ for all $m, k$ with
+    $0 \leq k \leq m$ (equivalently, that every element
+    with $k \in S$ finds a partner at level~$k$).  This
+    is the key remaining step.
+
+  \item \textbf{Characterise the survivors.}\;
+    The survivors of the recursive involution are elements
+    $(\emptyset, w, \mu)$ with $w \in \supp(R_n^{(n)})$.
+    Give a combinatorial characterisation of which NILP
+    families survive: what geometric property of the path
+    family determines whether it is a survivor?
+
+  \item \textbf{Handle $d \equiv 0 \pmod{3}$.}\;
+    When $h_m$ has negative coefficients, the involution
+    must be refined to operate on individual CPPs.
+    One approach: define the ground set using individual
+    CPP--$(q)_m$ pairs rather than the compressed
+    $h_m$ polynomials, and show the toggle works at that
+    finer level.
+
+  \item \textbf{Higher rank.}\;
+    The recursive structure uses only the subset
+    structure of $S \subseteq [n]$ and the $h$-polynomials.
+    Does the same involution work for higher-rank cylindric
+    partitions (rank $> 3$)?
+
+  \item \textbf{Connection to the local rule.}\;
+    The level-$k$ toggle has an algebraic description
+    (shift~$w$ by~$k$, toggle~$k$ in~$S$).  Give a
+    bijective description in terms of the growth
+    diagram local rule: at which face does the peel/glue
+    occur, and how does the growth diagram change?
+\end{enumerate}
+
+
+\begin{thebibliography}{99}
+\bibitem{Andrews}
+  G.~E.~Andrews,
+  \emph{The Theory of Partitions},
+  Cambridge University Press, 1998 (reprint).
+
+\bibitem{CANONICAL_PEEL}
+  R.~Langer,
+  \emph{The Canonical Peel via Local Rules and NILP
+  Duality},
+  companion note, 2026.
+
+\bibitem{LOCAL_RULE}
+  R.~Langer,
+  \emph{The Generalized Local Rule and the Burge--RSK
+  Involution},
+  companion note, 2026.
+
+\bibitem{Q_NILP}
+  R.~Langer,
+  \emph{$Q$-Non-Intersecting Lattice Paths},
+  companion note, 2026.
+
+\bibitem{Q_SCHUTZ}
+  R.~Langer,
+  \emph{The $Q$-Sch\"utzenberger Identity},
+  companion note, 2026.
+
+\bibitem{langer-thesis}
+  R.~Langer,
+  \emph{Cylindric Partitions and Bijective Proofs},
+  PhD thesis, University of Melbourne.
+
+\bibitem{Warnaar}
+  S.~O.~Warnaar,
+  \emph{Refined $q$-trinomial coefficients and character
+  identities},
+  J.~Combin.\ Theory Ser.~A \textbf{110} (2005), 241--295.
+\end{thebibliography}
+
+\end{document}

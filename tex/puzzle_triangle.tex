@@ -1,0 +1,243 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage[margin=1in]{geometry}
+
+%% ============================================================
+%% Puzzle Triangle for Littlewood-Richardson coefficients
+%% After Zinn-Justin, "LR coefficients and integrable tilings"
+%% (arXiv:0809.2392), Figure 8.
+%%
+%% Usage: \drawLRtriangle{n}{bottom-string}{left-string}{right-string}
+%%   n = side length of triangle
+%%   Each string is a sequence of 0 and 1 of length n.
+%%   0 = green particle (= "-" in Zinn-Justin = up step in boundary walk)
+%%   1 = red particle   (= "+" in Zinn-Justin = right step in boundary walk)
+%%   bottom = lambda's binary string (left to right)
+%%   left   = mu's binary string (bottom to top)
+%%   right  = nu's binary string (bottom to top)
+%%
+%% Convention: partition lambda inside k x (n-k) rectangle.
+%%   Binary string of length n = k + (n-k): k zeros and (n-k) ones.
+%%   Position of zeros: m - lambda_i + i  for i = 1,...,k  (m = n-k).
+%%   Remaining positions are ones.
+%%
+%% Coordinate system (equilateral triangle):
+%%   Bottom-left vertex at origin.
+%%   Unit vectors: e1 = (1, 0),  e2 = (1/2, sqrt(3)/2)
+%%   Vertex (j, i): real coords (j + i/2, i * sqrt(3)/2)
+%%   Range: i >= 0, j >= 0, i + j <= n
+%% ============================================================
+
+\definecolor{greenparticle}{RGB}{0,150,0}
+\definecolor{redparticle}{RGB}{200,0,0}
+
+%% Helper: extract character at 1-indexed position #2 from string #1.
+%% Result stored in \puzzlechar (will be "0" or "1").
+\makeatletter
+\newcommand{\extractchar}[2]{%
+  \def\puzzlechar{?}%
+  \@tempcnta=0\relax
+  \expandafter\@extractchar@loop#1\@nil{#2}%
+}
+\def\@extractchar@loop#1#2\@nil#3{%
+  \advance\@tempcnta by 1\relax
+  \ifnum\@tempcnta=#3\relax
+    \def\puzzlechar{#1}%
+  \else
+    \ifx\relax#2\relax\else
+      \@extractchar@loop#2\@nil{#3}%
+    \fi
+  \fi
+}
+\makeatother
+
+%% Helper: draw a particle dot at (x,y).
+%% \particledot{char}{x}{y} where char is 0 (green) or 1 (red).
+\newcommand{\particledot}[3]{%
+  \if0#1%
+    \node[greendot] at (#2, #3) {};%
+  \else
+    \node[reddot] at (#2, #3) {};%
+  \fi
+}
+
+\newcommand{\drawLRtriangle}[4]{%
+  % #1 = n (side length)
+  % #2 = bottom string (length n, chars 0/1, left to right)
+  % #3 = left string   (length n, chars 0/1, bottom to top)
+  % #4 = right string  (length n, chars 0/1, bottom to top)
+  %
+  \begin{tikzpicture}[
+    scale=1.2,
+    gridline/.style={gray!40, thin},
+    vertex/.style={circle, inner sep=0pt, minimum size=3pt, fill=black!20},
+    greendot/.style={circle, inner sep=0pt, minimum size=5pt, fill=greenparticle},
+    reddot/.style={circle, inner sep=0pt, minimum size=5pt, fill=redparticle},
+  ]
+    \pgfmathsetmacro{\sq}{0.86602540378} % sqrt(3)/2
+
+    %% -- Draw grid lines --
+    % Horizontal lines (constant i)
+    \foreach \i in {0,...,#1} {
+      \pgfmathtruncatemacro{\jmax}{#1-\i}
+      \draw[gridline] ({\i*0.5}, {\i*\sq}) -- ({\jmax + \i*0.5}, {\i*\sq});
+    }
+    % Lines going up-right (constant j): from (j,0) in direction e2
+    \foreach \j in {0,...,#1} {
+      \pgfmathtruncatemacro{\imax}{#1-\j}
+      \draw[gridline] ({\j}, 0) -- ({\j + \imax*0.5}, {\imax*\sq});
+    }
+    % Lines going up-left (constant i+j): from (s,0) to apex
+    \foreach \s in {0,...,#1} {
+      \draw[gridline] ({\s}, 0) -- ({\s*0.5}, {\s*\sq});
+    }
+
+    %% -- Draw vertices --
+    \foreach \i in {0,...,#1} {
+      \pgfmathtruncatemacro{\jmax}{#1-\i}
+      \foreach \j in {0,...,\jmax} {
+        \node[vertex] at ({\j + \i*0.5}, {\i*\sq}) {};
+      }
+    }
+
+    %% -- Draw boundary particles --
+    %% Bottom edge: edge k (k=1..n) has midpoint at (k-0.5, 0)
+    \foreach \k in {1,...,#1} {
+      \extractchar{#2}{\k}%
+      \pgfmathsetmacro{\xmid}{\k - 0.5}%
+      \expandafter\particledot\expandafter{\puzzlechar}{\xmid}{0}%
+    }
+
+    %% Left edge: edge k (k=1..n) from vertex (0,k-1) to (0,k)
+    %% Midpoint: ((k-0.5)/2, (k-0.5)*sq)
+    \foreach \k in {1,...,#1} {
+      \extractchar{#3}{\k}%
+      \pgfmathsetmacro{\imid}{\k - 0.5}%
+      \pgfmathsetmacro{\xmid}{\imid * 0.5}%
+      \pgfmathsetmacro{\ymid}{\imid * \sq}%
+      \expandafter\particledot\expandafter{\puzzlechar}{\xmid}{\ymid}%
+    }
+
+    %% Right edge: edge k (k=1..n) from vertex (n-k+1, k-1) to (n-k, k)
+    %% Midpoint j = n-k+0.5, i = k-0.5
+    %% Real coords: (n-k+0.5 + (k-0.5)/2, (k-0.5)*sq)
+    \foreach \k in {1,...,#1} {
+      \extractchar{#4}{\k}%
+      \pgfmathsetmacro{\imid}{\k - 0.5}%
+      \pgfmathsetmacro{\jmid}{#1 - \k + 0.5}%
+      \pgfmathsetmacro{\xmid}{\jmid + \imid*0.5}%
+      \pgfmathsetmacro{\ymid}{\imid * \sq}%
+      \expandafter\particledot\expandafter{\puzzlechar}{\xmid}{\ymid}%
+    }
+
+    %% -- Labels --
+    \node[below=8pt] at ({#1/2}, 0) {$\lambda$};
+    \node[left=8pt] at ({#1*0.25}, {#1*\sq/2}) {$\mu$};
+    \node[right=8pt] at ({#1*0.75}, {#1*\sq/2}) {$\nu$};
+
+    %% -- Thick boundary of triangle --
+    \draw[thick] (0,0) -- (#1, 0) -- ({#1*0.5}, {#1*\sq}) -- cycle;
+
+  \end{tikzpicture}%
+}
+
+\begin{document}
+
+\section*{Puzzle Triangles for Littlewood--Richardson Coefficients}
+\noindent
+After Zinn-Justin, \textit{LR coefficients and integrable tilings} (arXiv:0809.2392), Figure~8.
+
+\medskip\noindent
+\textbf{Encoding.}
+A partition $\lambda$ inside a $k \times m$ rectangle ($n = k + m$) is encoded as a binary string of length $n$:
+the $i$-th zero (green particle) is at position $m - \lambda_i + i$ for $i = 1,\dots,k$.
+Remaining positions are ones (red particles).
+The LR coefficient $c^\lambda_{\mu,\nu}$ counts the number of valid tilings
+of the triangle with boundary conditions $\lambda$ (bottom), $\mu$ (left), $\nu$ (right).
+
+\subsection*{Example 1: $c^{(3,1)}_{(2,1),(2,1)} = 1$}
+
+All partitions in a $2 \times 3$ rectangle ($k=2$, $m=3$, $n=5$).
+
+\medskip\noindent
+\begin{tabular}{lll}
+$\lambda = (3,1)$: & zeros at $3{-}3{+}1=1$, $3{-}1{+}2=4$ & $\to$ \texttt{0\,1\,1\,0\,1} \\
+$\mu = (2,1)$:     & zeros at $3{-}2{+}1=2$, $3{-}1{+}2=4$ & $\to$ \texttt{1\,0\,1\,0\,1} \\
+$\nu = (2,1)$:     & zeros at $3{-}2{+}1=2$, $3{-}1{+}2=4$ & $\to$ \texttt{1\,0\,1\,0\,1} \\
+\end{tabular}
+
+\bigskip
+\begin{center}
+\drawLRtriangle{5}{01101}{10101}{10101}
+\end{center}
+
+\subsection*{Example 2: $c^{(2,1)}_{(2),(1,1)} = 1$}
+
+All partitions in a $2 \times 2$ rectangle ($k=2$, $m=2$, $n=4$).
+
+\medskip\noindent
+\begin{tabular}{lll}
+$\lambda = (2,1)$: & zeros at $2{-}2{+}1=1$, $2{-}1{+}2=3$ & $\to$ \texttt{0\,1\,0\,1} \\
+$\mu = (2,0)$:     & zeros at $2{-}2{+}1=1$, $2{-}0{+}2=4$ & $\to$ \texttt{0\,1\,1\,0} \\
+$\nu = (1,1)$:     & zeros at $2{-}1{+}1=2$, $2{-}1{+}2=3$ & $\to$ \texttt{1\,0\,0\,1} \\
+\end{tabular}
+
+\bigskip
+\begin{center}
+\drawLRtriangle{4}{0101}{0110}{1001}
+\end{center}
+
+\subsection*{Example 3: $c^{(3,2,1)}_{(2,1),(2,1)} = 2$}
+
+All partitions in a $3 \times 3$ rectangle ($k=3$, $m=3$, $n=6$).
+
+\medskip\noindent
+\begin{tabular}{lll}
+$\lambda = (3,2,1)$:  & zeros at $1, 3, 5$ & $\to$ \texttt{0\,1\,0\,1\,0\,1} \\
+$\mu = (2,1,0)$:      & zeros at $2, 4, 6$ & $\to$ \texttt{1\,0\,1\,0\,1\,0} \\
+$\nu = (2,1,0)$:      & zeros at $2, 4, 6$ & $\to$ \texttt{1\,0\,1\,0\,1\,0} \\
+\end{tabular}
+
+\bigskip
+\begin{center}
+\drawLRtriangle{6}{010101}{101010}{101010}
+\end{center}
+
+\subsection*{Example 4: Trivial case $c^{(4)}_{(4),\varnothing} = 1$}
+
+$\lambda = (4)$, $\mu = (4)$, $\nu = \varnothing$ in $1 \times 4$ rectangle ($k=1$, $m=4$, $n=5$).
+
+\medskip\noindent
+\begin{tabular}{lll}
+$\lambda = (4)$:        & zero at $4{-}4{+}1=1$ & $\to$ \texttt{0\,1\,1\,1\,1} \\
+$\mu = (4)$:            & zero at $4{-}4{+}1=1$ & $\to$ \texttt{0\,1\,1\,1\,1} \\
+$\nu = \varnothing = (0)$: & zero at $4{-}0{+}1=5$ & $\to$ \texttt{1\,1\,1\,1\,0} \\
+\end{tabular}
+
+\bigskip
+\begin{center}
+\drawLRtriangle{5}{01111}{01111}{11110}
+\end{center}
+
+\medskip\noindent
+The single green particle enters at the far left of the bottom, exits at the bottom of the left edge. All red particles travel from the bottom-right to the right edge.
+
+\subsection*{Example 5: Pieri rule $c^{(3,1)}_{(2,1),(1)} = 1$}
+
+$\lambda = (3,1)$, $\mu = (2,1)$, $\nu = (1)$ in $2 \times 3$ rectangle ($k=2$, $m=3$, $n=5$).
+
+\medskip\noindent
+\begin{tabular}{lll}
+$\lambda = (3,1)$:  & zeros at $1, 4$ & $\to$ \texttt{0\,1\,1\,0\,1} \\
+$\mu = (2,1)$:      & zeros at $2, 4$ & $\to$ \texttt{1\,0\,1\,0\,1} \\
+$\nu = (1,0)$:      & zeros at $3, 5$ & $\to$ \texttt{1\,1\,0\,1\,0} \\
+\end{tabular}
+
+\bigskip
+\begin{center}
+\drawLRtriangle{5}{01101}{10101}{11010}
+\end{center}
+
+\end{document}

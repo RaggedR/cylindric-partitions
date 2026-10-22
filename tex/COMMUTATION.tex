@@ -1,0 +1,379 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\La}{\Lambda}
+\newcommand{\bin}{\mathrm{bin}}
+\newcommand{\CPP}{\mathrm{CPP}}
+\newcommand{\IP}{\mathrm{IP}}
+\newcommand{\ALCD}{\mathrm{ALCD}}
+\newcommand{\tr}{\mathrm{tr}}
+\newcommand{\lhs}{\mathrm{LHS}}
+\newcommand{\cohook}{\mathrm{cohook}}
+\newcommand{\diag}{\mathrm{diag}}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{From Commutation Relations to Growth Diagrams:\\
+A Summary of the Operator--Bijection Correspondence}
+\author{Summary of work by Robin Langer}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note summarizes the relationship between three pieces of work:
+(1)~the theory of row and column operators on symmetric functions developed in Part~1 of
+\emph{Symmetric Functions and Macdonald Polynomials} (Masters thesis, 2009),
+(2)~the $(q,t)$-vertex operator commutation relations used in \emph{Enumeration of Cylindric Plane Partitions -- Part~I} (2012), and
+(3)~the cylindric growth diagrams providing a bijective proof of Borodin's identity (PhD thesis).
+The central theme is that each algebraic commutation relation between row/column operators
+has a precise bijective counterpart in the form of a local rule applied within a growth diagram.
+\end{abstract}
+
+\tableofcontents
+
+%% ============================================================
+\section{The ring of symmetric functions and its operators}
+%% ============================================================
+
+\subsection{Setup and notation}
+Let $\La$ denote the ring of symmetric functions with natural basis $\{s_\lambda\}$ (the Schur functions), and let $\La^*$ denote the dual space with respect to the Hall inner product.
+We use the \emph{plethystic notation} of Garsia--Haiman--Tesler: writing $X = x_1 + x_2 + \cdots$ for a set of indeterminates, the complete and elementary symmetric function generating series are
+\[
+\Omega(Xz) = \Omega_z(X) = \prod_{x \in X} \frac{1}{1 - xz} = \sum_{n \geq 0} h_n(X) z^n,
+\]
+\[
+\tilde\Omega(Xz) = \tilde\Omega_z(X) = \prod_{x \in X} (1 + xz) = \sum_{n \geq 0} e_n(X) z^n.
+\]
+The \emph{Hall inner product} satisfies $\langle m_\lambda(Y), h_\mu(X) \rangle = \delta_{\lambda\mu}$, or equivalently
+\[
+\sum_\lambda P_\lambda(X) Q_\lambda(Y) = \Omega(XY) = \prod_{\substack{x \in X \\ y \in Y}} \frac{1}{1-xy}
+\]
+for any pair of dual bases $\{P_\lambda\}$, $\{Q_\lambda\}$.
+
+\subsection{Translation and multiplication operators}
+Following Garsia--Haiman--Tesler, define the \emph{translation} and \emph{multiplication} operators:
+\begin{align}
+\mathcal{T}(z)[f(X)] &= f(X + z), \label{eq:translation} \\
+\mathcal{P}(z)[f(X)] &= \Omega(Xz) \cdot f(X). \label{eq:multiplication}
+\end{align}
+In terms of the dual bases $\{m_\lambda(Y)\}$ and $\{h_\lambda(X)\}$:
+\[
+\mathcal{T}(z) = \sum_n z^n \partial_{h_n}, \qquad
+\mathcal{P}(z) = \sum_n z^n h_n(X),
+\]
+and dually $\mathcal{T}(z) = \mathcal{P}^*(z)$ (the adjoint with respect to the Hall inner product).
+
+\subsection{The fundamental commutation relation}\label{sec:fund-comm}
+The following identity governs how translation and multiplication interact:
+
+\begin{lemma}[Masters thesis, Lemma~1.1]\label{lem:TP-comm}
+\begin{equation}\label{eq:TP-comm}
+\mathcal{T}(v) \,\mathcal{P}(w) = \Omega(vw)\, \mathcal{P}(w)\, \mathcal{T}(v).
+\end{equation}
+\end{lemma}
+\begin{proof}
+$\mathcal{T}(v)\mathcal{P}(w)[h(X)] = \mathcal{T}(v)[\Omega(Xw)h(X)]
+= \Omega((X+v)w)h(X+v) = \Omega(vw)\Omega(Xw)\mathcal{T}(v)[h(X)]$.
+\end{proof}
+
+This single identity is the algebraic engine behind all of the enumerative results.
+The scalar factor $\Omega(vw) = 1/(1-vw)$ (when $v,w$ are single variables) is precisely the generating function $\sum_{n \geq 0} (vw)^n$ which counts the ``extra'' horizontal strips.
+
+\subsection{Row and column operators}
+The \emph{column operator} and \emph{row operator} are defined as:
+\begin{align}
+C(z) &= \sum_m (-1)^m C_m z^m = \mathcal{P}(-z)\,\mathcal{T}(1/z), \label{eq:col-op}\\
+R(z) &= \sum_m z^m (-1)^m R_m = \mathcal{P}(z)\,\mathcal{T}(-1/z) = C(-z). \label{eq:row-op}
+\end{align}
+
+\begin{proposition}[Masters thesis, Prop.~1.4]
+The Schur function has a natural expression as:
+\[
+s_\lambda(X) = R_{\lambda_1} \circ R_{\lambda_2} \circ \cdots \circ R_{\lambda_n}[1]
+= C_{\lambda'_1} \circ C_{\lambda'_2} \circ \cdots \circ C_{\lambda'_m}[1].
+\]
+\end{proposition}
+This is the operator-theoretic avatar of the Jacobi--Trudi and N\"agelsbach--Kostka determinantal formulas.
+
+\subsection{Commutation of column operators with translation}
+From \eqref{eq:TP-comm} one derives:
+\begin{equation}\label{eq:CT-comm}
+\mathcal{T}(v)\, C(z) = \mathcal{T}(v)\,\mathcal{P}(-z)\,\mathcal{T}(1/z)
+= \Omega(-vz)\,\mathcal{P}(-z)\,\mathcal{T}(v)\,\mathcal{T}(1/z)
+= (1-vz)\, C(z)\, \mathcal{T}(v),
+\end{equation}
+which yields the commutator identity:
+\begin{equation}\label{eq:CT-bracket}
+[C(z), \mathcal{T}(v)] = vz\, C(z)\, \mathcal{T}(v).
+\end{equation}
+Extracting the coefficient of $(-1)^m v^k z^m$:
+\[
+[C_m, \partial_{h_k}] = -C_{m-1}\partial_{h_{k-1}},
+\]
+or equivalently $\partial_{h_m} C_k = C_k \partial_{h_m} + C_{k-1}\partial_{h_{m-1}}$.
+
+\paragraph{Pieri rules from commutation.}
+Applying $\mathcal{T}(z)$ to $s_\lambda(X) = C_{\lambda'_1} \circ \cdots \circ C_{\lambda'_m}[1]$
+and commuting $\mathcal{T}(z)$ through each column operator via \eqref{eq:CT-comm} produces:
+\begin{equation}\label{eq:pieri-col}
+\mathcal{T}(z)[s_\lambda(X)] = s_\lambda(X+z) = \sum_{\mu \in D(\lambda)} s_\mu(X)\, z^{|\lambda|-|\mu|},
+\end{equation}
+where $D(\lambda)$ is the set of partitions obtained from $\lambda$ by removing a horizontal strip.
+This is the \textbf{first form of the Pieri rule}.
+
+Dually, $\mathcal{P}(z)[s_\mu(Y)] = s_\mu(Y)\Omega_z(Y) = \sum_{\lambda \in U(\mu)} s_\lambda(Y) z^{|\lambda|-|\mu|}$
+gives the second form: the \textbf{Pieri formula} for adding a horizontal strip.
+
+%% ============================================================
+\section{Generalized operators and Littlewood--Richardson bases}
+%% ============================================================
+
+\subsection{Umbral operators}
+Given an invertible formal power series $f(z)$ with compositional inverse $g(z)$, define the \emph{umbral operator} $U_f$ by:
+\[
+U_f[\Omega(Xz)] = \Omega_f(Xz) = \prod_{x \in X} \frac{1}{1 - f(z)x} = \sum_n r_n(X) z^n,
+\]
+extended multiplicatively.  Then $U_f^{-1} = U_g$.
+
+\subsection{Generalized column and row operators}
+The \emph{generalized column operator} is:
+\[
+C_f(z) = U_f \circ C(z) \circ U_g = \mathcal{P}_{-f}(z) \circ \mathcal{T}_{1/g}(z),
+\]
+and the \emph{generalized row operator} $R_f(z) = C_f(-z)$.
+
+\begin{proposition}[Masters thesis, Prop.~1.8]
+The basis defined by $P_\lambda(X) = C^f_{\lambda'_1} \circ C^f_{\lambda'_2} \circ \cdots \circ C^f_{\lambda'_m}[1]$
+is of Littlewood--Richardson type:
+$P_\lambda(X+X') = \sum_{\mu,\nu} c^\lambda_{\mu\nu} P_\mu(X) P_\nu(X')$.
+\end{proposition}
+
+The key point: \textbf{the same commutation relation} \eqref{eq:TP-comm}, conjugated by $U_f$, governs all generalized LR bases.  The generalized Pieri rules follow identically:
+\[
+\mathcal{T}(z)[P_\lambda(X)] = \sum_{\mu \in D(\lambda)} P_\mu(X) \cdot P_{(|\lambda|-|\mu|)}(z).
+\]
+
+%% ============================================================
+\section{Lifting to Macdonald polynomials and $(q,t)$-operators}
+%% ============================================================
+
+\subsection{The $(q,t)$-deformed inner product}
+In the Macdonald setting, the ring $\Lambda_{q,t}$ is equipped with the deformed inner product associated to the \emph{$(q,t)$-Cauchy kernel}:
+\begin{equation}\label{eq:qt-cauchy}
+\Omega_{q,t}[XY] = \Omega\!\left[XY\frac{1-t}{1-q}\right] = \prod_{i,j} \frac{(tx_i y_j; q)_\infty}{(x_i y_j; q)_\infty}.
+\end{equation}
+The Macdonald polynomials $\{P_\lambda(X;q,t)\}$ are orthogonal with respect to this inner product, with norms $b_\lambda(q,t) = \prod_{s \in \lambda} \frac{1 - q^{a(s)+1}t^{\ell(s)}}{1 - q^{a(s)}t^{\ell(s)+1}}$.
+
+\subsection{$(q,t)$-Pieri formulas}
+The Pieri rules for Macdonald polynomials take the form (Macdonald, Ch.~VI):
+\begin{align}
+\Omega_{q,t}[Xz]\, P_\mu(X;q,t) &= \sum_{\lambda \in U(\mu)} \psi_{\lambda/\mu}(q,t)\, P_\lambda(X;q,t)\, z^{|\lambda|-|\mu|}, \label{eq:qt-pieri1}\\
+\Omega^*_{q,t}[Xz]\, P_\lambda(X;q,t) &= \sum_{\mu \in D(\lambda)} \varphi_{\lambda/\mu}(q,t)\, P_\mu(X;q,t)\, z^{|\lambda|-|\mu|}, \label{eq:qt-pieri2}
+\end{align}
+where $\psi_{\lambda/\mu}$ and $\varphi_{\lambda/\mu}$ are explicit products over arm-lengths and leg-lengths of boxes in $\lambda$ and $\mu$.
+
+\subsection{The $(q,t)$-commutation relation}\label{sec:qt-comm}
+The following is the $(q,t)$-analog of the Jimbo--Miwa commutation relation for vertex operators, due to Garsia--Haiman--Tesler:
+
+\begin{lemma}[CPP Part~I, Lemma~4.2]\label{lem:qt-comm}
+\begin{equation}\label{eq:qt-comm}
+\Omega^*_{q,t}[Xu]\, \Omega_{q,t}[Xv] = \frac{(tuv;q)_\infty}{(quv;q)_\infty}\; \Omega_{q,t}[Xv]\, \Omega^*_{q,t}[Xu].
+\end{equation}
+\end{lemma}
+
+When $q = t$ (the Schur/Hall--Littlewood specialization), this reduces to
+\[
+\Omega^*[Xu]\, \Omega[Xv] = \frac{1}{1-uv}\; \Omega[Xv]\, \Omega^*[Xu],
+\]
+which is precisely the commutation $\mathcal{T}(v)\mathcal{P}(w) = \Omega(vw)\mathcal{P}(w)\mathcal{T}(v)$ from \eqref{eq:TP-comm},
+since $\Omega^*[Xz] = \mathcal{T}(-z)$ (the adjoint/translation operator) when specialized appropriately.
+
+\subsection{The degree operator}
+In enumerating cylindric plane partitions, we need an additional operator $D_z$ which tracks the total weight:
+\[
+D_z\, P_\lambda[X] = z^{|\lambda|}\, P_\lambda[X].
+\]
+Its commutation with the vertex operators is:
+\begin{align}
+D_z\, \Omega_{q,t}[Xu] &= \Omega_{q,t}[Xuz]\, D_z, \label{eq:Dz-comm1}\\
+D_z\, \Omega^*_{q,t}[Xu] &= \Omega^*_{q,t}[Xuz^{-1}]\, D_z. \label{eq:Dz-comm2}
+\end{align}
+
+%% ============================================================
+\section{Cylindric plane partitions as operator traces}
+%% ============================================================
+
+\subsection{From interlacing sequences to operator products}
+A cylindric plane partition of profile $\pi = (\pi_1, \ldots, \pi_T)$ is a periodic interlacing sequence $(\mu^0, \mu^1, \ldots, \mu^T)$ with $\mu^0 = \mu^T$, where $\mu^k/\mu^{k-1}$ is a horizontal strip if $\pi_k = 1$, and $\mu^{k-1}/\mu^k$ is a horizontal strip if $\pi_k = 0$.
+
+This structure means: \textbf{a CPP is built by successively applying $\Omega_{q,t}$ (adding strips) and $\Omega^*_{q,t}$ (removing strips)}.
+The generating function is a \emph{trace}:
+\begin{equation}\label{eq:trace}
+\sum_{\mathfrak{c} \in \CPP(\pi)} W_\mathfrak{c}(q,t) z^{|\mathfrak{c}|}
+= \sum_\mu \langle Q_\mu \mid G^{\pi_0}(u_0)\, G^{\pi_1}(u_1) \cdots G^{\pi_T}(u_T)\, D_w\, P_\mu \rangle_{q,t}
+\end{equation}
+where $G^1(z) = \Omega_{q,t}[Xz]$, $G^0(z) = \Omega^*_{q,t}[Xz]$, and $u_k$, $w$ are determined by the profile.
+
+\subsection{Proof of Borodin's identity via commutation}
+The proof of the $(q,t)$-Borodin formula (Theorem~1.1 of CPP Part~I) proceeds by:
+\begin{enumerate}
+\item \textbf{Express} the CPP generating function as the trace \eqref{eq:trace}.
+\item \textbf{Commute} all $\Omega^*_{q,t}$ operators past all $\Omega_{q,t}$ operators using Lemma~\ref{lem:qt-comm}. Each commutation produces a scalar factor $(tuv;q)_\infty / (quv;q)_\infty$.
+\item \textbf{Shift} the $D_w$ operator using \eqref{eq:Dz-comm1}--\eqref{eq:Dz-comm2} and iterate, producing:
+\[
+M_\pi(m) = \prod_{\substack{(i,j)\\\pi_i \neq \pi_j}} \frac{(tu_iu_jw^{m+1};q)_\infty}{(u_iu_jw^{m+1};q)_\infty}\; M_\pi(m+1).
+\]
+\item \textbf{Take the limit} $m \to \infty$, where $M_\pi(\infty) = \prod_{n \geq 1} 1/(1-w^n)$.
+\end{enumerate}
+Each commutation step produces one factor in the infinite product formula.
+
+%% ============================================================
+\section{Growth diagrams: the bijective realization}
+%% ============================================================
+
+\subsection{The fundamental correspondence}
+The PhD thesis establishes a weight-preserving bijection:
+\begin{equation}\label{eq:bijection}
+\psi_\pi : (\IP, \ALCD(\pi)) \xrightarrow{\;\sim\;} \CPP(\pi),
+\end{equation}
+where $\IP$ is the set of integer partitions and $\ALCD(\pi)$ the set of arbitrarily labelled cylindric diagrams with profile $\pi$.
+This bijection is encoded by a \textbf{cylindric growth diagram}.
+
+\subsection{Cylindric growth diagrams}
+\begin{definition}
+For $\pi \in \bin(n,m)$, the \emph{cylindric poset} $\mathfrak{G}(n,m)$ is the quotient of $\Z^2$ by $(x,y) \equiv (x+n, y-m)$.
+A \emph{cylindric growth diagram} is a labelling of vertices by integer partitions and faces by non-negative integers, satisfying:
+\begin{enumerate}
+\item If $v \lhd w$ then $\lambda(v)/\lambda(w)$ is a horizontal strip.
+\item All but finitely many vertices carry the same partition $\gamma$.
+\item If $(u; v_1, v_2; w)$ is a face with label $m$, and $\mu = \lambda(u)$, $\alpha = \lambda(v_1)$, $\beta = \lambda(v_2)$, $\lambda = \lambda(w)$, then $\lambda = \mathfrak{U}_{\alpha,\beta}(m,\mu)$ where $\mathfrak{U}$ is the \emph{local rule}.
+\end{enumerate}
+\end{definition}
+
+The upper boundary path gives a cylindric plane partition; forgetting vertex labels gives an arbitrarily labelled cylindric diagram.  The growth diagram \emph{interpolates} between the two sides of the bijection.
+
+\subsection{Local rules as commutation relations}\label{sec:local-comm}
+This is the key conceptual bridge.
+
+The \emph{local rule} $\mathfrak{U}_{\alpha,\beta}$ has type signature:
+\[
+\mathfrak{U}_{\alpha,\beta} : U(\alpha) \cap U(\beta) \to (\Z_{\geq 0},\; D(\alpha) \cap D(\beta)),
+\]
+where $U(\mu)$ (resp.\ $D(\lambda)$) is the set of partitions obtained by adding (resp.\ removing) a horizontal strip.
+It satisfies the weight condition: if $\lambda = \mathfrak{U}_{\alpha,\beta}(m,\mu)$ then
+\begin{equation}\label{eq:weight-cond}
+|\lambda| = |\alpha| + |\beta| - |\mu| + m.
+\end{equation}
+
+The local rule is used as a \emph{higher-order function}:
+\begin{equation}
+\mathfrak{L}_i : \big((\IP, \ALCD(\pi)) \to \CPP(\pi)\big) \;\longrightarrow\; \big((\IP, \ALCD(\pi')) \to \CPP(\pi')\big),
+\end{equation}
+where $\pi \prec \pi'$ (obtained by adding one inversion).
+
+\begin{remark}[Algebra $\leftrightarrow$ Bijection dictionary]\label{rem:dictionary}
+\begin{center}
+\begin{tabular}{l|l}
+\textbf{Algebraic proof} & \textbf{Bijective proof} \\ \hline
+Commuting $\Omega^*[Xu]$ past $\Omega[Xv]$ & Applying local rule $\mathfrak{L}_i$ \\
+Scalar factor $\Omega(uv) = \frac{1}{1-uv}$ & Face label $m$ (non-negative integer) \\
+Cyclic invariance of trace & Rotation of the cylinder \\
+$D_w$ shift (Lemma~5.1) & Depth increment in growth diagram \\
+$M_\pi(m) \to M_\pi(m+1)$ iteration & Adding a new row of faces \\
+$M_\pi(\infty) = \prod 1/(1-w^n)$ & Base case: $\psi_\pi(\gamma, \emptyset) = (\gamma, \ldots, \gamma)$ \\
+\end{tabular}
+\end{center}
+\end{remark}
+
+\subsection{Commutativity of local rules}
+The algebraic fact that commuting different pairs of operators is independent (when the positions are non-adjacent) has the following bijective counterpart:
+
+\begin{lemma}[PhD thesis, Lemma in \S3]
+If $\pi$ has inversions at both positions $i$ and $j$ with $|i-j| \geq 2$, then:
+\[
+\mathfrak{L}_i \circ \mathfrak{L}_j[\psi_\pi] = \mathfrak{L}_j \circ \mathfrak{L}_i[\psi_\pi].
+\]
+\end{lemma}
+This is because $\mathfrak{L}_i$ only affects the $(i+1)$-th diagonal while $\mathfrak{L}_j$ only affects the $(j+1)$-th, so they act on disjoint data.  This mirrors the fact that the operators $\Omega[Xu_i]$ and $\Omega[Xu_j]$ commute when they are of the same type.
+
+\subsection{Weight preservation}
+The bijection is not merely weight-preserving but \textbf{strongly} weight-preserving: if $\psi_\pi(\gamma, \mathfrak{d}) = (\mu^0, \ldots, \mu^T)$ then for all $1 \leq k \leq T$:
+\[
+|\mu^k| = |\gamma| + |\diag(k)|_\mathfrak{d}.
+\]
+The proof proceeds by induction, using the weight condition \eqref{eq:weight-cond} of the local rule and the identity:
+\[
+|\diag(i)|_{\mathfrak{d}'} = m + |\diag(i-1)|_\mathfrak{d} + |\diag(i+1)|_\mathfrak{d} - |\diag(i)|_\mathfrak{d}.
+\]
+
+%% ============================================================
+\section{Summary: the three levels}
+%% ============================================================
+
+The relationship between the three works can be visualized as three levels of the same structure:
+
+\medskip
+
+\noindent\textbf{Level 1: Schur functions} (Masters thesis, Part~1).
+\begin{itemize}
+\item Operators: $\mathcal{T}(z)$, $\mathcal{P}(z)$, $C(z)$, $R(z)$ on $\La$.
+\item Fundamental commutation: $\mathcal{T}(v)\mathcal{P}(w) = \Omega(vw)\,\mathcal{P}(w)\mathcal{T}(v)$.
+\item Consequence: Pieri rules, Jacobi--Trudi, all LR-type bases via $U_f$.
+\item Generalization: Stirling numbers, Lah numbers as change-of-basis matrices for LR bases associated to $f(z) = \exp(z) - 1$.
+\end{itemize}
+
+\medskip
+
+\noindent\textbf{Level 2: Macdonald polynomials} (CPP Part~I).
+\begin{itemize}
+\item Operators: $\Omega_{q,t}[Xz]$, $\Omega^*_{q,t}[Xz]$, $D_z$ on $\La_{q,t}$.
+\item Fundamental commutation:
+$\Omega^*_{q,t}[Xu]\,\Omega_{q,t}[Xv] = \frac{(tuv;q)_\infty}{(quv;q)_\infty}\,\Omega_{q,t}[Xv]\,\Omega^*_{q,t}[Xu]$.
+\item Consequence: $(q,t)$-Borodin identity for cylindric plane partitions; at $q=t$ recovers Schur case; at $t=0$ gives Hall--Littlewood.
+\item The weight function $W_\mathfrak{c}(q,t) = \Omega[(q-t)\mathcal{D}_\mathfrak{c}(q,t)]$ has an explicit combinatorial description in terms of peak and valley cubes.
+\end{itemize}
+
+\medskip
+
+\noindent\textbf{Level 3: Growth diagrams} (PhD thesis, Chapter~3).
+\begin{itemize}
+\item Objects: Cylindric growth diagrams on the poset $\mathfrak{G}(n,m) = \Z^2/(x,y)\sim(x+n,y-m)$.
+\item Local rule $\mathfrak{U}_{\alpha,\beta}$: the bijective incarnation of one commutation step.
+\item Each application of $\mathfrak{L}_i$ (local rule as higher-order function) $\longleftrightarrow$ one commutation $\Omega^* \leftrightarrow \Omega$.
+\item Cylinder rotation $\longleftrightarrow$ cyclic invariance of trace $\tr(AB) = \tr(BA)$.
+\item The full bijection $\psi_\pi : (\IP, \ALCD(\pi)) \to \CPP(\pi)$ is constructed by iterating local rules and rotations, exactly mirroring the algebraic proof.
+\item Two natural local rules exist (RSK and Burge), related by the Sch\"utzenberger involution. Their composition $\psi_R \circ \psi_B^{-1} : \CPP(\pi) \to \CPP(\pi)$ has a conjectural interpretation via crystal bases for $\widehat{\mathfrak{sl}}_n$.
+\end{itemize}
+
+\medskip
+
+The power of this framework is that the \emph{same} local rule, applied repeatedly on a cylindric growth diagram, produces the full bijective proof of Borodin's product formula. The algebraic proof and the bijective proof are not merely analogous --- they are \textbf{structurally identical}, with each algebraic manipulation corresponding to a precisely defined combinatorial operation.
+
+\begin{thebibliography}{99}
+\bibitem{borodin} A.~Borodin, \emph{Periodic Schur process and cylindric partitions}, Duke Math.~J.~\textbf{140} (2007), 391--468.
+\bibitem{fomin} S.V.~Fomin, \emph{Generalized Robinson--Schensted--Knuth correspondence}, J.~Soviet Math.~\textbf{41} (1988), 979--991.
+\bibitem{GHT} A.M.~Garsia, M.~Haiman, G.~Tesler, \emph{Explicit plethystic formulas for Macdonald $q,t$-Kostka coefficients}, S\'em.\ Lothar.\ Combin.~\textbf{42} (1999).
+\bibitem{JM} M.~Jimbo, T.~Miwa, \emph{Solitons and infinite dimensional Lie algebras}, Publ.\ RIMS \textbf{19} (1983), 943--1001.
+\bibitem{krattenthaler} C.~Krattenthaler, \emph{Growth diagrams, and increasing and decreasing chains in fillings of Ferrers shapes}, Adv.\ Appl.\ Math.\ \textbf{37} (2006), 404--431.
+\bibitem{langer-masters} R.~Langer, \emph{Symmetric Functions and Macdonald Polynomials}, Master's thesis, University of Melbourne, 2008. arXiv:0907.3950.
+\bibitem{langer-cpp1} R.~Langer, \emph{Enumeration of Cylindric Plane Partitions -- Part I}, 2012. arXiv:1204.4583.
+\bibitem{langer-phd} R.~Langer, \emph{Cylindric Partitions and Bijective Proofs}, PhD thesis.
+\bibitem{macdonald} I.G.~Macdonald, \emph{Symmetric Functions and Hall Polynomials}, 2nd ed., Oxford, 1995.
+\bibitem{stanley} R.P.~Stanley, \emph{The conjugate trace and trace of a plane partition}, J.~Combin.\ Theory Ser.~A~\textbf{14} (1973), 53--65.
+\end{thebibliography}
+
+\end{document}

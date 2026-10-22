@@ -1,0 +1,415 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{observation}[theorem]{Observation}
+
+\newcommand{\CPP}{\operatorname{CPP}}
+\newcommand{\GK}{\operatorname{GK}}
+\newcommand{\QSym}{\operatorname{QSym}}
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\qpoch}[2]{(#1;#2)_\infty}
+\newcommand{\qpochn}[3]{(#1;#2)_{#3}}
+\newcommand{\sln}{\widehat{\mathfrak{sl}}_n}
+
+\title{Literature Review: Three Threads Toward Conjecture~2.7\\
+{\large Tingley, Tight Partitions, and Quasisymmetric Functions}}
+\author{Robin Langer}
+\date{February 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We survey three approaches to Warnaar's Conjecture~2.7
+(positivity of $Q_{n,c}(q)$ for cylindric plane partitions)
+and assess what each contributes and where each hits its limit.
+The three threads are: (1)~Tingley's crystal base interpretation
+of cylindric partitions, (2)~Kanade--Russell's tight cylindric
+partitions and functional equations, and (3)~our own
+quasisymmetric function refinement and $L$-positivity results.
+All three illuminate different facets of the conjecture but
+each encounters the same obstacle: the $[z^n]$ extraction
+that isolates CPPs with a fixed maximum entry.
+\end{abstract}
+
+%% ========================================================================
+\section{Thread 1: Tingley --- Crystal bases and cylindric partitions}
+\label{sec:tingley}
+%% ========================================================================
+
+\subsection{Main result}
+
+Tingley~\cite{tingley-2008} proved that cylindric plane partitions
+are crystal basis elements of $\sln$. He establishes three
+equivalent combinatorial models for the crystal graph:
+
+\begin{enumerate}
+  \item \textbf{Hayashi realization}: partitions with crystal
+    operators $e_i$, $f_i$ acting by adding/removing boxes
+    colored by residue mod~$n$.
+  \item \textbf{Abacus model}: beads on an $n$-strand abacus,
+    with crystal operators sliding beads between strands.
+  \item \textbf{Kyoto path model}: semi-infinite tensor products
+    of elements from a perfect Kirillov--Reshetikhin crystal
+    $B_{r,s}$.
+\end{enumerate}
+
+\begin{theorem}[Tingley, Theorem~3.14]
+The colored directed graph formed by tight, descending abacus
+configurations is a realization of the crystal graph for the
+$\sln$ representation $V(\Lambda)$.
+\end{theorem}
+
+The central application: Tingley gives a
+\textbf{representation-theoretic proof of Borodin's product
+formula}~\cite{borodin-2007}. The generating function
+$\GK_c(1,q)$ is identified with the principally specialized
+character of an integrable highest-weight $\sln$-module,
+and characters of integrable modules factor by the
+Weyl--Kac character formula.
+
+\subsection{The underlying chain}
+
+The connection runs through the corner transfer matrix (CTM)
+method of Baxter. In a solvable lattice model satisfying the
+Yang--Baxter equations, the CTM eigenstates at $q = 0$ form the
+crystal basis $B(\Lambda)$. A \emph{path} through this crystal
+is a sequence $(b_1, b_2, \ldots, b_L) \in B_{r,s}^{\otimes L}$.
+When the path is periodic (ground-state boundary condition),
+it becomes a cylindric partition. The energy function
+$H : B_1 \times B_2 \to \mathbb{Z}$ tracks the $q$-weight:
+\[
+  X(B, \Lambda; q)
+  = \sum_{\text{paths } p} q^{\operatorname{energy}(p)}
+  = \GK_c(1, q).
+\]
+This one-dimensional configuration sum equals the CPP generating
+function, which factors into Borodin's product.
+
+\subsection{The bijection chain}
+
+There is a chain of weight-preserving bijections:
+\[
+  \text{Cylindric partitions}
+  \xleftrightarrow{\text{Tingley}}
+  \text{Crystal paths}
+  \xleftrightarrow{\text{Kyoto}}
+  \text{Semi-infinite tensor products}
+  \xleftrightarrow{\text{OSS}}
+  \text{Rigged configurations,}
+\]
+where OSS refers to Okado--Schilling--Shimozono~\cite{oss-2001}.
+Each arrow preserves the generating function weight
+(energy $\leftrightarrow$ size $\leftrightarrow$ cocharge).
+
+\subsection{Relevance to Conjecture~2.7}
+
+If $Q_{n,c}(q)$ could be interpreted as a weight multiplicity
+or branching coefficient inside the crystal, positivity would be
+automatic---crystals count things. The obstacle is that the
+$[z^n]$ extraction (fixing the maximum entry of a CPP) does not
+have a known crystal interpretation. The maximum entry
+$n(\pi) = \max\{\nu^{(i)}_j\}$ is not a crystal-theoretic
+statistic: it depends on the absolute values of entries, not on
+their relative positions or the action of the operators $e_i$,
+$f_i$.
+
+\begin{remark}
+Tingley's crystal structure lives on the \emph{full} set of CPPs
+(all max entries). Restricting to $\max = n$ breaks the crystal
+into fragments that do not form sub-crystals in general.
+This parallels the failure of quasi-symmetry at fixed max entry
+(Thread~3).
+\end{remark}
+
+\subsection{Key references}
+
+\begin{itemize}
+  \item Tingley~\cite{tingley-2008}: the central bridge paper.
+  \item Kang--Kashiwara--Misra~\cite{kkm-1992}: perfect crystals
+    and the path realization theorem.
+  \item Okado--Schilling--Shimozono~\cite{oss-2001}: path-to-rigged-configuration bijection.
+  \item Nakayashiki--Yamada~\cite{ny-1995}: Kostka polynomials and
+    energy functions in solvable lattice models.
+\end{itemize}
+
+%% ========================================================================
+\section{Thread 2: Kanade--Russell --- Tight cylindric partitions}
+\label{sec:tight}
+%% ========================================================================
+
+\subsection{Main result}
+
+Kanade and Russell~\cite{kanade-russell-2023} define
+\emph{tight} cylindric partitions, where consecutive stack
+heights differ by at most~1 (a stricter condition than ordinary
+interlacing). They prove:
+
+\begin{theorem}[Kanade--Russell, Theorem~4]
+For a profile $c = (c_1, \ldots, c_r)$ with
+$m = c_1 + \cdots + c_r$, the univariate generating function
+for tight CPPs is
+\[
+  T_c(1,q)
+  = \Pr\bigl(L_{\sln[r]}(\Lambda(c))\bigr)
+  = \frac{(q^r; q^r)_\infty\, (q^m; q^m)_\infty^{r-1}}
+         {(q)_\infty^r}
+    \prod_{1 \le i < j \le r}
+    \theta\bigl(q^{j - i + c_i + \cdots + c_{j-1}};\, q^m\bigr).
+\]
+\end{theorem}
+
+The proof uses \textbf{Corteel--Welsh functional equations}:
+a system of equations for the bivariate generating function
+$T_c(z, q)$, solved via inclusion-exclusion and induction on
+$z$-exponents. This is a purely analytic approach---no
+representation theory, no crystal bases.
+
+\subsection{Additional results}
+
+\begin{itemize}
+  \item \textbf{Theorem~10}: Corteel--Welsh functional equation
+    analogue for $r$-rowed tight CPPs.
+  \item \textbf{Theorem~13}: Bivariate closed forms for
+    2-rowed tight CPPs. For profile $(c_1, c_2)$, the generating
+    functions reduce to $(-q;q)_\infty$ times Gordon--Andrews or
+    Andrews--Bressoud identities.
+  \item \textbf{Theorem~14}: Diamond relations reformulation.
+  \item The 3-row case remains open (only conjectural bivariate
+    formulas for small profiles).
+\end{itemize}
+
+\subsection{Relevance to Conjecture~2.7}
+
+The Corteel--Welsh functional equations are powerful for
+computing generating functions and proving product formulas,
+but they do \emph{not} directly address positivity. The explicit
+double-sum formulas for $[y^n] G_c(y,q)$ (Theorem~3.2 of
+Corteel--Welsh~\cite{corteel-welsh-2019}) involve terms with
+alternating signs for profiles like $(3,0,1)$ and $(2,2,0)$.
+Positivity of $Q_{n,c}(q)$ requires delicate cancellation that
+the functional equations cannot explain.
+
+The functional equations are a computational oracle, not a
+conceptual explanation. They tell us \emph{what} $Q_{n,c}(q)$
+equals, but not \emph{why} its coefficients should be positive.
+
+\begin{remark}
+The tight CPP product formula is structurally parallel to
+Borodin's identity (both are principally specialized
+$\sln[r]$ characters). This suggests that an alternative proof
+via crystal bases (extending Tingley's approach to tight CPPs)
+should be possible and would deepen the representation-theoretic
+picture. It could also reveal whether analogous $Q$-polynomials
+exist for the tight case.
+\end{remark}
+
+%% ========================================================================
+\section{Thread 3: Quasisymmetric functions and $L$-positivity}
+\label{sec:qsym}
+%% ========================================================================
+
+\subsection{Main results}
+
+In~\cite{langer-qsym}, we showed that the CPP frequency
+generating function
+\[
+  \widetilde{\GK}_c(\mathbf{z})
+  = \sum_{\pi \in \CPP(c)}
+    z_1^{\#_1(\pi)}\, z_2^{\#_2(\pi)} \cdots
+\]
+(where $\#_k(\pi)$ counts parts equal to~$k$) lies in the ring
+$\QSym$ of quasisymmetric functions. This follows from Stanley's
+$P$-partition theory: the interlacing conditions depend only on
+the relative order of entries, not their absolute values.
+
+\begin{observation}[Verified: 55 profiles, $d \leq 5$]
+$\widetilde{\GK}_c$ is $L$-positive:
+$\widetilde{\GK}_c = \sum_\alpha b_\alpha(c)\, L_\alpha$
+with $b_\alpha \in \mathbb{Z}_{\geq 0}$.
+\end{observation}
+
+The stabilized $L$-coefficients follow $b^{\ell(\alpha)}$
+patterns ($b = 2$ for $d = 2$, $b = 5$ for $d = 4$), suggesting
+a product structure. By Tewari--van Willigenburg~\cite{tvw-2015},
+$L$-positivity is equivalent to the existence of a $0$-Hecke
+module whose character is $\widetilde{\GK}_c$.
+
+\begin{conjecture}[Descent statistic]
+There exists a natural descent-type statistic on cylindric
+partitions such that
+$\widetilde{\GK}_c = \sum_\pi L_{\alpha(\pi)}$,
+where $\alpha(\pi)$ is the descent composition of~$\pi$.
+\end{conjecture}
+
+\subsection{The dead end}
+
+$L$-positivity does \textbf{not} extend to the $Q$-polynomials.
+Two obstacles:
+
+\begin{enumerate}
+  \item \textbf{Max-entry constraint breaks quasi-symmetry.}
+    The individual slices
+    $\tilde{g}_n = \sum_{\max(\pi) = n} z_1^{\#_1} \cdots$
+    are \emph{not} quasi-symmetric: fixing $\max = n$ privileges
+    the value~$n$, breaking the relabelling argument.
+  \item \textbf{Cross-frequency cancellation.}
+    The alternating-sign factor $(zq;q)_\infty$ introduces
+    cancellation that crosses between different frequency vectors.
+    Computationally, $\sim$3--6\% of the cancellation in $Q_n$ is
+    cross-frequency: the net coefficient at individual frequency
+    vectors is negative, and only the aggregation across all
+    compositions of the same weight (under $z_k \mapsto q^k$)
+    yields the positive $Q_n$ coefficient.
+\end{enumerate}
+
+The positivity of $Q_{n,c}(q)$ is an
+\textbf{intrinsically one-variable phenomenon}: the
+specialization $z_k \mapsto q^k$ is essential and cannot be
+avoided within $\QSym$.
+
+\subsection{Connection to Lam--Pylyavskyy Conjecture~5.5}
+
+Conjecture~5.5 of~\cite{lam-pylyavskyy-2006} characterizes when
+products $L_\alpha \cdot L_\beta$ are maximal in the
+$L$-positivity order (iff the pair $\{\alpha, \beta\}$ is stable
+under cell transfer). This is relevant because the stabilization
+pattern of $\widetilde{\GK}_c$ suggests a product structure in
+the $L$-basis, and Conjecture~5.5 would constrain its form.
+However, this enriches the understanding of $\widetilde{\GK}_c$
+itself (the unconstrained generating function) without bridging
+the gap to $Q_{n,c}$ positivity.
+
+%% ========================================================================
+\section{Synthesis}
+\label{sec:synthesis}
+%% ========================================================================
+
+The three threads illuminate different facets of the same problem:
+
+\medskip
+\begin{center}
+\begin{tabular}{l|l|l}
+  \textbf{Thread} & \textbf{What it gives} & \textbf{Where it stops} \\
+  \hline
+  Tingley (crystals) & \emph{Why} Borodin's product holds &
+    $[z^n]$ extraction has no crystal \\
+  & (characters of $\sln$ modules) & interpretation \\
+  \hline
+  Kanade--Russell & \emph{What} $G_c(y,q)$ equals &
+    Formulas have mixed signs; \\
+  (functional eqns) & (explicit double sums) & no positivity mechanism \\
+  \hline
+  QSym / $L$-positivity & \emph{Structure} of $\widetilde{\GK}_c$ &
+    Positivity is one-variable; \\
+  & ($L$-positive, $0$-Hecke module) & cross-frequency cancellation
+\end{tabular}
+\end{center}
+
+\medskip
+
+All three approaches converge on the same obstacle: the $[z^n]$
+extraction that isolates CPPs with a specific maximum entry.
+In the crystal picture, fixing max entry breaks the crystal into
+non-sub-crystal fragments. In the QSym picture, it breaks
+quasi-symmetry. In the functional equation picture, it
+introduces alternating signs.
+
+\subsection{What would a proof need?}
+
+A proof of Conjecture~2.7 likely requires one of:
+\begin{enumerate}
+  \item A \textbf{combinatorial interpretation} of $Q_{n,c}(q)$
+    as a counting function---finding what $Q_{n,c}$ counts.
+  \item A \textbf{crystal-theoretic interpretation} of the
+    $[z^n]$ extraction---expressing $Q_{n,c}$ as a weight
+    multiplicity or branching coefficient.
+  \item A \textbf{new positivity mechanism} that works in one
+    variable---perhaps a positivity-preserving transformation
+    (in the spirit of the Borwein program) or a connection to
+    Kazhdan--Lusztig theory.
+\end{enumerate}
+
+The most promising direction may be~(2): if the
+``$\max = n$ slice'' of the crystal corresponds to some natural
+representation-theoretic object (a Demazure module? a level
+restriction? a truncated path space?), then positivity would
+follow from the general theory. This is the direction suggested
+by the parallel between Borodin's identity and the
+Kanade--Russell product formula---both are $\sln[r]$ characters,
+and the extraction of $Q_n$ should have a meaning in that world.
+
+%% ========================================================================
+%% References
+%% ========================================================================
+
+\begin{thebibliography}{99}
+
+\bibitem{borodin-2007}
+A.~Borodin,
+Periodic Schur process and cylindric partitions,
+\emph{Duke Math.\ J.}\ \textbf{140}(3) (2007), 391--468.
+arXiv:math/0601019.
+
+\bibitem{corteel-welsh-2019}
+S.~Corteel and T.~Welsh,
+The $A_2$ Rogers--Ramanujan identities revisited,
+arXiv:1905.08343, 2019.
+
+\bibitem{kanade-russell-2023}
+S.~Kanade and M.~C.~Russell,
+Tight cylindric partitions,
+arXiv:2507.02435, 2023.
+
+\bibitem{kkm-1992}
+S.-J.~Kang, M.~Kashiwara, and K.~C.~Misra,
+Crystal bases of Verma modules for quantum affine Lie algebras,
+\emph{Compositio Math.}\ \textbf{92}(3) (1994), 299--325.
+
+\bibitem{lam-pylyavskyy-2006}
+T.~Lam and P.~Pylyavskyy,
+$P$-partition products and fundamental quasi-symmetric function
+positivity,
+\emph{Adv.\ in Appl.\ Math.}\ \textbf{40}(3) (2008), 331--354.
+
+\bibitem{langer-qsym}
+R.~Langer,
+Quasi-symmetric refinement of the cylindric partition
+generating function,
+In preparation, 2025.
+
+\bibitem{ny-1995}
+A.~Nakayashiki and Y.~Yamada,
+Kostka polynomials and energy functions in solvable lattice
+models,
+\emph{Selecta Math.\ (N.S.)}\ \textbf{3}(4) (1997), 547--599.
+arXiv:q-alg/9512027.
+
+\bibitem{oss-2001}
+M.~Okado, A.~Schilling, and M.~Shimozono,
+Virtual crystals and fermionic formulas of type
+$D^{(2)}_{n+1}$, $A^{(2)}_{2n}$, and $C^{(1)}_n$,
+\emph{Represent.\ Theory}\ \textbf{7} (2003), 101--163.
+arXiv:math/0105017.
+
+\bibitem{tingley-2008}
+P.~Tingley,
+Three combinatorial models for $\widehat{\mathfrak{sl}}_n$
+crystals, with applications to cylindric plane partitions,
+\emph{Int.\ Math.\ Res.\ Not.}\ 2008(2), Art.~ID rnm143.
+arXiv:math/0702062.
+
+\bibitem{tvw-2015}
+V.~V.~Tewari and S.~J.~van Willigenburg,
+Modules of the $0$-Hecke algebra and quasisymmetric Schur
+functions,
+\emph{Adv.\ Math.}\ \textbf{285} (2015), 1025--1065.
+arXiv:1403.1527.
+
+\end{thebibliography}
+
+\end{document}
